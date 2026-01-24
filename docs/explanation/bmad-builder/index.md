@@ -22,7 +22,7 @@ Create custom agents, workflows, and modules for BMad — from simple personal a
 
 ## Key Concepts
 
-Agents are authored in YAML with Handlebars templating. The compiler auto-injects:
+Agents are authored in YAML with templates and standards. The compiler upon install of your agent will auto-inject:
 
 1. **Frontmatter** — Name and description from metadata
 2. **Activation Block** — Steps, menu handlers, rules
@@ -30,16 +30,5 @@ Agents are authored in YAML with Handlebars templating. The compiler auto-inject
 4. **Trigger Prefixing** — Your triggers auto-prefixed with `*`
 
 :::note[Learn More]
-See [Custom Content Types](/docs/explanation/bmad-builder/custom-content-types.md) for detailed explanations of all content categories.
+See [Custom Content Types](./custom-content-types.md) for detailed explanations of all content categories.
 :::
-
-## Reference Examples
-
-Production-ready examples available in the BMB reference folder:
-
-| Agent | Type | Description |
-|-------|------|-------------|
-| **commit-poet** | Simple | Commit message artisan with style customization |
-| **journal-keeper** | Expert | Personal journal companion with memory and pattern recognition |
-| **security-engineer** | Module | BMM security specialist with threat modeling |
-| **trend-analyst** | Module | CIS trend intelligence expert |

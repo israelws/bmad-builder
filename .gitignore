@@ -27,12 +27,31 @@ Thumbs.db
 # Development tools and configs
 .prettierrc
 
-# ai temp or local only files
+# AI assistant files
 CLAUDE.md
-.*/**
+.ai/*
+.cursor
+.gemini
+.mcp.json
+CLAUDE.local.md
+.serena/
+.claude/settings.local.json
+
+z*/
 
 _bmad
 _bmad-output
+.clinerules
+.augment
+.crush
+.cursor
+.iflow
+.opencode
+.qwen
+.rovodev
+.kilocodemodes
+.claude
+.codex
 
 # Astro / Documentation Build
 website/.astro/

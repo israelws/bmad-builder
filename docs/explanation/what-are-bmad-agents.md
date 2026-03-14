@@ -38,9 +38,9 @@ Agent capabilities come in two flavors.
 
 You choose the mix when you design the agent. Internal commands keep everything self-contained; external skills let you compose agents from reusable building blocks.
 
-## Autonomous Mode
+## Headless Mode
 
-Agents support an autonomous wake mode. When activated — for example through a cron job or an orchestrator like Open Claw — the agent skips waiting for user input and attempts to complete its tasks independently. This makes agents suitable for background automation while still being conversational when a human is present.
+Agents support a headless (autonomous) wake mode. When activated — for example through a cron job or an orchestrator like Open Claw — the agent skips waiting for user input and attempts to complete its tasks independently. This makes agents suitable for background automation while still being conversational when a human is present.
 
 ## Registering With BMad Help
 

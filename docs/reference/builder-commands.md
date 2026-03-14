@@ -12,7 +12,7 @@ Reference for the two core BMad Builder skills — the Agent Builder (`bmad-agen
 | **Build Process** | BP | Build, edit, convert, or fix agents | Build, edit, convert, or fix workflows and utilities |
 | **Quality Optimize** | QO | Validate and optimize existing agents | Validate and optimize existing workflows and utilities |
 
-Both capabilities support autonomous/headless mode via `--autonomous`, `--headless`, `-A`, or `-H` flags.
+Both capabilities support autonomous/headless mode via `--headless` / `-H` flags.
 
 ## Build Process (BP)
 
@@ -67,7 +67,7 @@ Both builders accept any of these as a starting point.
 | **Activation modes** | Interactive only, or interactive + autonomous (schedule/cron) |
 | **First-run onboarding** | What to ask on first activation to configure itself |
 | **Folder dominion** | Read boundaries, write boundaries, explicit deny zones |
-| **Autonomous tasks** | Default wake behavior, named tasks via `--autonomous:{task-name}` |
+| **Autonomous tasks** | Default wake behavior, named tasks via `--headless {task-name}` or `-H {task-name}` |
 
 ### Workflow Builder: Phase 2-3 Details
 

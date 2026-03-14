@@ -9,31 +9,31 @@ description: {skill-description} # Format: [4-6 word summary]. [trigger: "User w
 
 {overview-template}
 
-{if-autonomous}
+{if-headless}
 ## Activation Mode Detection
 
 **Check activation context immediately:**
 
-1. **Autonomous mode**: Skill invoked with `--autonomous` flag or with task parameter
-   - Look for `--autonomous` in the activation context
-   - If `--autonomous:{task-name}` → run that specific autonomous task
-   - If just `--autonomous` → run default autonomous wake behavior
-   - Load and execute `prompts/autonomous-wake.md` with task context
+1. **Autonomous mode**: Skill invoked with `--headless` or `-H` flag or with task parameter
+   - Look for `--headless` in the activation context
+   - If `--headless:{task-name}` → run that specific autonomous task
+   - If just `--headless` → run default autonomous wake behavior
+   - Load and execute `prompts/headless-wake.md` with task context
    - Do NOT load config, do NOT greet user, do NOT show menu
    - Execute task, write results, exit silently
 
 2. **Interactive mode** (default): User invoked the skill directly
    - Proceed to `## On Activation` section below
 
-**Example autonomous activation:**
+**Example headless activation:**
 ```bash
 # Autonomous - default wake
-/bmad-{agent-skill-name} --autonomous
+/bmad-{agent-skill-name} --headless
 
 # Autonomous - specific task
-/bmad-{agent-skill-name} --autonomous:refine-memories
+/bmad-{agent-skill-name} --headless:refine-memories
 ```
-{/if-autonomous}
+{/if-headless}
 
 ## Identity
 {Who is this agent? One clear sentence.}

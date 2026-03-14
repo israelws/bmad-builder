@@ -47,9 +47,9 @@ Both the Agent Builder and the Workflow Builder support two interaction styles w
 
 Guided mode is no longer the slow multi-step process of earlier BMad versions. It is conversational and adaptive, but produces significantly better results than YOLO for complex workflows.
 
-## Autonomous Mode
+## Headless (Autonomous) Mode
 
-Like agents, workflows can support an **autonomous mode**. When invoked autonomously — through a scheduler, orchestrator, or another skill — the workflow skips interactive prompts and completes its process end-to-end without waiting for user input.
+Like agents, workflows can support a **Headless Mode**. When invoked headless — through a scheduler, orchestrator, or another skill — the workflow skips interactive prompts and completes its process end-to-end without waiting for user input.
 
 ## Registering With BMad Help
 

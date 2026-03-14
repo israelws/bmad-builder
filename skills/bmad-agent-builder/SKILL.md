@@ -1,7 +1,7 @@
 ---
 name: bmad-agent-builder
 description: Builds, edit or validate Agent Skill through conversational discovery. Use when the user requests to "Create an Agent", "Optimize an Agent" or "Edit an Agent".
-argument-hint: "--headless or --autonomous to not prompt user, initial input for create, path to existing skill with keywords optimize, edit, validate"
+argument-hint: "--headless or -H to not prompt user, initial input for create, path to existing skill with keywords optimize, edit, validate"
 ---
 
 # Agent Builder
@@ -30,7 +30,7 @@ These agents become part of the BMad Method ecosystem — personal companions th
 
 2. Detect user's intent from their request:
 
-**Autonomous/Headless Mode Detection:** If the user passes `--autonomous`, `--headless`, `-H`, or `-A` flags, or if their intent clearly indicates non-interactive execution, set `{autonomous_mode}=true` and pass to all sub-prompts.
+**Autonomous/Headless Mode Detection:** If the user passes `--headless` or`-H` flags, or if their intent clearly indicates non-interactive execution, set `{autonomous_mode}=true` and pass to all sub-prompts.
 
 3. Route by intent.
 

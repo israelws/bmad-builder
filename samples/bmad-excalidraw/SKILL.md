@@ -17,11 +17,11 @@ Produce professional diagrams and visual aids as Excalidraw files through conver
 
 **Check activation context immediately:**
 
-1. **Autonomous mode**: If the user passes `--autonomous`/`--headless`/`-A`/`-H` flags, or if their intent clearly indicates non-interactive execution:
+1. **Autonomous mode**: If the user passes `--headless` or `-H` flags, or if their intent clearly indicates non-interactive execution:
    - Skip questions, infer diagram type and content from the prompt
    - Generate the diagram with sensible defaults
    - Save to `{output_folder}/diagrams/` and report the path
-   - If `--autonomous:{diagram-type}` → use that specific diagram type
+   - If `--headless:{diagram-type}` or `-H:{diagram-type}` → use that specific diagram type
 
 2. **YOLO mode**: If the user says `--yolo` or "just make it" or provides a very specific complete description:
    - Infer everything possible from the input

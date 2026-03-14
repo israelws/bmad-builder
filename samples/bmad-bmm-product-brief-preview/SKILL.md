@@ -17,9 +17,9 @@ The user is the domain expert. You bring structured thinking, facilitation, mark
 
 Check activation context immediately:
 
-1. **Autonomous mode**: If the user passes `--autonomous`/`-A` flags, or provides structured inputs clearly intended for headless execution:
+1. **Autonomous mode**: If the user passes `--headless`/`-H` flags, or provides structured inputs clearly intended for headless execution:
    - Ingest all provided inputs, fan out subagents, produce complete brief without interaction
-   - Route directly to `prompts/contextual-discovery.md` with `{mode}=autonomous`
+   - Route directly to `prompts/contextual-discovery.md` with `{mode}=headless`
 
 2. **Yolo mode**: If the user passes `--yolo` or says "just draft it" / "draft the whole thing":
    - Ingest everything, draft complete brief upfront, then walk user through refinement

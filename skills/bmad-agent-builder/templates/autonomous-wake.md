@@ -1,6 +1,6 @@
 ---
 name: autonomous-wake
-description: Default autonomous wake behavior — runs when --autonomous is passed with no specific task.
+description: Default autonomous wake behavior — runs when --headless or -H is passed with no specific task.
 ---
 
 # Autonomous Wake

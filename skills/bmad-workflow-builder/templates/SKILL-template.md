@@ -59,10 +59,10 @@ Act as {role-guidance}.
 
 **Check activation context immediately:**
 
-1. **Headless mode**: If the user passes `--autonomous`/`--headless` flags, or if their intent clearly indicates non-interactive execution:
+1. **Headless mode**: If the user passes `--headless` or `-H` flags, or if their intent clearly indicates non-interactive execution:
    - Skip questions, proceed with safe defaults, output structured results
-   - If `--autonomous:{task-name}` → run that specific task
-   - If just `--autonomous` → run default headless behavior
+   - If `--headless:{task-name}` → run that specific task headless mode
+   - If just `--headless` → run default headless behavior
 
 2. **Interactive mode** (default): Proceed to `## On Activation` section below
 {/if-headless}

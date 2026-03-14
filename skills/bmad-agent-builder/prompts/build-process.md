@@ -58,8 +58,8 @@ Work through these conversationally:
 **If autonomous mode is enabled, ask additional questions:**
 - **Autonomous tasks:** What should the agent do when waking on a schedule?
   - Examples: Review/organize memory, process queue, maintenance tasks, implement tickets
-- **Default wake behavior:** What happens with `--autonomous` (no specific task)?
-- **Named tasks:** What specific tasks can be invoked with `--autonomous:{task-name}`?
+- **Default wake behavior:** What happens with `--headless` | `-H` (no specific task)?
+- **Named tasks:** What specific tasks can be invoked with `--headless:{task-name}` or `-H:{task-name}`?
 
 - **Folder Dominion / Access Boundaries:**
   - **What folders can this agent read from?** (e.g., `journals/`, `financials/`, specific file patterns)

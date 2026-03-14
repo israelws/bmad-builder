@@ -158,7 +158,7 @@ For interactive agents, offer three execution modes that match different user co
 |------|---------|----------|
 | **Guided** | Default | Section-by-section with soft gates. Drafts from what it knows, questions what it doesn't. |
 | **Yolo** | `--yolo` or "just draft it" | Ingests everything, drafts complete artifact upfront, then walks user through refinement. |
-| **Autonomous** | `--autonomous` / `-A` | Headless. Takes inputs, produces artifact, no interaction. |
+| **Autonomous** | `--headless` / `-H` | Headless. Takes inputs, produces artifact, no interaction. |
 
 **Why it works:** Not every user wants the same experience. A first-timer needs guided discovery. A repeat user with clear inputs wants yolo. A pipeline wants autonomous. Same agent, three entry points.
 

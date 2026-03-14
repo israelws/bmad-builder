@@ -44,7 +44,7 @@ Each entry in the `capabilities` array describes one thing the skill can do.
 
 | Field | Type | Required | Description |
 | ----- | ---- | -------- | ----------- |
-| `supports-autonomous` | boolean | No | Whether this capability can run without user interaction |
+| `supports-headless` | boolean | No | Whether this capability can support a headless mode that runs to completion without user interaction |
 | `prompt` | string | No | Relative path to the prompt file for internal capabilities (e.g., `prompts/build-process.md`). Omit if handled by SKILL.md directly or if this is an external skill call |
 | `skill-name` | string | No | Registered name of an external skill this capability delegates to. Omit for internal capabilities |
 
@@ -77,7 +77,7 @@ These fields control how BMad-Help orders skills within a module.
       "name": "build",
       "menu-code": "BP",
       "description": "Build, edit, or convert agents through six-phase conversational discovery.",
-      "supports-autonomous": true,
+      "supports-headless": true,
       "prompt": "prompts/build-process.md",
       "phase-name": "anytime",
       "output-location": "{bmad_builder_output_folder}"
@@ -96,7 +96,7 @@ These fields control how BMad-Help orders skills within a module.
       "name": "build",
       "menu-code": "BP",
       "description": "Build, edit, or convert workflows and skills through six-phase conversational discovery.",
-      "supports-autonomous": true,
+      "supports-headless": true,
       "prompt": "prompts/build-process.md",
       "phase-name": "anytime",
       "output-location": "{bmad_builder_output_folder}"

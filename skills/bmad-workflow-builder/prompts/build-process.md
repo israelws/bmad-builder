@@ -36,11 +36,11 @@ Load `resources/classification-reference.md` for the full decision tree, classif
 
 1. Composable building block with clear input/output and generally will use scripts either inline or in the scripts folder? → **Simple Utility**
 2. Fits in a single SKILL.md, may have some resources and a prompt, but generally not very complex. Human in the Loop and Autonomous abilities? → **Simple Workflow**
-   - **Headless mode?** Should this workflow support `--autonomous`/headless invocation? (If it produces an artifact, headless mode may be valuable)
+   - **Headless mode?** Should this workflow support `--headless` invocation? (If it produces an artifact, headless mode may be valuable)
 3. Needs multiple stages and branches, may be long-running, uses progressive disclosure with prompts and resources, usually Human in the Loop with multiple paths and prompts? → **Complex Workflow**
 
 For Complex Workflows, also ask:
-- **Headless mode?** Should this workflow support `--autonomous`/headless invocation?
+- **Headless mode?** Should this workflow support `--headless` invocation?
 
 Present classification with reasoning. This determines template and structure.
 

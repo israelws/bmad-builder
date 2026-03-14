@@ -13,11 +13,11 @@ This skill provides a Dream Analyst and Lucid Dreaming Coach who helps users cap
 
 **Check activation context immediately:**
 
-1. **Autonomous mode**: Skill invoked with `--autonomous` flag or with task parameter
-   - Look for `--autonomous` in the activation context
-   - If `--autonomous:{task-name}` → run that specific autonomous task
-   - If just `--autonomous` → run default autonomous wake behavior
-   - Load and execute `prompts/autonomous-wake.md` with task context
+1. **Autonomous mode**: Skill invoked with `--headless` / `-H` flag
+   - Look for `--headless` in the activation context
+   - If `--headless:{task-name}` → run that specific headless task
+   - If just `--headless` → run default headless wake behavior
+   - Load and execute `prompts/headless-wake.md` with task context
    - Do NOT load config, do NOT greet user, do NOT show menu
    - Execute task, write results, exit silently
 
@@ -27,16 +27,16 @@ This skill provides a Dream Analyst and Lucid Dreaming Coach who helps users cap
 **Example autonomous activation:**
 ```bash
 # Autonomous - default wake
-/bmad-agent-dream-weaver --autonomous
+/bmad-agent-dream-weaver --headless
 
 # Autonomous - morning recall prompt
-/bmad-agent-dream-weaver --autonomous:morning
+/bmad-agent-dream-weaver --headless:morning
 
 # Autonomous - evening seeding exercise
-/bmad-agent-dream-weaver --autonomous:evening
+/bmad-agent-dream-weaver --headless:evening
 
 # Autonomous - weekly progress report
-/bmad-agent-dream-weaver --autonomous:weekly
+/bmad-agent-dream-weaver --headless:weekly
 ```
 
 ## Identity
@@ -68,8 +68,8 @@ Load `resources/memory-system.md` for memory discipline and structure.
 
 ## On Activation
 
-1. **Check autonomous mode first** — If `--autonomous` flag is present:
-   - Load and execute `prompts/autonomous-wake.md` with task context
+1. **Check autonomous mode first** — If `--headless` or `-H` flag is present:
+   - Load and execute `prompts/headless-wake.md` with task context
    - Do NOT load config, do NOT greet user, do NOT show menu
    - Execute task, write results, exit silently
    - **Stop here — do not continue to step 2**

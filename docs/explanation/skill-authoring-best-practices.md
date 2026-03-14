@@ -85,7 +85,7 @@ Interactive workflows can offer three execution modes matching different user co
 | ---- | ------- | -------- |
 | **Guided** | Default | Section-by-section with soft gates; drafts from what it knows, questions what it doesn't |
 | **YOLO** | `--yolo` or "just draft it" | Ingests everything, drafts complete artifact upfront, then walks user through refinement |
-| **Autonomous** | `--autonomous` / `-A` | Headless; takes inputs, produces artifact, no interaction |
+| **Headless (Autonomous)** | `--headless` / `-H` | Headless; takes inputs, produces artifact, no interaction |
 
 Not every workflow needs all three — but considering them during design prevents painting yourself into a single interaction model.
 

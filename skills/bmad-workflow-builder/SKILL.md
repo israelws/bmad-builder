@@ -1,7 +1,7 @@
 ---
 name: bmad-workflow-builder
 description: Builds workflows and skills through conversational discovery and validates existing ones. Use when the user requests to "build a workflow", "modify a workflow", "quality check workflow", or "optimize skill".
-argument-hint: "--headless or --autonomous to not prompt user, initial input for create, path to existing skill with keywords optimize, edit, validate"
+argument-hint: "--headless or -H to not prompt user, initial input for create, path to existing skill with keywords optimize, edit, validate"
 ---
 
 # Workflow & Skill Builder
@@ -30,7 +30,7 @@ These workflows become part of the BMad Method ecosystem. If the user with your 
 
 2. Detect user's intent from their request:
 
-**Autonomous/Headless Mode Detection:** If the user passes `--autonomous`, `--headless`, `-H`, or `-A` flags, or if their intent clearly indicates non-interactive execution, set `{autonomous_mode}=true` and pass to all sub-prompts.
+**Autonomous/Headless Mode Detection:** If the user passes `--headless` or `-H` flags, or if their intent clearly indicates non-interactive execution, set `{autonomous_mode}=true` and pass to all sub-prompts.
 
 3. Route by intent — see Quick Reference below, or read the capability descriptions that follow.
 

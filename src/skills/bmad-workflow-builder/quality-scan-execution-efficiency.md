@@ -225,62 +225,65 @@ You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/execution-efficiency-temp.json`
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+**Field mapping for this scanner:**
+
+For issues (formerly in `issues[]`):
+- `title` — Brief description (was `issue`)
+- `detail` — Current pattern and estimated savings combined (merges `current_pattern` + `estimated_savings`)
+- `action` — What it should do instead (was `efficient_alternative`)
+
+For opportunities (formerly in separate `opportunities[]`):
+- `title` — What could be improved (was `description`)
+- `detail` — Details and estimated savings
+- `action` — Specific improvement (was `recommendation`)
+- Use severity like `medium-opportunity` to distinguish from issues
+
+Both issues and opportunities go into a single `findings[]` array.
+
 ```json
 {
   "scanner": "execution-efficiency",
   "skill_path": "{path}",
-  "issues": [
+  "findings": [
     {
-      "file": "SKILL.md|{name}.md|bmad-manifest.json",
+      "file": "SKILL.md",
       "line": 42,
-      "severity": "critical|high|medium|low",
-      "category": "sequential-independent|parent-reads-first|missing-batch|no-output-spec|subagent-chain-violation|stage-ordering|dependency-bloat|circular-dependency|resource-loading|missing-delegation",
-      "issue": "Brief description",
-      "current_pattern": "What it does now",
-      "efficient_alternative": "What it should do instead",
-      "estimated_savings": "Time/token savings estimate"
-    }
-  ],
-  "opportunities": [
+      "severity": "high",
+      "category": "parent-reads-first",
+      "title": "Parent reads 3 source files before delegating analysis to subagents",
+      "detail": "Parent context bloats by ~6000 tokens reading doc1.md, doc2.md, doc3.md before spawning subagents to analyze them. Estimated savings: ~6000 tokens per invocation.",
+      "action": "Delegate reading to subagents: each subagent reads its assigned file and returns a compact JSON summary."
+    },
     {
-      "file": "SKILL.md|{name}.md|bmad-manifest.json",
+      "file": "SKILL.md",
       "line": 15,
-      "type": "parallelization|stage-reorder|dependency-trim|batching|delegation|resource-optimization",
-      "description": "What could be improved",
-      "recommendation": "Specific improvement",
-      "estimated_savings": "Estimated improvement"
+      "severity": "medium-opportunity",
+      "category": "parallelization",
+      "title": "Stages 2 and 3 could run in parallel",
+      "detail": "Stages 2 (validate inputs) and 3 (scan resources) have no data dependency. Running in parallel would save ~1 round-trip.",
+      "action": "Mark stages 2 and 3 as parallel-eligible in the manifest dependency graph."
     }
   ],
   "summary": {
-    "total_issues": 0,
+    "total_findings": 0,
     "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
-    "by_category": {
-      "sequential_independent": 0,
-      "parent_reads_first": 0,
-      "missing_batch": 0,
-      "no_output_spec": 0,
-      "stage_ordering": 0,
-      "dependency_bloat": 0,
-      "resource_loading": 0,
-      "missing_delegation": 0
-    },
-    "potential_improvements": {
-      "parallelization_opportunities": 0,
-      "batching_opportunities": 0,
-      "stage_reorder_opportunities": 0,
-      "dependency_trim_opportunities": 0,
-      "delegation_opportunities": 0
-    }
+    "assessment": "Brief 1-2 sentence overall assessment of execution efficiency"
   }
 }
 ```
 
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 ## Process
 
-1. Read SKILL.md — check On Activation and operation flow patterns
-2. Read all prompt files — check each for execution patterns
-3. Read bmad-manifest.json if present — check stage ordering and dependencies
-4. Check resource loading patterns in references/
+1. **Parallel read batch:** Read SKILL.md, bmad-manifest.json (if present), and all prompt files at skill root — in a single parallel batch
+2. Check On Activation and operation flow patterns from SKILL.md
+3. Check each prompt file for execution patterns
+4. Check resource loading patterns in references/ (read as needed)
 5. Identify sequential operations that could be parallel
 6. Check for parent-reading-before-delegating patterns
 7. Verify subagent instructions have output specifications

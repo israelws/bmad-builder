@@ -24,24 +24,26 @@ Read `assets/quality-report-template.md` for the report structure. The template 
 
 ### Step 2: Extract All Data Types
 
-For each scanner file, extract not just `issues`/`findings` arrays but ALL of these data types:
+All scanners now use the universal schema defined in `references/universal-scan-schema.md`. Scanner-specific data lives in `assessments{}`, not as top-level keys.
+
+For each scanner file, extract not just `findings` arrays but ALL of these data types:
 
 | Data Type | Where It Lives | Report Destination |
 |-----------|---------------|-------------------|
-| Issues/findings (severity: critical-low) | All scanner `issues[]`/`findings[]` | Detailed Findings by Category |
-| Strengths (severity: "strength"/"note", category: "strength") | agent-cohesion, prompt-craft | Strengths section |
-| Agent identity | agent-cohesion `agent_identity` | Agent Identity section + Executive Summary |
-| Cohesion dimensional analysis | agent-cohesion `cohesion_analysis` | Cohesion Analysis table |
-| Consolidation opportunities | agent-cohesion `cohesion_analysis.redundancy_level.consolidation_opportunities` | Consolidation Opportunities in Cohesion |
-| Creative suggestions | agent-cohesion `creative_suggestions[]` | Creative Suggestions in Cohesion section |
-| Craft & agent assessment | prompt-craft `skillmd_assessment` (incl. `persona_context`), `prompt_health`, `summary.craft_assessment` | Prompt Craft section header + Executive Summary |
-| Structure metadata | structure `metadata` (has_memory, has_headless, manifest_valid, etc.) | Structure & Capabilities section header |
-| User journeys | enhancement-opportunities `user_journeys[]` | User Journeys section |
-| Autonomous assessment | enhancement-opportunities `autonomous_assessment` | Autonomous Readiness section |
-| Skill understanding | enhancement-opportunities `skill_understanding` | Creative section header |
-| Top insights | enhancement-opportunities `top_insights[]` | Top Insights in Creative section |
-| Optimization opportunities | execution-efficiency `opportunities[]` | Optimization Opportunities in Efficiency section |
-| Script inventory & token savings | scripts `script_summary`, script-opportunities `summary` | Scripts sections |
+| Issues/findings (severity: critical-low) | All scanner `findings[]` | Detailed Findings by Category |
+| Strengths (severity: "strength"/"note", category: "strength") | All scanners: findings where severity="strength" | Strengths section |
+| Agent identity | agent-cohesion `assessments.agent_identity` | Agent Identity section + Executive Summary |
+| Cohesion dimensional analysis | agent-cohesion `assessments.cohesion_analysis` | Cohesion Analysis table |
+| Consolidation opportunities | agent-cohesion `assessments.cohesion_analysis.redundancy_level.consolidation_opportunities` | Consolidation Opportunities in Cohesion |
+| Creative suggestions | `findings[]` with severity="suggestion" (no separate creative_suggestions array) | Creative Suggestions in Cohesion section |
+| Craft & agent assessment | prompt-craft `assessments.skillmd_assessment` (incl. `persona_context`), `assessments.prompt_health`, `summary.assessment` | Prompt Craft section header + Executive Summary |
+| Structure metadata | structure `assessments.metadata` (has_memory, has_headless, manifest_valid, etc.) | Structure & Capabilities section header |
+| User journeys | enhancement-opportunities `assessments.user_journeys[]` | User Journeys section |
+| Autonomous assessment | enhancement-opportunities `assessments.autonomous_assessment` | Autonomous Readiness section |
+| Skill understanding | enhancement-opportunities `assessments.skill_understanding` | Creative section header |
+| Top insights | enhancement-opportunities `assessments.top_insights[]` | Top Insights in Creative section |
+| Optimization opportunities | `findings[]` with severity ending in "-opportunity" (no separate opportunities array) | Optimization Opportunities in Efficiency section |
+| Script inventory & token savings | scripts `assessments.script_summary`, script-opportunities `summary` | Scripts sections |
 | Prepass metrics | `*-prepass.json` files | Context data points where useful |
 
 ### Step 3: Populate Template
@@ -65,9 +67,9 @@ Fill the template section by section, following the `<!-- comment -->` guidance 
 
 **This step is mandatory.** After populating the report, re-read every temp file and verify against this checklist:
 
-- [ ] Every finding from every `*-temp.json` issues/findings array
+- [ ] Every finding from every `*-temp.json` findings[] array
 - [ ] Agent identity block (persona_summary, primary_purpose, capability_count)
-- [ ] All strengths (agent-cohesion `strengths[]` AND severity="strength" findings)
+- [ ] All findings with severity="strength" from any scanner
 - [ ] All positive notes from prompt-craft (severity="note")
 - [ ] Cohesion analysis dimensional scores table (if present)
 - [ ] Consolidation opportunities from cohesion redundancy analysis
@@ -75,9 +77,9 @@ Fill the template section by section, following the `<!-- comment -->` guidance 
 - [ ] Structure metadata (sections_found, has_memory, has_headless, manifest_valid)
 - [ ] ALL user journeys with ALL friction_points and bright_spots per archetype
 - [ ] The autonomous_assessment block (all fields)
-- [ ] All creative_suggestions from agent-cohesion
-- [ ] All opportunities from execution-efficiency
-- [ ] All top_insights from enhancement-opportunities
+- [ ] All findings with severity="suggestion" from cohesion scanners
+- [ ] All findings with severity ending in "-opportunity" from execution-efficiency
+- [ ] assessments.top_insights from enhancement-opportunities
 - [ ] Script inventory and token savings from script-opportunities
 - [ ] Skill understanding (purpose, primary_user, key_assumptions)
 - [ ] Prompt health summary from prompt-craft (if prompts exist)

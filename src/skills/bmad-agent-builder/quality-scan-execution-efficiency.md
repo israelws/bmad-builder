@@ -120,6 +120,12 @@ GOOD: Selective loading
 
 ## Output Format
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/execution-efficiency-temp.json`
@@ -128,33 +134,28 @@ Write JSON findings to: `{quality-report-dir}/execution-efficiency-temp.json`
 {
   "scanner": "execution-efficiency",
   "skill_path": "{path}",
-  "issues": [
+  "findings": [
     {
       "file": "SKILL.md|{name}.md",
       "line": 42,
-      "severity": "critical|high|medium|low",
-      "category": "sequential-independent|parent-reads-first|missing-batch|no-output-spec|subagent-chain-violation|memory-loading|resource-loading|missing-delegation",
-      "issue": "Brief description",
-      "current_pattern": "What it does now",
-      "efficient_alternative": "What it should do instead",
-      "estimated_savings": "Time/token savings estimate"
-    }
-  ],
-  "opportunities": [
-    {
-      "type": "parallelization|batching|delegation|memory-optimization|resource-optimization",
-      "description": "What could be improved",
-      "recommendation": "Specific improvement",
-      "estimated_savings": "Estimated improvement"
+      "severity": "critical|high|medium|low|medium-opportunity",
+      "category": "sequential-independent|parent-reads-first|missing-batch|no-output-spec|subagent-chain-violation|memory-loading|resource-loading|missing-delegation|parallelization|batching|delegation|memory-optimization|resource-optimization",
+      "title": "Brief description",
+      "detail": "What it does now, and estimated time/token savings",
+      "action": "What it should do instead"
     }
   ],
   "summary": {
-    "total_issues": 0,
+    "total_findings": 0,
     "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
     "by_category": {}
   }
 }
 ```
+
+Merge all items into the single `findings[]` array:
+- Former `issues[]` items: map `issue` to `title`, merge `current_pattern`+`estimated_savings` into `detail`, map `efficient_alternative` to `action`
+- Former `opportunities[]` items: map `description` to `title`, merge details into `detail`, map `recommendation` to `action`, use severity like `medium-opportunity`
 
 ## Process
 

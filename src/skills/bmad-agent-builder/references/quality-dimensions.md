@@ -37,7 +37,7 @@ Default to conservative triggering. See `references/standard-fields.md` for full
 
 ## 5. Path Construction
 
-Never use `{skill-root}`. Only use `{project-root}` for `_bmad` paths. Config variables used directly — they already contain `{project-root}`.
+Only use `{project-root}` for `_bmad` paths. Config variables used directly — they already contain `{project-root}`.
 
 See `references/standard-fields.md` for correct/incorrect patterns.
 

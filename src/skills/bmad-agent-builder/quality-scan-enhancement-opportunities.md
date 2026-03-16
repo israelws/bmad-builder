@@ -165,6 +165,12 @@ For each journey, note:
 
 ## Output Format
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/enhancement-opportunities-temp.json`
@@ -173,46 +179,47 @@ Write JSON findings to: `{quality-report-dir}/enhancement-opportunities-temp.jso
 {
   "scanner": "enhancement-opportunities",
   "skill_path": "{path}",
-  "skill_understanding": {
-    "purpose": "What this agent is trying to do",
-    "primary_user": "Who this agent is for",
-    "key_assumptions": ["assumption 1", "assumption 2"]
-  },
   "findings": [
     {
       "file": "SKILL.md|{name}.md",
       "severity": "high-opportunity|medium-opportunity|low-opportunity",
       "category": "edge-case|experience-gap|delight-opportunity|assumption-risk|journey-friction|autonomous-potential|facilitative-pattern",
-      "scenario": "The specific situation or user story that reveals this opportunity",
-      "insight": "What you noticed and why it matters",
-      "suggestion": "Concrete, actionable improvement — the tempered version of the wild idea",
-      "user_impact": "How this would change the user's experience"
+      "title": "The specific situation or user story that reveals this opportunity",
+      "detail": "What you noticed, why it matters, and how this would change the user's experience",
+      "action": "Concrete, actionable improvement — the tempered version of the wild idea"
     }
   ],
-  "user_journeys": [
-    {
-      "archetype": "first-timer|expert|confused|edge-case|hostile-environment|automator",
-      "journey_summary": "Brief narrative of this user's experience with the agent",
-      "friction_points": ["moment 1", "moment 2"],
-      "bright_spots": ["what works well for this user"]
-    }
-  ],
-  "autonomous_assessment": {
-    "overall_potential": "headless-ready|easily-adaptable|partially-adaptable|fundamentally-interactive",
-    "hitl_interaction_points": 0,
-    "auto_resolvable": 0,
-    "needs_input": 0,
-    "suggested_output_contract": "What a headless invocation would return",
-    "required_inputs": ["parameters needed upfront for headless mode"],
-    "notes": "Brief assessment of autonomous viability"
+  "assessments": {
+    "skill_understanding": {
+      "purpose": "What this agent is trying to do",
+      "primary_user": "Who this agent is for",
+      "key_assumptions": ["assumption 1", "assumption 2"]
+    },
+    "user_journeys": [
+      {
+        "archetype": "first-timer|expert|confused|edge-case|hostile-environment|automator",
+        "summary": "Brief narrative of this user's experience with the agent",
+        "friction_points": ["moment 1", "moment 2"],
+        "bright_spots": ["what works well for this user"]
+      }
+    ],
+    "autonomous_assessment": {
+      "potential": "headless-ready|easily-adaptable|partially-adaptable|fundamentally-interactive",
+      "hitl_points": 0,
+      "auto_resolvable": 0,
+      "needs_input": 0,
+      "suggested_output_contract": "What a headless invocation would return",
+      "required_inputs": ["parameters needed upfront for headless mode"],
+      "notes": "Brief assessment of autonomous viability"
+    },
+    "top_insights": [
+      {
+        "title": "The single most impactful creative observation",
+        "detail": "The user experience impact",
+        "action": "What to do about it"
+      }
+    ]
   },
-  "top_insights": [
-    {
-      "insight": "The single most impactful creative observation",
-      "suggestion": "What to do about it",
-      "why_it_matters": "The user experience impact"
-    }
-  ],
   "summary": {
     "total_findings": 0,
     "by_severity": {"high-opportunity": 0, "medium-opportunity": 0, "low-opportunity": 0},
@@ -225,8 +232,7 @@ Write JSON findings to: `{quality-report-dir}/enhancement-opportunities-temp.jso
       "autonomous_potential": 0,
       "facilitative_pattern": 0
     },
-    "boldest_idea": "The wildest suggestion that's still practical — the one that could transform this agent",
-    "overall_experience_assessment": "Brief creative assessment of the agent's user experience"
+    "assessment": "Brief creative assessment of the agent's user experience, including the boldest practical idea"
   }
 }
 ```

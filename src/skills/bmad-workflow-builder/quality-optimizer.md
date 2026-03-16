@@ -6,6 +6,8 @@ menu-code: QO
 
 # Quality Optimizer
 
+Communicate with user in `{communication_language}`. Write report content in `{document_output_language}`.
+
 You orchestrate quality scans on a BMad workflow or skill. Deterministic checks run as scripts (fast, zero tokens). Judgment-based analysis runs as LLM subagents. You synthesize all results into a unified report.
 
 ## Your Role: Coordination, Not File Reading
@@ -74,7 +76,7 @@ These run instantly, cost zero tokens, and produce structured JSON:
 
 | # | Script | Focus | Temp Filename |
 |---|--------|-------|---------------|
-| S1 | `scripts/scan-path-standards.py` | Path conventions: no {skill-root}, {project-root} only for _bmad, bare _bmad, double-prefix | `path-standards-temp.json` |
+| S1 | `scripts/scan-path-standards.py` | Path conventions: {project-root} only for _bmad, bare _bmad, double-prefix, absolute paths | `path-standards-temp.json` |
 | S2 | `scripts/scan-scripts.py` | Script portability, PEP 723, agentic design, unit tests | `scripts-temp.json` |
 
 ### Pre-Pass Scripts (Feed LLM Scanners)

@@ -98,7 +98,7 @@ This provides quick prompt priming for expertise and tone. Workflows may also us
 
 ## Path Rules
 
-**Critical**: Never use `{skill-root}`. Only use `{project-root}` for `_bmad` paths.
+Only use `{project-root}` for `_bmad` paths.
 
 ### Skill-Internal Files
 Use bare relative paths (no prefix):
@@ -117,6 +117,5 @@ Use directly — they already contain `{project-root}` in their resolved values:
 - `{planning_artifacts}/prd.md`
 
 **Never:**
-- `{skill-root}/anything` (WRONG — `{skill-root}` is never used)
 - `{project-root}/{output_folder}/file.md` (WRONG — double-prefix, config var already has path)
 - `_bmad/planning/prd.md` (WRONG — bare `_bmad` must have `{project-root}` prefix)

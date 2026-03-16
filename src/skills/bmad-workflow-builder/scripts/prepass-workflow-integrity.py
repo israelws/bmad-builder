@@ -303,7 +303,7 @@ def check_prompt_basics(skill_path: Path) -> tuple[list[dict], list[dict]]:
             findings.append({
                 'file': rel_path, 'line': 1,
                 'severity': 'medium', 'category': 'config-header',
-                'issue': f'No config header with language variables found',
+                'issue': 'No config header with language variables found',
             })
 
         # Progression condition check (look for progression-related keywords near end)

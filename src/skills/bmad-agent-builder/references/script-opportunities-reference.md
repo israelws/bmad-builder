@@ -119,7 +119,7 @@ All scripts use PEP 723 and `--help`. When a skill's prompt needs to invoke a sc
 - ## Read Access section exists
 - ## Write Access section exists
 - ## Deny Zones section exists (can be empty)
-- Paths use placeholders correctly ({project-root} for _bmad paths, relative for skill-internal, no {skill-root})
+- Paths use placeholders correctly ({project-root} for _bmad paths, relative for skill-internal)
 ```
 
 **Output:** Structured JSON of read/write/deny zones

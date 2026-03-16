@@ -192,44 +192,57 @@ You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/workflow-integrity-temp.json`
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+**Field mapping for this scanner:**
+- `title` — Brief description of the issue (was `issue`)
+- `detail` — Why this is a problem (was `rationale`)
+- `action` — Specific action to resolve (was `fix`)
+
 ```json
 {
   "scanner": "workflow-integrity",
   "skill_path": "{path}",
-  "workflow_type": "complex|simple-workflow|simple-utility",
-  "issues": [
+  "findings": [
     {
-      "file": "SKILL.md|{name}.md|bmad-manifest.json",
+      "file": "SKILL.md",
       "line": 42,
-      "severity": "critical|high|medium|low",
-      "category": "frontmatter|sections|type-structure|config|config-header|language|artifacts|consistency|progression|missing-stage|naming|inline-steps|input-output|manifest|headless|invalid-section",
-      "issue": "Brief description",
-      "rationale": "Why this is a problem",
-      "fix": "Specific action to resolve"
+      "severity": "critical",
+      "category": "progression",
+      "title": "Stage 03 has no progression conditions",
+      "detail": "Without explicit conditions, the AI does not know when to advance to the next stage, causing stalls or premature transitions.",
+      "action": "Add progression conditions: 'Advance when all required fields are populated and user confirms.'"
     }
   ],
-  "stage_summary": {
-    "total_stages": 0,
-    "missing_stages": [],
-    "orphaned_stages": [],
-    "stages_without_progression": [],
-    "stages_without_config_header": []
+  "assessments": {
+    "workflow_type": "complex|simple-workflow|simple-utility",
+    "stage_summary": {
+      "total_stages": 0,
+      "missing_stages": [],
+      "orphaned_stages": [],
+      "stages_without_progression": [],
+      "stages_without_config_header": []
+    }
   },
   "summary": {
-    "total_issues": 0,
+    "total_findings": 0,
     "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
-    "by_category": {"frontmatter": 0, "sections": 0, "type-structure": 0, "config": 0, "config-header": 0, "language": 0, "artifacts": 0, "consistency": 0, "progression": 0, "missing-stage": 0, "naming": 0, "inline-steps": 0, "input-output": 0, "manifest": 0, "headless": 0}
+    "assessment": "Brief 1-2 sentence overall assessment of workflow integrity"
   }
 }
 ```
 
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 ## Process
 
-1. Read SKILL.md — validate frontmatter, sections, language, template artifacts
-2. Determine workflow type (complex, simple workflow, simple utility)
-3. For complex workflows: list all stage files at skill root, cross-reference with SKILL.md references
-4. For complex workflows: read each stage prompt at root — check progression conditions, config headers, naming
-5. For complex workflows: check bmad-manifest.json if module-based
+1. **Parallel read batch:** Read SKILL.md, bmad-manifest.json (if present), and list all `.md` files at skill root — in a single parallel batch
+2. Validate frontmatter, sections, language, template artifacts from SKILL.md
+3. Determine workflow type (complex, simple workflow, simple utility)
+4. For complex workflows: **parallel read batch** — read all stage prompt files identified in step 1
+5. For complex workflows: cross-reference stage files with SKILL.md references, check progression conditions, config headers, naming
 6. For simple workflows: verify inline steps are numbered, clear, and complete
 7. For simple utilities: verify input/output format and transformation rules
 8. Check headless mode if declared

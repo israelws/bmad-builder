@@ -143,6 +143,12 @@ Find and read:
 
 ## Output Format
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/agent-cohesion-temp.json`
@@ -151,75 +157,68 @@ Write JSON findings to: `{quality-report-dir}/agent-cohesion-temp.json`
 {
   "scanner": "agent-cohesion",
   "agent_path": "{path}",
-  "agent_identity": {
-    "name": "{skill-name}",
-    "persona_summary": "Brief characterization of who this agent is",
-    "primary_purpose": "What this agent is for",
-    "capability_count": 12
-  },
   "findings": [
     {
       "file": "SKILL.md|bmad-manifest.json|{name}.md",
-      "severity": "high|medium|low|suggestion",
+      "severity": "high|medium|low|suggestion|strength",
       "category": "gap|redundancy|misalignment|opportunity|strength",
-      "issue": "Brief description",
-      "observation": "What you noticed that led to this finding",
-      "rationale": "Why this matters for cohesion",
-      "suggestion": "Specific improvement idea",
-      "impact": "What value this would add if addressed"
+      "title": "Brief description",
+      "detail": "What you noticed, why this matters for cohesion, and what value addressing it would add",
+      "action": "Specific improvement idea"
     }
   ],
-  "cohesion_analysis": {
-    "persona_alignment": {
-      "score": "strong|moderate|weak",
-      "notes": "Brief explanation of why persona fits or doesn't fit capabilities"
+  "assessments": {
+    "agent_identity": {
+      "name": "{skill-name}",
+      "persona_summary": "Brief characterization of who this agent is",
+      "primary_purpose": "What this agent is for",
+      "capability_count": 12
     },
-    "capability_completeness": {
-      "score": "complete|mostly-complete|gaps-obvious",
-      "missing_areas": ["area1", "area2"],
-      "notes": "What's missing that should probably be there"
-    },
-    "redundancy_level": {
-      "score": "clean|some-overlap|significant-redundancy",
-      "consolidation_opportunities": [
-        {
-          "capabilities": ["cap-a", "cap-b", "cap-c"],
-          "suggested_consolidation": "How these could be combined"
-        }
-      ]
-    },
-    "external_integration": {
-      "external_skills_referenced": 3,
-      "integration_pattern": "intentional|incidental|unclear",
-      "notes": "How external skills fit into the overall design"
-    },
-    "user_journey_score": {
-      "score": "complete-end-to-end|mostly-complete|fragmented",
-      "broken_workflows": ["workflow that can't be completed"],
-      "notes": "Can a user accomplish real work with this agent?"
+    "cohesion_analysis": {
+      "persona_alignment": {
+        "score": "strong|moderate|weak",
+        "notes": "Brief explanation of why persona fits or doesn't fit capabilities"
+      },
+      "capability_completeness": {
+        "score": "complete|mostly-complete|gaps-obvious",
+        "missing_areas": ["area1", "area2"],
+        "notes": "What's missing that should probably be there"
+      },
+      "redundancy_level": {
+        "score": "clean|some-overlap|significant-redundancy",
+        "consolidation_opportunities": [
+          {
+            "capabilities": ["cap-a", "cap-b", "cap-c"],
+            "suggested_consolidation": "How these could be combined"
+          }
+        ]
+      },
+      "external_integration": {
+        "external_skills_referenced": 3,
+        "integration_pattern": "intentional|incidental|unclear",
+        "notes": "How external skills fit into the overall design"
+      },
+      "user_journey_score": {
+        "score": "complete-end-to-end|mostly-complete|fragmented",
+        "broken_workflows": ["workflow that can't be completed"],
+        "notes": "Can a user accomplish real work with this agent?"
+      }
     }
   },
-  "creative_suggestions": [
-    {
-      "type": "new-capability|consolidation|refinement|persona-shift",
-      "idea": "Brief creative suggestion for improvement",
-      "rationale": "Why this would strengthen the agent",
-      "estimated_impact": "high|medium|low"
-    }
-  ],
-  "strengths": [
-    "Something this agent does really well - positive feedback is useful!",
-    "Another strength..."
-  ],
   "summary": {
     "total_findings": 0,
-    "by_severity": {"high": 0, "medium": 0, "low": 0, "suggestion": 0},
+    "by_severity": {"high": 0, "medium": 0, "low": 0, "suggestion": 0, "strength": 0},
     "by_category": {"gap": 0, "redundancy": 0, "misalignment": 0, "opportunity": 0, "strength": 0},
     "overall_cohesion": "cohesive|mostly-cohesive|fragmented|confused",
     "single_most_important_fix": "The ONE thing that would most improve this agent"
   }
 }
 ```
+
+Merge all findings into the single `findings[]` array:
+- Former `findings[]` items: map `issue` to `title`, merge `observation`+`rationale`+`impact` into `detail`, map `suggestion` to `action`
+- Former `strengths[]` items: use `severity: "strength"`, `category: "strength"`
+- Former `creative_suggestions[]` items: use `severity: "suggestion"`, map `idea` to `title`, `rationale` to `detail`, merge `type` and `estimated_impact` context into `detail`, map actionable recommendation to `action`
 
 ## Severity Guidelines
 

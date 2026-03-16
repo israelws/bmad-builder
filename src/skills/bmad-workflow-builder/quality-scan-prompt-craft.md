@@ -235,60 +235,71 @@ You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/prompt-craft-temp.json`
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+**Field mapping for this scanner:**
+- `title` — Brief description of the issue (was `issue`)
+- `detail` — Why this matters and any nuance about whether it might be intentional (merges `rationale` + `nuance`)
+- `action` — Specific action to resolve (was `fix`)
+
 ```json
 {
   "scanner": "prompt-craft",
   "skill_path": "{path}",
-  "skill_type_assessment": "simple-utility|simple-workflow|complex-workflow|interactive-workflow",
-  "skillmd_assessment": {
-    "overview_quality": "appropriate|excessive|missing|disconnected",
-    "progressive_disclosure": "good|needs-extraction|monolithic",
-    "notes": "Brief assessment of SKILL.md craft"
-  },
-  "prompts_scanned": 0,
-  "issues": [
+  "findings": [
     {
-      "file": "SKILL.md|{name}.md",
+      "file": "SKILL.md",
       "line": 42,
-      "severity": "critical|high|medium|low|note",
-      "category": "token-waste|anti-pattern|outcome-balance|progression|self-containment|intelligence-placement|overview-quality|progressive-disclosure|under-contextualized|inline-data",
-      "issue": "Brief description",
-      "rationale": "Why this matters for prompt craft",
-      "fix": "Specific action to resolve",
-      "nuance": "Optional — why this might be intentional or context-dependent"
+      "severity": "medium",
+      "category": "token-waste",
+      "title": "Defensive padding in activation instructions",
+      "detail": "Three instances of 'Make sure to...' and 'Don't forget to...' add tokens without value. These are genuine waste, not contextual framing.",
+      "action": "Replace with direct imperatives: 'Load config first' instead of 'Make sure to load config first.'"
     }
   ],
-  "prompt_health": {
-    "prompts_with_config_header": 0,
-    "prompts_with_progression_conditions": 0,
-    "prompts_self_contained": 0,
-    "total_prompts": 0
+  "assessments": {
+    "skill_type_assessment": "simple-utility|simple-workflow|complex-workflow|interactive-workflow",
+    "skillmd_assessment": {
+      "overview_quality": "appropriate|excessive|missing|disconnected",
+      "progressive_disclosure": "good|needs-extraction|monolithic",
+      "notes": "Brief assessment of SKILL.md craft"
+    },
+    "prompts_scanned": 0,
+    "prompt_health": {
+      "prompts_with_config_header": 0,
+      "prompts_with_progression_conditions": 0,
+      "prompts_self_contained": 0,
+      "total_prompts": 0
+    }
   },
   "summary": {
-    "total_issues": 0,
+    "total_findings": 0,
     "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0, "note": 0},
-    "craft_assessment": "Brief 1-2 sentence overall assessment of prompt craft quality",
-    "top_improvement": "The single highest-impact improvement for this skill's prompts"
+    "assessment": "Brief 1-2 sentence overall assessment of prompt craft quality"
   }
 }
 ```
 
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 ## Process
 
-1. Read SKILL.md — assess skill type, evaluate Overview quality and progressive disclosure
-2. Read all prompt files at skill root
+1. **Parallel read batch:** Read SKILL.md, all prompt files at skill root, and list references/ contents — in a single parallel batch
+2. Assess skill type from SKILL.md, evaluate Overview quality and progressive disclosure
 3. Check references/ to verify progressive disclosure is working (detail is where it belongs)
 4. For SKILL.md: evaluate Overview quality (present? appropriate? excessive? disconnected? **missing?**)
 5. For SKILL.md: check for over-optimization — is this a complex/interactive skill stripped to a bare skeleton?
 6. For SKILL.md: check size and progressive disclosure — does it exceed guidelines? Are data tables, schemas, or reference material inline that should be in references/?
 7. For multi-branch SKILL.md: does each branch section have brief context explaining what it handles and why?
-7. For each stage prompt: check config header, progression conditions, self-containment
-8. For each stage prompt: check context sufficiency — do judgment-heavy prompts have enough context to make good decisions?
-9. For all files: scan for genuine token waste (repetition, defensive padding, meta-explanation)
-10. For all files: evaluate outcome vs implementation balance given the skill type
-11. For all files: check intelligence placement (judgment in prompts, determinism in scripts)
-12. Write JSON to `{quality-report-dir}/prompt-craft-temp.json`
-13. Return only the filename: `prompt-craft-temp.json`
+8. For each stage prompt: check config header, progression conditions, self-containment
+9. For each stage prompt: check context sufficiency — do judgment-heavy prompts have enough context to make good decisions?
+10. For all files: scan for genuine token waste (repetition, defensive padding, meta-explanation)
+11. For all files: evaluate outcome vs implementation balance given the skill type
+12. For all files: check intelligence placement (judgment in prompts, determinism in scripts)
+13. Write JSON to `{quality-report-dir}/prompt-craft-temp.json`
+14. Return only the filename: `prompt-craft-temp.json`
 
 ## Critical After Draft Output
 

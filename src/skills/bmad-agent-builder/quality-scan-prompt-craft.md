@@ -165,6 +165,12 @@ Do NOT flag these:
 
 ## Output Format
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/prompt-craft-temp.json`
@@ -173,36 +179,37 @@ Write JSON findings to: `{quality-report-dir}/prompt-craft-temp.json`
 {
   "scanner": "prompt-craft",
   "skill_path": "{path}",
-  "skill_type_assessment": "simple-utility|domain-expert|companion-interactive|workflow-facilitator",
-  "skillmd_assessment": {
-    "overview_quality": "appropriate|excessive|missing|disconnected",
-    "progressive_disclosure": "good|needs-extraction|monolithic",
-    "persona_context": "appropriate|excessive|missing",
-    "notes": "Brief assessment of SKILL.md craft"
-  },
-  "prompts_scanned": 0,
-  "issues": [
+  "findings": [
     {
       "file": "SKILL.md|{name}.md",
       "line": 42,
       "severity": "critical|high|medium|low|note",
       "category": "token-waste|anti-pattern|outcome-balance|progression|self-containment|intelligence-placement|overview-quality|progressive-disclosure|under-contextualized|persona-voice|communication-consistency|inline-data",
-      "issue": "Brief description",
-      "rationale": "Why this matters for prompt craft",
-      "fix": "Specific action to resolve",
-      "nuance": "Optional — why this might be intentional"
+      "title": "Brief description",
+      "detail": "Why this matters for prompt craft. Include any nuance about why this might be intentional.",
+      "action": "Specific action to resolve"
     }
   ],
-  "prompt_health": {
-    "prompts_with_config_header": 0,
-    "prompts_with_progression_conditions": 0,
-    "prompts_self_contained": 0,
-    "total_prompts": 0
+  "assessments": {
+    "skill_type_assessment": "simple-utility|domain-expert|companion-interactive|workflow-facilitator",
+    "skillmd_assessment": {
+      "overview_quality": "appropriate|excessive|missing|disconnected",
+      "progressive_disclosure": "good|needs-extraction|monolithic",
+      "persona_context": "appropriate|excessive|missing",
+      "notes": "Brief assessment of SKILL.md craft"
+    },
+    "prompts_scanned": 0,
+    "prompt_health": {
+      "prompts_with_config_header": 0,
+      "prompts_with_progression_conditions": 0,
+      "prompts_self_contained": 0,
+      "total_prompts": 0
+    }
   },
   "summary": {
-    "total_issues": 0,
+    "total_findings": 0,
     "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0, "note": 0},
-    "craft_assessment": "Brief 1-2 sentence assessment",
+    "assessment": "Brief 1-2 sentence assessment",
     "top_improvement": "Highest-impact improvement"
   }
 }

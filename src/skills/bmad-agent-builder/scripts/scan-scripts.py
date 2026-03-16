@@ -62,8 +62,9 @@ def lint_python_ruff(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'high', 'category': 'lint-setup',
-            'issue': 'uv not found on PATH — cannot run ruff for Python linting',
-            'fix': 'Install uv: https://docs.astral.sh/uv/getting-started/installation/',
+            'title': 'uv not found on PATH — cannot run ruff for Python linting',
+            'detail': '',
+            'action': 'Install uv: https://docs.astral.sh/uv/getting-started/installation/',
         }]
 
     rc, stdout, stderr = _run_command([
@@ -74,15 +75,18 @@ def lint_python_ruff(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'high', 'category': 'lint-setup',
-            'issue': f'Failed to run ruff via uv: {stderr.strip()}',
-            'fix': 'Ensure uv can install and run ruff: uv run ruff --version',
+            'title': f'Failed to run ruff via uv: {stderr.strip()}',
+            'detail': '',
+            'action': 'Ensure uv can install and run ruff: uv run ruff --version',
         }]
 
     if rc == -2:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'medium', 'category': 'lint',
-            'issue': f'ruff timed out on {rel_path}',
+            'title': f'ruff timed out on {rel_path}',
+            'detail': '',
+            'action': '',
         }]
 
     # ruff outputs JSON array on stdout (even on rc=1 when issues found)
@@ -93,7 +97,9 @@ def lint_python_ruff(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'medium', 'category': 'lint',
-            'issue': f'Failed to parse ruff output for {rel_path}',
+            'title': f'Failed to parse ruff output for {rel_path}',
+            'detail': '',
+            'action': '',
         }]
 
     for issue in issues:
@@ -103,8 +109,9 @@ def lint_python_ruff(filepath: Path, rel_path: str) -> list[dict]:
             'line': issue.get('location', {}).get('row', 0),
             'severity': 'high',
             'category': 'lint',
-            'issue': f'[{issue.get("code", "?")}] {issue.get("message", "")}',
-            'fix': fix_msg or f'See https://docs.astral.sh/ruff/rules/{issue.get("code", "")}',
+            'title': f'[{issue.get("code", "?")}] {issue.get("message", "")}',
+            'detail': '',
+            'action': fix_msg or f'See https://docs.astral.sh/ruff/rules/{issue.get("code", "")}',
         })
 
     return findings
@@ -117,8 +124,9 @@ def lint_shell_shellcheck(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'high', 'category': 'lint-setup',
-            'issue': 'uv not found on PATH — cannot run shellcheck for shell linting',
-            'fix': 'Install uv: https://docs.astral.sh/uv/getting-started/installation/',
+            'title': 'uv not found on PATH — cannot run shellcheck for shell linting',
+            'detail': '',
+            'action': 'Install uv: https://docs.astral.sh/uv/getting-started/installation/',
         }]
 
     rc, stdout, stderr = _run_command([
@@ -130,15 +138,18 @@ def lint_shell_shellcheck(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'high', 'category': 'lint-setup',
-            'issue': f'Failed to run shellcheck via uv: {stderr.strip()}',
-            'fix': 'Ensure uv can install shellcheck-py: uv run --with shellcheck-py shellcheck --version',
+            'title': f'Failed to run shellcheck via uv: {stderr.strip()}',
+            'detail': '',
+            'action': 'Ensure uv can install shellcheck-py: uv run --with shellcheck-py shellcheck --version',
         }]
 
     if rc == -2:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'medium', 'category': 'lint',
-            'issue': f'shellcheck timed out on {rel_path}',
+            'title': f'shellcheck timed out on {rel_path}',
+            'detail': '',
+            'action': '',
         }]
 
     findings = []
@@ -150,7 +161,9 @@ def lint_shell_shellcheck(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'medium', 'category': 'lint',
-            'issue': f'Failed to parse shellcheck output for {rel_path}',
+            'title': f'Failed to parse shellcheck output for {rel_path}',
+            'detail': '',
+            'action': '',
         }]
 
     # Map shellcheck levels to our severity
@@ -163,8 +176,9 @@ def lint_shell_shellcheck(filepath: Path, rel_path: str) -> list[dict]:
             'line': issue.get('line', 0),
             'severity': level_map.get(issue.get('level', ''), 'high'),
             'category': 'lint',
-            'issue': f'[SC{sc_code}] {issue.get("message", "")}',
-            'fix': f'See https://www.shellcheck.net/wiki/SC{sc_code}',
+            'title': f'[SC{sc_code}] {issue.get("message", "")}',
+            'detail': '',
+            'action': f'See https://www.shellcheck.net/wiki/SC{sc_code}',
         })
 
     return findings
@@ -177,8 +191,9 @@ def lint_node_biome(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'high', 'category': 'lint-setup',
-            'issue': 'npx not found on PATH — cannot run biome for JS/TS linting',
-            'fix': 'Install Node.js 20+: https://nodejs.org/',
+            'title': 'npx not found on PATH — cannot run biome for JS/TS linting',
+            'detail': '',
+            'action': 'Install Node.js 20+: https://nodejs.org/',
         }]
 
     rc, stdout, stderr = _run_command([
@@ -189,15 +204,18 @@ def lint_node_biome(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'high', 'category': 'lint-setup',
-            'issue': f'Failed to run biome via npx: {stderr.strip()}',
-            'fix': 'Ensure npx can run biome: npx @biomejs/biome --version',
+            'title': f'Failed to run biome via npx: {stderr.strip()}',
+            'detail': '',
+            'action': 'Ensure npx can run biome: npx @biomejs/biome --version',
         }]
 
     if rc == -2:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'medium', 'category': 'lint',
-            'issue': f'biome timed out on {rel_path}',
+            'title': f'biome timed out on {rel_path}',
+            'detail': '',
+            'action': '',
         }]
 
     findings = []
@@ -209,7 +227,9 @@ def lint_node_biome(filepath: Path, rel_path: str) -> list[dict]:
         return [{
             'file': rel_path, 'line': 0,
             'severity': 'medium', 'category': 'lint',
-            'issue': f'Failed to parse biome output for {rel_path}',
+            'title': f'Failed to parse biome output for {rel_path}',
+            'detail': '',
+            'action': '',
         }]
 
     for diag in result.get('diagnostics', []):
@@ -220,8 +240,9 @@ def lint_node_biome(filepath: Path, rel_path: str) -> list[dict]:
             'line': start.get('line', 0),
             'severity': 'high',
             'category': 'lint',
-            'issue': f'[{diag.get("category", "?")}] {diag.get("message", "")}',
-            'fix': diag.get('advices', [{}])[0].get('message', '') if diag.get('advices') else '',
+            'title': f'[{diag.get("category", "?")}] {diag.get("message", "")}',
+            'detail': '',
+            'action': diag.get('advices', [{}])[0].get('message', '') if diag.get('advices') else '',
         })
 
     return findings
@@ -245,8 +266,9 @@ def scan_python_script(filepath: Path, rel_path: str) -> list[dict]:
             findings.append({
                 'file': rel_path, 'line': 1,
                 'severity': 'medium', 'category': 'dependencies',
-                'issue': 'No PEP 723 inline dependency block (# /// script)',
-                'fix': 'Add PEP 723 block with requires-python and dependencies',
+                'title': 'No PEP 723 inline dependency block (# /// script)',
+                'detail': '',
+                'action': 'Add PEP 723 block with requires-python and dependencies',
             })
     else:
         # Check requires-python is present
@@ -254,8 +276,9 @@ def scan_python_script(filepath: Path, rel_path: str) -> list[dict]:
             findings.append({
                 'file': rel_path, 'line': 1,
                 'severity': 'low', 'category': 'dependencies',
-                'issue': 'PEP 723 block exists but missing requires-python constraint',
-                'fix': 'Add requires-python = ">=3.9" or appropriate version',
+                'title': 'PEP 723 block exists but missing requires-python constraint',
+                'detail': '',
+                'action': 'Add requires-python = ">=3.9" or appropriate version',
             })
 
     # requirements.txt reference
@@ -263,8 +286,9 @@ def scan_python_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'high', 'category': 'dependencies',
-            'issue': 'References requirements.txt or pip install — use PEP 723 inline deps',
-            'fix': 'Replace with PEP 723 inline dependency block',
+            'title': 'References requirements.txt or pip install — use PEP 723 inline deps',
+            'detail': '',
+            'action': 'Replace with PEP 723 inline dependency block',
         })
 
     # Agentic design checks via AST
@@ -274,7 +298,9 @@ def scan_python_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'critical', 'category': 'error-handling',
-            'issue': 'Python syntax error — script cannot be parsed',
+            'title': 'Python syntax error — script cannot be parsed',
+            'detail': '',
+            'action': '',
         })
         return findings
 
@@ -299,8 +325,9 @@ def scan_python_script(filepath: Path, rel_path: str) -> list[dict]:
                 findings.append({
                     'file': rel_path, 'line': node.lineno,
                     'severity': 'critical', 'category': 'agentic-design',
-                    'issue': 'input() call found — blocks in non-interactive agent execution',
-                    'fix': 'Use argparse with required flags instead of interactive prompts',
+                    'title': 'input() call found — blocks in non-interactive agent execution',
+                    'detail': '',
+                    'action': 'Use argparse with required flags instead of interactive prompts',
                 })
             # json.dumps
             if isinstance(func, ast.Attribute) and func.attr == 'dumps':
@@ -319,24 +346,27 @@ def scan_python_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'medium', 'category': 'agentic-design',
-            'issue': 'No argparse found — script lacks --help self-documentation',
-            'fix': 'Add argparse with description and argument help text',
+            'title': 'No argparse found — script lacks --help self-documentation',
+            'detail': '',
+            'action': 'Add argparse with description and argument help text',
         })
 
     if not has_json_dumps and line_count > 20:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'medium', 'category': 'agentic-design',
-            'issue': 'No json.dumps found — output may not be structured JSON',
-            'fix': 'Use json.dumps for structured output parseable by workflows',
+            'title': 'No json.dumps found — output may not be structured JSON',
+            'detail': '',
+            'action': 'Use json.dumps for structured output parseable by workflows',
         })
 
     if not has_sys_exit and line_count > 20:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'low', 'category': 'agentic-design',
-            'issue': 'No sys.exit() calls — may not return meaningful exit codes',
-            'fix': 'Return 0=success, 1=fail, 2=error via sys.exit()',
+            'title': 'No sys.exit() calls — may not return meaningful exit codes',
+            'detail': '',
+            'action': 'Return 0=success, 1=fail, 2=error via sys.exit()',
         })
 
     # Over-engineering: simple file ops in Python
@@ -346,8 +376,9 @@ def scan_python_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'low', 'category': 'over-engineered',
-            'issue': f'Short script ({line_count} lines) imports {", ".join(over_eng)} — may be simpler as bash',
-            'fix': 'Consider if cp/mv/find shell commands would suffice',
+            'title': f'Short script ({line_count} lines) imports {", ".join(over_eng)} — may be simpler as bash',
+            'detail': '',
+            'action': 'Consider if cp/mv/find shell commands would suffice',
         })
 
     # Very short script
@@ -355,8 +386,9 @@ def scan_python_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'medium', 'category': 'over-engineered',
-            'issue': f'Script is only {line_count} lines — could be an inline command',
-            'fix': 'Consider inlining this command directly in the prompt',
+            'title': f'Script is only {line_count} lines — could be an inline command',
+            'detail': '',
+            'action': 'Consider inlining this command directly in the prompt',
         })
 
     return findings
@@ -374,15 +406,17 @@ def scan_shell_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'high', 'category': 'portability',
-            'issue': 'Missing shebang line',
-            'fix': 'Add #!/usr/bin/env bash or #!/usr/bin/env sh',
+            'title': 'Missing shebang line',
+            'detail': '',
+            'action': 'Add #!/usr/bin/env bash or #!/usr/bin/env sh',
         })
     elif '/usr/bin/env' not in lines[0]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'medium', 'category': 'portability',
-            'issue': f'Shebang uses hardcoded path: {lines[0].strip()}',
-            'fix': 'Use #!/usr/bin/env bash for cross-platform compatibility',
+            'title': f'Shebang uses hardcoded path: {lines[0].strip()}',
+            'detail': '',
+            'action': 'Use #!/usr/bin/env bash for cross-platform compatibility',
         })
 
     # set -e
@@ -390,8 +424,9 @@ def scan_shell_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'medium', 'category': 'error-handling',
-            'issue': 'Missing set -e — errors will be silently ignored',
-            'fix': 'Add set -e (or set -euo pipefail) near the top',
+            'title': 'Missing set -e — errors will be silently ignored',
+            'detail': '',
+            'action': 'Add set -e (or set -euo pipefail) near the top',
         })
 
     # Hardcoded interpreter paths
@@ -401,8 +436,9 @@ def scan_shell_script(filepath: Path, rel_path: str) -> list[dict]:
             findings.append({
                 'file': rel_path, 'line': i,
                 'severity': 'medium', 'category': 'portability',
-                'issue': f'Hardcoded interpreter path: {line.strip()}',
-                'fix': 'Use /usr/bin/env or PATH-based lookup',
+                'title': f'Hardcoded interpreter path: {line.strip()}',
+                'detail': '',
+                'action': 'Use /usr/bin/env or PATH-based lookup',
             })
 
     # GNU-only tools
@@ -413,8 +449,9 @@ def scan_shell_script(filepath: Path, rel_path: str) -> list[dict]:
             findings.append({
                 'file': rel_path, 'line': i,
                 'severity': 'medium', 'category': 'portability',
-                'issue': f'GNU-only tool: {m.group()} — not available on all platforms',
-                'fix': 'Use POSIX-compatible equivalent',
+                'title': f'GNU-only tool: {m.group()} — not available on all platforms',
+                'detail': '',
+                'action': 'Use POSIX-compatible equivalent',
             })
 
     # Unquoted variables (basic check)
@@ -430,8 +467,9 @@ def scan_shell_script(filepath: Path, rel_path: str) -> list[dict]:
             findings.append({
                 'file': rel_path, 'line': i,
                 'severity': 'low', 'category': 'portability',
-                'issue': f'Potentially unquoted variable: {m.group()} — breaks with spaces in paths',
-                'fix': f'Use "{m.group()}" with double quotes',
+                'title': f'Potentially unquoted variable: {m.group()} — breaks with spaces in paths',
+                'detail': '',
+                'action': f'Use "{m.group()}" with double quotes',
             })
 
     # npx/uvx without version pinning
@@ -444,8 +482,9 @@ def scan_shell_script(filepath: Path, rel_path: str) -> list[dict]:
             findings.append({
                 'file': rel_path, 'line': i,
                 'severity': 'medium', 'category': 'dependencies',
-                'issue': f'{m.group(1)} {m.group(2)} without version pinning',
-                'fix': f'Pin version: {m.group(1)} {m.group(2)}@<version>',
+                'title': f'{m.group(1)} {m.group(2)} without version pinning',
+                'detail': '',
+                'action': f'Pin version: {m.group(1)} {m.group(2)}@<version>',
             })
 
     # Very short script
@@ -453,8 +492,9 @@ def scan_shell_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'medium', 'category': 'over-engineered',
-            'issue': f'Script is only {line_count} lines — could be an inline command',
-            'fix': 'Consider inlining this command directly in the prompt',
+            'title': f'Script is only {line_count} lines — could be an inline command',
+            'detail': '',
+            'action': 'Consider inlining this command directly in the prompt',
         })
 
     return findings
@@ -475,8 +515,9 @@ def scan_node_script(filepath: Path, rel_path: str) -> list[dict]:
             findings.append({
                 'file': rel_path, 'line': i,
                 'severity': 'medium', 'category': 'dependencies',
-                'issue': f'{m.group(1)} {m.group(2)} without version pinning',
-                'fix': f'Pin version: {m.group(1)} {m.group(2)}@<version>',
+                'title': f'{m.group(1)} {m.group(2)} without version pinning',
+                'detail': '',
+                'action': f'Pin version: {m.group(1)} {m.group(2)}@<version>',
             })
 
     # Very short script
@@ -484,8 +525,9 @@ def scan_node_script(filepath: Path, rel_path: str) -> list[dict]:
         findings.append({
             'file': rel_path, 'line': 1,
             'severity': 'medium', 'category': 'over-engineered',
-            'issue': f'Script is only {line_count} lines — could be an inline command',
-            'fix': 'Consider inlining this command directly in the prompt',
+            'title': f'Script is only {line_count} lines — could be an inline command',
+            'detail': '',
+            'action': 'Consider inlining this command directly in the prompt',
         })
 
     return findings
@@ -511,25 +553,30 @@ def scan_skill_scripts(skill_path: Path) -> dict:
             'skill_path': str(skill_path),
             'timestamp': datetime.now(timezone.utc).isoformat(),
             'status': 'pass',
-            'issues': [{
+            'findings': [{
                 'file': 'scripts/',
                 'severity': 'info',
                 'category': 'none',
-                'issue': 'No scripts/ directory found — nothing to scan',
+                'title': 'No scripts/ directory found — nothing to scan',
+                'detail': '',
+                'action': '',
             }],
-            'lint_summary': {
-                'tools_used': [],
-                'files_linted': 0,
-                'lint_issues': 0,
-            },
-            'script_summary': {
-                'total_scripts': 0,
-                'by_type': script_inventory,
-                'missing_tests': [],
+            'assessments': {
+                'lint_summary': {
+                    'tools_used': [],
+                    'files_linted': 0,
+                    'lint_issues': 0,
+                },
+                'script_summary': {
+                    'total_scripts': 0,
+                    'by_type': script_inventory,
+                    'missing_tests': [],
+                },
             },
             'summary': {
-                'total_issues': 0,
+                'total_findings': 0,
                 'by_severity': {'critical': 0, 'high': 0, 'medium': 0, 'low': 0},
+                'assessment': '',
             },
         }
 
@@ -588,8 +635,9 @@ def scan_skill_scripts(skill_path: Path) -> dict:
             findings.append({
                 'file': rel_path, 'line': 1,
                 'severity': 'medium', 'category': 'tests',
-                'issue': f'No unit test found for {script_file.name}',
-                'fix': f'Create scripts/tests/test-{script_file.stem}{ext} with test cases',
+                'title': f'No unit test found for {script_file.name}',
+                'detail': '',
+                'action': f'Create scripts/tests/test-{script_file.stem}{ext} with test cases',
             })
 
         all_findings.extend(findings)
@@ -601,8 +649,9 @@ def scan_skill_scripts(skill_path: Path) -> dict:
             'line': 0,
             'severity': 'high',
             'category': 'tests',
-            'issue': 'scripts/tests/ directory does not exist — no unit tests',
-            'fix': 'Create scripts/tests/ with test files for each script',
+            'title': 'scripts/tests/ directory does not exist — no unit tests',
+            'detail': '',
+            'action': 'Create scripts/tests/ with test files for each script',
         })
 
     # Merge lint findings into all findings
@@ -636,22 +685,25 @@ def scan_skill_scripts(skill_path: Path) -> dict:
         'skill_path': str(skill_path),
         'timestamp': datetime.now(timezone.utc).isoformat(),
         'status': status,
-        'issues': all_findings,
-        'lint_summary': {
-            'tools_used': sorted(lint_tools_used),
-            'files_linted': total_scripts,
-            'lint_issues': lint_issue_count,
-        },
-        'script_summary': {
-            'total_scripts': total_scripts,
-            'by_type': {k: len(v) for k, v in script_inventory.items()},
-            'scripts': {k: v for k, v in script_inventory.items() if v},
-            'missing_tests': missing_tests,
+        'findings': all_findings,
+        'assessments': {
+            'lint_summary': {
+                'tools_used': sorted(lint_tools_used),
+                'files_linted': total_scripts,
+                'lint_issues': lint_issue_count,
+            },
+            'script_summary': {
+                'total_scripts': total_scripts,
+                'by_type': {k: len(v) for k, v in script_inventory.items()},
+                'scripts': {k: v for k, v in script_inventory.items() if v},
+                'missing_tests': missing_tests,
+            },
         },
         'summary': {
-            'total_issues': len(all_findings),
+            'total_findings': len(all_findings),
             'by_severity': by_severity,
             'by_category': by_category,
+            'assessment': '',
         },
     }
 

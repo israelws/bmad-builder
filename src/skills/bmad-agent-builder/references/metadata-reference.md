@@ -103,7 +103,7 @@ All module skills MUST use the `bmad-init` skill at startup.
 
 ## Path Construction Rules — CRITICAL
 
-Never use `{skill-root}`. Only use `{project-root}` for `_bmad` paths.
+Only use `{project-root}` for `_bmad` paths.
 
 **Three path types:**
 - **Skill-internal** — bare relative paths (no prefix)
@@ -120,7 +120,7 @@ capability.md                         # Skill-internal (bare relative)
 
 **Never use:**
 ```
-{skill-root}/references/reference.md   # {skill-root} doesn't exist
+../../other-skill/file.md              # Cross-skill relative path breaks with reorganization
 {project-root}/{config_var}/output.md # Double-prefix
 ./references/reference.md              # Relative prefix breaks context changes
 ```

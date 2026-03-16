@@ -106,7 +106,7 @@ For each capability, confirm these with the user — they determine how the modu
 - **description (capability):** Keep this VERY short — a single sentence describing what it produces, not how it works. This is what the LLM help system shows users. (e.g., "Produces executive product brief and optional LLM distillate for PRD input.")
 
 **Path conventions (CRITICAL):**
-- Skill-internal files use bare relative paths: `references/`, `scripts/`, and prompt files at root (never `{skill-root}`)
+- Skill-internal files use bare relative paths: `references/`, `scripts/`, and prompt files at root
 - Only `_bmad` paths get `{project-root}` prefix: `{project-root}/_bmad/...`
 - Config variables used directly — they already contain `{project-root}` (no double-prefix)
 

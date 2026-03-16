@@ -188,6 +188,12 @@ For each script opportunity found, also assess:
 
 ## Output Format
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/script-opportunities-temp.json`
@@ -196,32 +202,25 @@ Write JSON findings to: `{quality-report-dir}/script-opportunities-temp.json`
 {
   "scanner": "script-opportunities",
   "skill_path": "{path}",
-  "existing_scripts": ["list of scripts that already exist in the agent's scripts/ folder"],
   "findings": [
     {
       "file": "SKILL.md|{name}.md",
       "line": 42,
       "severity": "high|medium|low",
       "category": "validation|extraction|transformation|counting|comparison|structure|graph|preprocessing|postprocessing",
-      "current_behavior": "What the LLM is currently doing",
-      "script_alternative": "What a script would do instead",
-      "determinism_confidence": "certain|high|moderate",
-      "estimated_token_savings": "tokens saved per invocation",
-      "implementation_complexity": "trivial|moderate|complex",
-      "language": "python|bash|either",
-      "could_be_prepass": false,
-      "feeds_scanner": "scanner name if applicable",
-      "reusable_across_skills": false,
-      "help_pattern_savings": "additional prompt tokens saved by using --help instead of inlining interface"
+      "title": "What the LLM is currently doing",
+      "detail": "Determinism confidence: certain|high|moderate. Estimated token savings: N per invocation. Implementation complexity: trivial|moderate|complex. Language: python|bash|either. Could be prepass: yes/no. Feeds scanner: name if applicable. Reusable across skills: yes/no. Help pattern savings: additional prompt tokens saved by using --help instead of inlining interface.",
+      "action": "What a script would do instead"
     }
   ],
+  "assessments": {
+    "existing_scripts": ["list of scripts that already exist in the agent's scripts/ folder"]
+  },
   "summary": {
     "total_findings": 0,
     "by_severity": {"high": 0, "medium": 0, "low": 0},
     "by_category": {},
-    "total_estimated_token_savings": "aggregate estimate across all findings",
-    "highest_value_opportunity": "The single biggest win — describe it",
-    "prepass_opportunities": "How many findings could become pre-pass scripts for LLM scanners"
+    "assessment": "Brief assessment including total estimated token savings, the single highest-value opportunity, and how many findings could become pre-pass scripts for LLM scanners"
   }
 }
 ```

@@ -116,6 +116,12 @@ Include all pre-pass findings in your output, preserved as-is. These are determi
 
 ## Output Format
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/structure-temp.json`
@@ -124,17 +130,18 @@ Write JSON findings to: `{quality-report-dir}/structure-temp.json`
 {
   "scanner": "structure",
   "skill_path": "{path}",
-  "issues": [
+  "findings": [
     {
       "file": "SKILL.md|bmad-manifest.json|{name}.md",
       "line": 42,
       "severity": "critical|high|medium|low",
       "category": "frontmatter|sections|artifacts|manifest|capabilities|identity|communication-style|principles|consistency|memory-setup|headless-mode|activation-sequence",
-      "issue": "Brief description",
-      "fix": "Specific action to resolve"
+      "title": "Brief description",
+      "detail": "",
+      "action": "Specific action to resolve"
     }
   ],
-  "metadata": {
+  "assessments": {
     "sections_found": ["Overview", "Identity"],
     "capabilities_count": 0,
     "has_memory": false,
@@ -142,10 +149,10 @@ Write JSON findings to: `{quality-report-dir}/structure-temp.json`
     "manifest_valid": true
   },
   "summary": {
-    "total_issues": 0,
+    "total_findings": 0,
     "by_severity": {"critical": 0, "high": 0, "medium": 0, "low": 0},
     "by_category": {},
-    "structure_assessment": "Brief 1-2 sentence assessment"
+    "assessment": "Brief 1-2 sentence assessment"
   }
 }
 ```

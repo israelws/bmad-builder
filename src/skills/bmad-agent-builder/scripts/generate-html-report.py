@@ -70,12 +70,46 @@ SECTION_LABELS = {
 }
 
 
+def _coalesce(*values) -> str:
+    """Return the first truthy string value, or empty string."""
+    for v in values:
+        if v and isinstance(v, str) and v.strip() and v.strip() not in ('N/A', 'n/a', 'None'):
+            return v.strip()
+    return ''
+
+
+def _norm_severity(sev: str) -> str:
+    """Normalize severity to lowercase, handle variants."""
+    if not sev:
+        return 'low'
+    s = sev.strip().lower()
+    # Map common variants
+    return {
+        'high-opportunity': 'high-opportunity',
+        'medium-opportunity': 'medium-opportunity',
+        'low-opportunity': 'low-opportunity',
+    }.get(s, s)
+
+
 def normalize_finding(f: dict, scanner: str, idx: int) -> dict:
-    """Normalize a single finding/issue dict into the unified item model."""
-    sev = f.get('severity', 'low')
+    """
+    Normalize a single finding/issue dict into the unified item model.
+
+    Handles all known field name variants across scanners:
+      Title:  issue | title | description (fallback)
+      Desc:   description | rationale | observation | insight | scenario |
+              current_behavior | current_pattern | context | nuance
+      Action: fix | recommendation | suggestion | suggested_approach |
+              efficient_alternative | script_alternative
+      File:   file | location | current_location
+      Line:   line | lines
+      Cat:    category | dimension
+      Impact: user_impact | impact | estimated_savings | estimated_token_savings
+    """
+    sev = _norm_severity(f.get('severity', 'low'))
     section = SCANNER_SECTIONS.get(scanner, 'other')
 
-    # Determine item type
+    # Determine item type from severity
     if sev in ('strength', 'note') or f.get('category') == 'strength':
         item_type = 'strength'
         action_type = 'none'
@@ -93,99 +127,133 @@ def normalize_finding(f: dict, scanner: str, idx: int) -> dict:
         action_type = 'fix'
         selectable = True
 
-    # Build title — different scanners use different fields
-    title = (
-        f.get('issue')
-        or _first_sentence(f.get('scenario', ''))
-        or _first_sentence(f.get('current_behavior', ''))
-        or f.get('observation', '')
-        or 'Finding'
+    # --- Title: prefer 'title', fall back to old field names ---
+    title = _coalesce(
+        f.get('title'),
+        f.get('issue'),
+        _truncate(f.get('scenario', ''), 150),
+        _truncate(f.get('current_behavior', ''), 150),
+        _truncate(f.get('description', ''), 150),
+        f.get('observation', ''),
+    )
+    if not title:
+        title = f.get('id', 'Finding')
+
+    # --- Detail/description: prefer 'detail', fall back to old field names ---
+    description = _coalesce(f.get('detail'))
+    if not description:
+        # Backward compat: coalesce old field names
+        desc_candidates = []
+        for key in ('description', 'rationale', 'observation', 'insight', 'scenario',
+                    'current_behavior', 'current_pattern', 'context', 'nuance',
+                    'assessment'):
+            v = f.get(key)
+            if v and isinstance(v, str) and v.strip() and v != title:
+                desc_candidates.append(v.strip())
+        description = ' '.join(desc_candidates) if desc_candidates else ''
+
+    # --- Action: prefer 'action', fall back to old field names ---
+    action = _coalesce(
+        f.get('action'),
+        f.get('fix'),
+        f.get('recommendation'),
+        f.get('suggestion'),
+        f.get('suggested_approach'),
+        f.get('efficient_alternative'),
+        f.get('script_alternative'),
     )
 
-    # Build description
-    desc_parts = []
-    for key in ('rationale', 'observation', 'insight', 'scenario',
-                'current_behavior', 'current_pattern', 'nuance'):
-        v = f.get(key)
-        if v and v != title:
-            desc_parts.append(v)
-    description = ' '.join(desc_parts) if desc_parts else title
-
-    # Build action/fix
-    action = (
-        f.get('fix')
-        or f.get('suggestion')
-        or f.get('efficient_alternative')
-        or f.get('script_alternative')
-        or ''
+    # --- File reference ---
+    file_ref = _coalesce(
+        f.get('file'),
+        f.get('location'),
+        f.get('current_location'),
     )
 
-    # Build impact
-    impact = (
-        f.get('user_impact')
-        or f.get('impact')
-        or f.get('estimated_savings')
-        or f.get('estimated_token_savings')
-        or ''
+    # --- Line reference ---
+    line = f.get('line')
+    if line is None:
+        lines_str = f.get('lines')
+        if lines_str:
+            line = str(lines_str)
+
+    # --- Category ---
+    category = _coalesce(
+        f.get('category'),
+        f.get('dimension'),
     )
 
-    # Script-opportunity specific
+    # --- Impact (backward compat only - new schema folds into detail) ---
+    impact = _coalesce(
+        f.get('user_impact'),
+        f.get('impact'),
+        f.get('estimated_savings'),
+        str(f.get('estimated_token_savings', '')) if f.get('estimated_token_savings') else '',
+    )
+
+    # --- Extra fields for specific scanners ---
+    extra = {}
     if scanner == 'script-opportunities':
         action_type = 'create-script'
-        extra = {}
         for k in ('determinism_confidence', 'implementation_complexity',
                    'language', 'could_be_prepass', 'reusable_across_skills'):
             if k in f:
                 extra[k] = f[k]
-    else:
-        extra = {}
+
+    # Use scanner-provided id if available
+    item_id = f.get('id', f'{scanner}-{idx:03d}')
 
     return {
-        'id': f'{scanner}-{idx:03d}',
+        'id': item_id,
         'scanner': scanner,
         'section': section,
         'type': item_type,
         'severity': sev,
         'rank': SEVERITY_RANK.get(sev, 3),
-        'category': f.get('category', ''),
-        'file': f.get('file', ''),
-        'line': f.get('line'),
+        'category': category,
+        'file': file_ref,
+        'line': line,
         'title': title,
         'description': description,
         'action': action,
-        'impact': str(impact) if impact else '',
+        'impact': impact,
         'extra': extra,
         'selectable': selectable,
         'action_type': action_type,
     }
 
 
-def _first_sentence(text: str) -> str:
-    """Extract the first sentence from a string."""
+def _truncate(text: str, max_len: int) -> str:
+    """Truncate text to max_len, breaking at sentence boundary if possible."""
     if not text:
         return ''
-    for end in ('. ', '.\n', '—'):
+    text = text.strip()
+    if len(text) <= max_len:
+        return text
+    # Try to break at sentence boundary
+    for end in ('. ', '.\n', ' — ', '; '):
         pos = text.find(end)
-        if 0 < pos < 120:
+        if 0 < pos < max_len:
             return text[:pos + 1].strip()
-    return text[:120].strip()
+    return text[:max_len].strip() + '...'
 
 
 def normalize_scanner(data: dict) -> tuple[list[dict], dict]:
     """
     Normalize a full scanner JSON into (items, meta).
     Returns list of normalized items + dict of meta/assessment data.
+    Handles all known scanner output variants.
     """
     scanner = data.get('scanner', 'unknown')
     items = []
     meta = {}
 
-    # Normalize issues/findings arrays
-    findings = data.get('issues', data.get('findings', []))
+    # New schema: findings[]. Backward compat: issues[] or findings[]
+    findings = data.get('findings') or data.get('issues') or []
     for idx, f in enumerate(findings):
         items.append(normalize_finding(f, scanner, idx))
 
-    # Normalize opportunities (execution-efficiency has separate array)
+    # Backward compat: opportunities[] (execution-efficiency had separate array)
     for idx, opp in enumerate(data.get('opportunities', []), start=len(findings)):
         opp_item = normalize_finding(opp, scanner, idx)
         opp_item['type'] = 'enhancement'
@@ -193,8 +261,10 @@ def normalize_scanner(data: dict) -> tuple[list[dict], dict]:
         opp_item['selectable'] = True
         items.append(opp_item)
 
-    # Extract strengths array (cohesion scanners)
+    # Backward compat: strengths[] (old cohesion scanners — plain strings)
     for idx, s in enumerate(data.get('strengths', [])):
+        text = s if isinstance(s, str) else (s.get('title', '') if isinstance(s, dict) else str(s))
+        desc = '' if isinstance(s, str) else (s.get('description', s.get('detail', '')) if isinstance(s, dict) else '')
         items.append({
             'id': f'{scanner}-str-{idx:03d}',
             'scanner': scanner,
@@ -205,8 +275,8 @@ def normalize_scanner(data: dict) -> tuple[list[dict], dict]:
             'category': 'strength',
             'file': '',
             'line': None,
-            'title': s if isinstance(s, str) else str(s),
-            'description': '',
+            'title': text,
+            'description': desc,
             'action': '',
             'impact': '',
             'extra': {},
@@ -214,41 +284,122 @@ def normalize_scanner(data: dict) -> tuple[list[dict], dict]:
             'action_type': 'none',
         })
 
-    # Extract creative_suggestions (cohesion scanners)
+    # Backward compat: creative_suggestions[] (old cohesion scanners)
     for idx, cs in enumerate(data.get('creative_suggestions', [])):
+        if isinstance(cs, str):
+            cs_title, cs_desc = cs, ''
+        else:
+            cs_title = _coalesce(cs.get('title'), cs.get('idea'), '')
+            cs_desc = _coalesce(cs.get('description'), cs.get('detail'), cs.get('rationale'), '')
         items.append({
-            'id': f'{scanner}-cs-{idx:03d}',
+            'id': cs.get('id', f'{scanner}-cs-{idx:03d}') if isinstance(cs, dict) else f'{scanner}-cs-{idx:03d}',
             'scanner': scanner,
             'section': SCANNER_SECTIONS.get(scanner, 'cohesion'),
             'type': 'suggestion',
             'severity': 'suggestion',
             'rank': 4,
-            'category': cs.get('type', 'suggestion'),
+            'category': cs.get('type', 'suggestion') if isinstance(cs, dict) else 'suggestion',
             'file': '',
             'line': None,
-            'title': cs.get('idea', ''),
-            'description': cs.get('rationale', ''),
-            'action': cs.get('idea', ''),
-            'impact': cs.get('estimated_impact', ''),
+            'title': cs_title,
+            'description': cs_desc,
+            'action': cs_title,
+            'impact': cs.get('estimated_impact', '') if isinstance(cs, dict) else '',
             'extra': {},
             'selectable': True,
             'action_type': 'refactor',
         })
 
-    # Collect meta/assessment data
-    for key in ('cohesion_analysis', 'autonomous_assessment', 'skill_understanding',
-                'agent_identity', 'skill_identity', 'skillmd_assessment',
-                'prompt_health', 'metadata', 'script_summary', 'stage_summary',
-                'skill_type_assessment', 'top_insights', 'summary'):
-        if key in data:
-            meta[key] = data[key]
+    # New schema: assessments{} contains all structured analysis
+    # Backward compat: also collect from top-level keys
+    if 'assessments' in data:
+        meta.update(data['assessments'])
+
+    # Backward compat: collect meta from top-level keys
+    skip_keys = {'scanner', 'script', 'version', 'skill_path', 'agent_path',
+                 'timestamp', 'scan_date', 'status', 'issues', 'findings',
+                 'strengths', 'creative_suggestions', 'opportunities', 'assessments'}
+    for key, val in data.items():
+        if key not in skip_keys and key not in meta:
+            meta[key] = val
 
     return items, meta
 
 
 def build_journeys(data: dict) -> list[dict]:
-    """Extract user journey data from enhancement-opportunities scanner."""
-    return data.get('user_journeys', [])
+    """
+    Extract user journey data from enhancement-opportunities scanner.
+    Handles two formats:
+      - Array of objects: [{archetype, journey_summary, friction_points, bright_spots}]
+      - Object keyed by persona: {first_timer: {entry_friction, mid_flow_resilience, exit_satisfaction}}
+    """
+    journeys_raw = data.get('user_journeys')
+    if not journeys_raw:
+        return []
+
+    # Format 1: already a list — normalize field names
+    if isinstance(journeys_raw, list):
+        normalized = []
+        for j in journeys_raw:
+            if isinstance(j, dict):
+                normalized.append({
+                    'archetype': j.get('archetype', 'unknown'),
+                    'journey_summary': j.get('summary', j.get('journey_summary', '')),
+                    'friction_points': j.get('friction_points', []),
+                    'bright_spots': j.get('bright_spots', []),
+                })
+            else:
+                normalized.append(j)
+        return normalized
+
+    # Format 2: object keyed by persona name
+    if isinstance(journeys_raw, dict):
+        result = []
+        for persona, details in journeys_raw.items():
+            if isinstance(details, dict):
+                # Convert the dict-based format to the expected format
+                journey = {
+                    'archetype': persona.replace('_', ' ').title(),
+                    'journey_summary': '',
+                    'friction_points': [],
+                    'bright_spots': [],
+                }
+                # Map known sub-keys to friction/bright spots
+                for key, val in details.items():
+                    if isinstance(val, str):
+                        # Heuristic: negative-sounding keys → friction, positive → bright
+                        if any(neg in key.lower() for neg in ('friction', 'issue', 'problem', 'gap', 'pain')):
+                            journey['friction_points'].append(val)
+                        elif any(pos in key.lower() for pos in ('bright', 'strength', 'satisfaction', 'delight')):
+                            journey['bright_spots'].append(val)
+                        else:
+                            # Neutral keys — include as summary parts
+                            if journey['journey_summary']:
+                                journey['journey_summary'] += f' | {key}: {val}'
+                            else:
+                                journey['journey_summary'] = f'{key}: {val}'
+                    elif isinstance(val, list):
+                        for item in val:
+                            if isinstance(item, str):
+                                journey['friction_points'].append(item)
+                # Build summary from all fields if not yet set
+                if not journey['journey_summary']:
+                    parts = []
+                    for k, v in details.items():
+                        if isinstance(v, str):
+                            parts.append(f'**{k.replace("_", " ").title()}:** {v}')
+                    journey['journey_summary'] = ' | '.join(parts) if parts else str(details)
+                result.append(journey)
+            elif isinstance(details, str):
+                result.append({
+                    'archetype': persona.replace('_', ' ').title(),
+                    'journey_summary': details,
+                    'friction_points': [],
+                    'bright_spots': [],
+                })
+        return result
+
+    return []
 
 
 # =============================================================================
@@ -654,8 +805,8 @@ function renderAssessmentsSection() {
   const aa = DATA.assessments.autonomous_assessment;
   if (aa) {
     html += `<div class="assessment"><h4>Autonomous Readiness</h4><table>`;
-    html += `<tr><td>Overall Potential</td><td>${esc(aa.overall_potential||'')}</td></tr>`;
-    html += `<tr><td>HITL Points</td><td>${aa.hitl_interaction_points||0}</td></tr>`;
+    html += `<tr><td>Overall Potential</td><td>${esc(aa.potential||aa.overall_potential||'')}</td></tr>`;
+    html += `<tr><td>HITL Points</td><td>${aa.hitl_points||aa.hitl_interaction_points||0}</td></tr>`;
     html += `<tr><td>Auto-Resolvable</td><td>${aa.auto_resolvable||0}</td></tr>`;
     html += `<tr><td>Needs Input</td><td>${aa.needs_input||0}</td></tr>`;
     if (aa.notes) html += `<tr><td>Notes</td><td>${esc(aa.notes)}</td></tr>`;
@@ -666,9 +817,12 @@ function renderAssessmentsSection() {
   if (ti && ti.length) {
     html += `<div class="assessment"><h4>Top Insights</h4>`;
     ti.forEach(t => {
-      html += `<div style="margin:0.5rem 0"><strong>${esc(t.insight)}</strong>`;
-      if (t.suggestion) html += `<br><em>Suggestion:</em> ${esc(t.suggestion)}`;
-      if (t.why_it_matters) html += `<br><em>Why:</em> ${esc(t.why_it_matters)}`;
+      const tiTitle = t.title || t.insight || '';
+      const tiDetail = t.detail || t.why_it_matters || '';
+      const tiAction = t.action || t.suggestion || '';
+      html += `<div style="margin:0.5rem 0"><strong>${esc(tiTitle)}</strong>`;
+      if (tiDetail) html += `<br><em>Context:</em> ${esc(tiDetail)}`;
+      if (tiAction) html += `<br><em>Suggestion:</em> ${esc(tiAction)}`;
       html += `</div>`;
     });
     html += `</div>`;

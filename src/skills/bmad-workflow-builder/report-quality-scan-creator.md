@@ -24,22 +24,24 @@ Read `assets/quality-report-template.md` for the report structure. The template 
 
 ### Step 2: Extract All Data Types
 
-For each scanner file, extract not just `issues`/`findings` arrays but ALL of these data types:
+All scanners now use the universal schema defined in `references/universal-scan-schema.md`. Scanner-specific data lives in `assessments{}`, not as top-level keys.
+
+For each scanner file, extract not just `findings` arrays but ALL of these data types:
 
 | Data Type | Where It Lives | Report Destination |
 |-----------|---------------|-------------------|
-| Issues/findings (severity: critical-low) | All scanner `issues[]`/`findings[]` | Detailed Findings by Category |
-| Strengths (severity: "strength"/"note", category: "strength") | skill-cohesion, prompt-craft | Strengths section |
-| Cohesion dimensional analysis | skill-cohesion `cohesion_analysis` | Cohesion Analysis table |
-| Craft & skill assessment | prompt-craft `skillmd_assessment`, `prompt_health`, `summary.craft_assessment` | Prompt Craft section header + Executive Summary |
-| User journeys | enhancement-opportunities `user_journeys[]` | User Journeys section |
-| Autonomous assessment | enhancement-opportunities `autonomous_assessment` | Autonomous Readiness section |
-| Skill understanding | enhancement-opportunities `skill_understanding` | Creative section header |
-| Top insights | enhancement-opportunities `top_insights[]` | Top Insights in Creative section |
-| Creative suggestions | skill-cohesion `creative_suggestions[]` | Creative Suggestions in Cohesion section |
-| Optimization opportunities | execution-efficiency `opportunities[]` | Optimization Opportunities in Efficiency section |
-| Script inventory & token savings | scripts `script_summary`, script-opportunities `summary` | Scripts section |
-| Stage summary | workflow-integrity `stage_summary` | Structural section header |
+| Issues/findings (severity: critical-low) | All scanner `findings[]` | Detailed Findings by Category |
+| Strengths (severity: "strength"/"note", category: "strength") | All scanners: findings where severity="strength" | Strengths section |
+| Cohesion dimensional analysis | skill-cohesion `assessments.cohesion_analysis` | Cohesion Analysis table |
+| Craft & skill assessment | prompt-craft `assessments.skillmd_assessment`, `assessments.prompt_health`, `summary.assessment` | Prompt Craft section header + Executive Summary |
+| User journeys | enhancement-opportunities `assessments.user_journeys[]` | User Journeys section |
+| Autonomous assessment | enhancement-opportunities `assessments.autonomous_assessment` | Autonomous Readiness section |
+| Skill understanding | enhancement-opportunities `assessments.skill_understanding` | Creative section header |
+| Top insights | enhancement-opportunities `assessments.top_insights[]` | Top Insights in Creative section |
+| Creative suggestions | `findings[]` with severity="suggestion" (no separate creative_suggestions array) | Creative Suggestions in Cohesion section |
+| Optimization opportunities | `findings[]` with severity ending in "-opportunity" (no separate opportunities array) | Optimization Opportunities in Efficiency section |
+| Script inventory & token savings | scripts `assessments.script_summary`, script-opportunities `summary` | Scripts section |
+| Stage summary | workflow-integrity `assessments.stage_summary` | Structural section header |
 | Prepass metrics | `*-prepass.json` files | Context data points where useful |
 
 ### Step 3: Populate Template
@@ -62,16 +64,16 @@ Fill the template section by section, following the `<!-- comment -->` guidance 
 
 **This step is mandatory.** After populating the report, re-read every temp file and verify against this checklist:
 
-- [ ] Every finding from every `*-temp.json` issues/findings array
-- [ ] All strengths (skill-cohesion `strengths[]` AND severity="strength" findings)
+- [ ] Every finding from every `*-temp.json` findings[] array
+- [ ] All findings with severity="strength" from any scanner
 - [ ] All positive notes from prompt-craft (severity="note")
 - [ ] Cohesion analysis dimensional scores table (if present)
 - [ ] Craft assessment and skill assessment summaries
 - [ ] ALL user journeys with ALL friction_points and bright_spots per archetype
 - [ ] The autonomous_assessment block (all fields)
-- [ ] All creative_suggestions from skill-cohesion
-- [ ] All opportunities from execution-efficiency
-- [ ] All top_insights from enhancement-opportunities
+- [ ] All findings with severity="suggestion" from cohesion scanners
+- [ ] All findings with severity ending in "-opportunity" from execution-efficiency
+- [ ] assessments.top_insights from enhancement-opportunities
 - [ ] Script inventory and token savings from script-opportunities
 - [ ] Skill understanding (purpose, primary_user, key_assumptions)
 - [ ] Stage summary from workflow-integrity (if stages exist)

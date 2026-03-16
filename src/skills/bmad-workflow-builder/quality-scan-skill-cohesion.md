@@ -164,100 +164,130 @@ You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/skill-cohesion-temp.json`
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+**Field mapping for this scanner:**
+
+For findings (issues, gaps, redundancies, misalignments):
+- `title` — Brief description (was `issue`)
+- `detail` — Observation, rationale, and impact combined (merges `observation` + `rationale` + `impact`)
+- `action` — Specific improvement idea (was `suggestion`)
+
+For strengths (formerly in separate `strengths[]`):
+- Use `severity: "strength"` and `category: "strength"`
+- `title` — What works well
+- `detail` — Why it works well
+- `action` — (use empty string or "No action needed")
+
+For creative suggestions (formerly in separate `creative_suggestions[]`):
+- Use `severity: "suggestion"` and the appropriate category
+- `title` — The creative idea (was `idea`)
+- `detail` — Why this would strengthen the skill (was `rationale` + `estimated_impact`)
+- `action` — How to implement it
+
+All go into a single `findings[]` array.
+
 ```json
 {
   "scanner": "skill-cohesion",
   "skill_path": "{path}",
-  "skill_identity": {
-    "name": "{skill-name}",
-    "purpose_summary": "Brief characterization of what this skill does",
-    "primary_outcome": "What this skill produces",
-    "stage_count": 7
-  },
   "findings": [
     {
-      "file": "SKILL.md|bmad-manifest.json|{name}.md",
-      "severity": "high|medium|low|suggestion",
-      "category": "gap|redundancy|misalignment|opportunity|strength",
-      "issue": "Brief description",
-      "observation": "What you noticed that led to this finding",
-      "rationale": "Why this matters for cohesion",
-      "suggestion": "Specific improvement idea",
-      "impact": "What value this would add if addressed"
+      "file": "SKILL.md",
+      "severity": "medium",
+      "category": "gap",
+      "title": "No validation stage after artifact creation",
+      "detail": "Stage 04 produces the final artifact but nothing verifies it meets the declared schema. Users would need to manually validate. This matters because invalid artifacts propagate errors downstream.",
+      "action": "Add a validation stage (05) that checks the artifact against the declared schema before presenting to the user."
+    },
+    {
+      "file": "SKILL.md",
+      "severity": "strength",
+      "category": "strength",
+      "title": "Excellent progressive disclosure in stage routing",
+      "detail": "The routing table cleanly separates entry points and each branch loads only what it needs. This keeps context lean across all paths.",
+      "action": ""
+    },
+    {
+      "file": "bmad-manifest.json",
+      "severity": "suggestion",
+      "category": "opportunity",
+      "title": "Consolidate stages 02 and 03 into a single analysis stage",
+      "detail": "Both stages read overlapping file sets and produce similar output structures. Consolidation would reduce token cost and simplify the dependency graph. Estimated impact: high.",
+      "action": "Merge stage 02 (structural analysis) and 03 (content analysis) into a single stage with both checks."
     }
   ],
-  "cohesion_analysis": {
-    "stage_flow_coherence": {
-      "score": "strong|moderate|weak",
-      "notes": "Brief explanation of how well stages flow together"
+  "assessments": {
+    "cohesion_analysis": {
+      "stage_flow_coherence": {
+        "score": "strong|moderate|weak",
+        "notes": "Brief explanation of how well stages flow together"
+      },
+      "purpose_alignment": {
+        "score": "strong|moderate|weak",
+        "notes": "Brief explanation of why purpose fits or doesn't fit stages"
+      },
+      "complexity_appropriateness": {
+        "score": "appropriate|over-engineered|under-engineered",
+        "notes": "Is this the right level of complexity for the task?"
+      },
+      "stage_completeness": {
+        "score": "complete|mostly-complete|gaps-obvious",
+        "missing_areas": ["area1", "area2"],
+        "notes": "What's missing that should probably be there"
+      },
+      "redundancy_level": {
+        "score": "clean|some-overlap|significant-redundancy",
+        "consolidation_opportunities": [
+          {
+            "stages": ["stage-a", "stage-b"],
+            "suggested_consolidation": "How these could be combined"
+          }
+        ]
+      },
+      "dependency_graph": {
+        "score": "sound|minor-issues|significant-issues",
+        "circular_deps": false,
+        "unnecessary_bottlenecks": [],
+        "missing_dependencies": [],
+        "notes": "Assessment of after/before/is-required correctness"
+      },
+      "output_location_alignment": {
+        "score": "aligned|partially-aligned|misaligned",
+        "undeclared_outputs": [],
+        "declared_but_not_produced": [],
+        "notes": "Do output-location entries match what stages actually produce?"
+      },
+      "external_integration": {
+        "external_skills_referenced": 0,
+        "integration_pattern": "intentional|incidental|unclear",
+        "notes": "How external skills fit into the overall design"
+      },
+      "user_journey_score": {
+        "score": "complete-end-to-end|mostly-complete|fragmented",
+        "broken_workflows": ["workflow that can't be completed"],
+        "notes": "Can the skill accomplish its stated purpose end-to-end?"
+      }
     },
-    "purpose_alignment": {
-      "score": "strong|moderate|weak",
-      "notes": "Brief explanation of why purpose fits or doesn't fit stages"
-    },
-    "complexity_appropriateness": {
-      "score": "appropriate|over-engineered|under-engineered",
-      "notes": "Is this the right level of complexity for the task?"
-    },
-    "stage_completeness": {
-      "score": "complete|mostly-complete|gaps-obvious",
-      "missing_areas": ["area1", "area2"],
-      "notes": "What's missing that should probably be there"
-    },
-    "redundancy_level": {
-      "score": "clean|some-overlap|significant-redundancy",
-      "consolidation_opportunities": [
-        {
-          "stages": ["stage-a", "stage-b"],
-          "suggested_consolidation": "How these could be combined"
-        }
-      ]
-    },
-    "dependency_graph": {
-      "score": "sound|minor-issues|significant-issues",
-      "circular_deps": false,
-      "unnecessary_bottlenecks": [],
-      "missing_dependencies": [],
-      "notes": "Assessment of after/before/is-required correctness"
-    },
-    "output_location_alignment": {
-      "score": "aligned|partially-aligned|misaligned",
-      "undeclared_outputs": [],
-      "declared_but_not_produced": [],
-      "notes": "Do output-location entries match what stages actually produce?"
-    },
-    "external_integration": {
-      "external_skills_referenced": 0,
-      "integration_pattern": "intentional|incidental|unclear",
-      "notes": "How external skills fit into the overall design"
-    },
-    "user_journey_score": {
-      "score": "complete-end-to-end|mostly-complete|fragmented",
-      "broken_workflows": ["workflow that can't be completed"],
-      "notes": "Can the skill accomplish its stated purpose end-to-end?"
+    "skill_identity": {
+      "name": "{skill-name}",
+      "purpose_summary": "Brief characterization of what this skill does",
+      "primary_outcome": "What this skill produces",
+      "stage_count": 7
     }
   },
-  "creative_suggestions": [
-    {
-      "type": "new-stage|consolidation|refinement|complexity-shift|dependency-fix",
-      "idea": "Brief creative suggestion for improvement",
-      "rationale": "Why this would strengthen the skill",
-      "estimated_impact": "high|medium|low"
-    }
-  ],
-  "strengths": [
-    "Something this skill does really well - positive feedback is useful!",
-    "Another strength..."
-  ],
   "summary": {
     "total_findings": 0,
-    "by_severity": {"high": 0, "medium": 0, "low": 0, "suggestion": 0},
-    "by_category": {"gap": 0, "redundancy": 0, "misalignment": 0, "opportunity": 0, "strength": 0},
+    "by_severity": {"high": 0, "medium": 0, "low": 0, "suggestion": 0, "strength": 0},
     "overall_cohesion": "cohesive|mostly-cohesive|fragmented|confused",
     "single_most_important_fix": "The ONE thing that would most improve this skill"
   }
 }
 ```
+
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
 
 ## Severity Guidelines
 
@@ -270,16 +300,13 @@ Write JSON findings to: `{quality-report-dir}/skill-cohesion-temp.json`
 
 ## Process
 
-1. Read SKILL.md to understand purpose and role guidance
-2. Read bmad-manifest.json to enumerate all capabilities and dependencies
-3. Read all prompts to understand what each stage actually does
-4. Read resources if available for additional context
-5. Build mental model of the skill as a whole
-6. Evaluate cohesion across all dimensions (flow, purpose, complexity, completeness, redundancy, dependencies, creates alignment, external integration, journey)
-7. Generate findings with specific, actionable suggestions
-8. Identify strengths (positive feedback is valuable!)
-9. Write JSON to `{quality-report-dir}/skill-cohesion-temp.json`
-10. Return only the filename: `skill-cohesion-temp.json`
+1. **Parallel read batch:** Read SKILL.md, bmad-manifest.json, all prompt files, and list resources/ — in a single parallel batch
+2. Build mental model of the skill as a whole from all files read
+3. Evaluate cohesion across all dimensions (flow, purpose, complexity, completeness, redundancy, dependencies, creates alignment, external integration, journey)
+4. Generate findings with specific, actionable suggestions
+5. Identify strengths (positive feedback is valuable!)
+6. Write JSON to `{quality-report-dir}/skill-cohesion-temp.json`
+7. Return only the filename: `skill-cohesion-temp.json`
 
 ## Critical After Draft Output
 

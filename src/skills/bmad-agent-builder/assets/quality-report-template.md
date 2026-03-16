@@ -44,12 +44,11 @@
 *What this agent does well — preserve these during optimization:*
 
 <!-- Collect from ALL of these sources:
-  - agent-cohesion: findings where severity="strength" or category="strength"
-  - agent-cohesion: "strengths" array
+  - All scanners: findings[] with severity="strength" or category="strength"
   - prompt-craft: findings where severity="note" and observation is positive
-  - prompt-craft: positive aspects from skillmd_assessment.notes and persona_context assessment
-  - enhancement-opportunities: bright_spots from each user_journeys[] entry
-  - structure: positive observations from metadata (e.g., memory setup present, headless mode configured)
+  - prompt-craft: positive aspects from assessments.skillmd_assessment.notes and persona_context assessment
+  - enhancement-opportunities: bright_spots from each assessments.user_journeys[] entry
+  - structure: positive observations from assessments.metadata (e.g., memory setup present, headless mode configured)
   Group by theme. Each strength should explain WHY it matters. -->
 
 {strengths-list}
@@ -114,7 +113,7 @@
 {if-efficiency-opportunities}
 **Optimization Opportunities:**
 
-<!-- From execution-efficiency opportunities[] array (separate from issues). Each: type, description, recommendation, estimated_savings. -->
+<!-- From findings[] with severity ending in -opportunity. Each: title, detail (includes type/savings narrative), action. -->
 
 {efficiency-opportunities}
 {/if-efficiency-opportunities}
@@ -160,7 +159,7 @@
 {if-creative-suggestions}
 **Creative Suggestions:**
 
-<!-- From agent-cohesion creative_suggestions[]. Each: type, idea, rationale, estimated_impact. Types include new-capability, consolidation, refinement, persona-shift. -->
+<!-- From findings[] with severity="suggestion". Each: title, detail, action. -->
 
 {creative-suggestions}
 {/if-creative-suggestions}
@@ -178,15 +177,15 @@
 **Enhancement Findings:**
 
 <!-- Organize by: high-opportunity > medium-opportunity > low-opportunity.
-     Each: scenario, insight, suggestion, user_impact. -->
+     Each: title, detail, action. -->
 
 {enhancement-findings}
 
 {if-top-insights}
 **Top Insights:**
 
-<!-- From enhancement-opportunities top_insights[]. These are the synthesized highest-value observations.
-     Each: insight, suggestion, why_it_matters. -->
+<!-- From enhancement-opportunities assessments.top_insights[]. These are the synthesized highest-value observations.
+     Each: title, detail, action. -->
 
 {top-insights}
 {/if-top-insights}
@@ -238,7 +237,7 @@
 
 **Existing Scripts:** {existing-scripts-list}
 
-<!-- For each finding: current_behavior, script_alternative, determinism_confidence, estimated_token_savings, implementation_complexity, could_be_prepass. -->
+<!-- For each finding: title, detail (includes determinism/complexity/savings narrative), action. -->
 
 {script-opportunity-findings}
 

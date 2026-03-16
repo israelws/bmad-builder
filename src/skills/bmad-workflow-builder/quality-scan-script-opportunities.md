@@ -184,50 +184,56 @@ You will receive `{skill-path}` and `{quality-report-dir}` as inputs.
 
 Write JSON findings to: `{quality-report-dir}/script-opportunities-temp.json`
 
+Output your findings using the universal schema defined in `references/universal-scan-schema.md`.
+
+Use EXACTLY these field names: `file`, `line`, `severity`, `category`, `title`, `detail`, `action`. Do not rename, restructure, or add fields to findings.
+
+**Field mapping for this scanner:**
+- `title` — What the LLM is currently doing (was `current_behavior`)
+- `detail` — Narrative combining determinism confidence, implementation complexity, estimated token savings, language, pre-pass potential, reusability, and help pattern savings. Weave the specifics into a readable paragraph rather than separate fields.
+- `action` — What a script would do instead (was `script_alternative`)
+
 ```json
 {
   "scanner": "script-opportunities",
   "skill_path": "{path}",
-  "existing_scripts": ["list of scripts that already exist in skills/scripts/"],
   "findings": [
     {
-      "file": "SKILL.md|{name}.md",
+      "file": "SKILL.md",
       "line": 42,
-      "severity": "high|medium|low",
-      "category": "validation|extraction|transformation|counting|comparison|structure|graph|preprocessing|postprocessing",
-      "current_behavior": "What the LLM is currently doing",
-      "script_alternative": "What a script would do instead",
-      "determinism_confidence": "certain|high|moderate",
-      "estimated_token_savings": "tokens saved per invocation",
-      "implementation_complexity": "trivial|moderate|complex",
-      "language": "python|bash|either",
-      "could_be_prepass": false,
-      "feeds_scanner": "scanner name if applicable",
-      "reusable_across_skills": false,
-      "help_pattern_savings": "additional prompt tokens saved by using --help instead of inlining interface"
+      "severity": "high",
+      "category": "validation",
+      "title": "LLM validates frontmatter has required fields on every invocation",
+      "detail": "Determinism: certain. A Python script with pyyaml could validate frontmatter fields in <10ms. Estimated savings: ~500 tokens/invocation. Implementation: trivial (Python). This is reusable across all skills and could serve as a pre-pass feeding the workflow-integrity scanner. Using --help self-documentation would save an additional ~200 prompt tokens.",
+      "action": "Create a Python script that parses YAML frontmatter and checks required fields (name, description), returning JSON pass/fail with details."
     }
   ],
+  "assessments": {
+    "existing_scripts": ["list of scripts that already exist in skills/scripts/"]
+  },
   "summary": {
     "total_findings": 0,
     "by_severity": {"high": 0, "medium": 0, "low": 0},
     "by_category": {},
     "total_estimated_token_savings": "aggregate estimate across all findings",
-    "highest_value_opportunity": "The single biggest win — describe it",
-    "prepass_opportunities": "How many findings could become pre-pass scripts for LLM scanners"
+    "assessment": "Brief overall assessment including the single biggest win and how many findings could become pre-pass scripts"
   }
 }
 ```
 
+Before writing output, verify: Is your array called `findings`? Does every item have `title`, `detail`, `action`? Is `assessments` an object, not items in the findings array?
+
 ## Process
 
-1. Check `scripts/` directory — inventory what scripts already exist (avoid suggesting duplicates)
-2. Read SKILL.md — check On Activation and inline operations for deterministic work
-3. Read all prompt files — for each instruction, apply the determinism test
-4. Read resource files — check if any resource content could be generated/validated by scripts
-5. For each finding: estimate LLM tax, assess implementation complexity, check pre-pass potential
-6. For each finding: consider the --help pattern — if a prompt currently inlines a script's interface, note the additional savings
-7. Write JSON to `{quality-report-dir}/script-opportunities-temp.json`
-8. Return only the filename: `script-opportunities-temp.json`
+1. **Parallel read batch:** List `scripts/` directory, read SKILL.md, all prompt files, and resource files — in a single parallel batch
+2. Inventory existing scripts (avoid suggesting duplicates)
+3. Check On Activation and inline operations for deterministic work
+4. For each prompt instruction, apply the determinism test
+5. Check if any resource content could be generated/validated by scripts
+6. For each finding: estimate LLM tax, assess implementation complexity, check pre-pass potential
+7. For each finding: consider the --help pattern — if a prompt currently inlines a script's interface, note the additional savings
+8. Write JSON to `{quality-report-dir}/script-opportunities-temp.json`
+9. Return only the filename: `script-opportunities-temp.json`
 
 ## Critical After Draft Output
 

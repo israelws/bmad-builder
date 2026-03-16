@@ -158,6 +158,16 @@ After all scripts and scanners complete:
 - `{temp-files-dir}` — Directory containing all `*-temp.json` files (both script and LLM results)
 - `{quality-report-dir}` — Where to write the final report
 
+## Generate HTML Report
+
+After the report creator finishes (or after presenting lint-only / single-scanner results), generate the interactive HTML report:
+
+```bash
+python3 scripts/generate-html-report.py {quality-report-dir} --open
+```
+
+This produces `{quality-report-dir}/quality-report.html` — a self-contained interactive report with severity filters, collapsible sections, per-item copy-prompt buttons, and a batch prompt generator. The `--open` flag opens it in the default browser.
+
 ## Present Findings to User
 
 After receiving the JSON summary from the report creator:
@@ -169,6 +179,7 @@ After receiving the JSON summary from the report creator:
   "headless_mode": true,
   "scan_completed": true,
   "report_file": "{full-path-to-report}",
+  "html_report": "{full-path-to-html}",
   "warnings": ["any warnings from pre-scan checks"],
   "summary": {
     "total_issues": 0,
@@ -186,10 +197,10 @@ After receiving the JSON summary from the report creator:
 **IF `{headless_mode}=false` or not set:**
 1. **High-level summary** with total issues by severity
 2. **Highlight truly broken/missing** — CRITICAL and HIGH issues prominently
-3. **Mention detailed report** — "Full report saved to: {report_file}"
+3. **Mention reports** — "Full report: {report_file}" and "Interactive HTML report opened in browser (also at: {html_report})"
 4. **Offer next steps:**
    - Apply fixes directly
-   - Export checklist for manual fixes
+   - Use the HTML report to select specific items and generate prompts
    - Discuss specific findings
 
 ## Key Principle

@@ -76,7 +76,7 @@ Revisiting a specific dream symbol to go deeper.
 
 ## Checking Seed Results
 
-Seed correlation is checked automatically during dream logging (see dream-log capability). The `seed-log.yaml` result field is updated there, and `scripts/seed_tracker.py` runs to update overall success rate.
+Seed correlation is checked automatically during dream logging (see dream-log capability). The `seed-log.yaml` result field is updated there, and `../scripts/seed_tracker.py` runs to update overall success rate.
 
 ## Completion
 

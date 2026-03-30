@@ -28,7 +28,7 @@ Immediately persist the current session context to memory.
    - `patterns.md` — Add new personal symbol meanings or preferences discovered
    - `chronology.md` — Add session summary if significant events occurred
    - `coaching-profile.yaml` — Update if experience level, techniques, or metrics changed
-   - `symbol-registry.yaml` — Update if new symbols logged (run `scripts/symbol_stats.py` if multiple dreams were logged; **session cache:** reuse output if already run this session and no new dreams since)
+   - `symbol-registry.yaml` — Update if new symbols logged (run `../scripts/symbol_stats.py` if multiple dreams were logged; **session cache:** reuse output if already run this session and no new dreams since)
 
 ## Output
 

@@ -41,19 +41,19 @@ Produce professional diagrams and visual aids as Excalidraw files through conver
 
 3. **Detect diagram intent from user's request:**
    - What do they want to visualize?
-   - Did they specify a diagram type? If so, validate against `references/diagram-types.md`
+   - Did they specify a diagram type? If so, validate against `./references/diagram-types.md`
    - Did they specify enough detail to skip guided design?
 
 4. **Route by mode:**
-   - Autonomous/YOLO → `diagram-generation.md` directly
-   - Guided → `guided-design.md` first, then `diagram-generation.md`
+   - Autonomous/YOLO → `./references/diagram-generation.md` directly
+   - Guided → `./references/guided-design.md` first, then `./references/diagram-generation.md`
 
 ## Stages
 
 | #   | Stage         | Purpose                                                          | Prompt                  |
 | --- | ------------- | ---------------------------------------------------------------- | ----------------------- |
-| 1   | Guided Design | Creative facilitation — brainstorm diagram type, content, layout | `guided-design.md`      |
-| 2   | Generation    | Produce the `.excalidraw` file with proper layout                | `diagram-generation.md` |
+| 1   | Guided Design | Creative facilitation — brainstorm diagram type, content, layout | `./references/guided-design.md`      |
+| 2   | Generation    | Produce the `.excalidraw` file with proper layout                | `./references/diagram-generation.md` |
 
 Headless: skip guided-design, output file path on completion.
 

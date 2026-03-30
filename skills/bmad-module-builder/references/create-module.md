@@ -172,11 +172,17 @@ This adds to the existing skill:
 - `./scripts/merge-help-csv.py` — Help CSV merge script
 - `../.claude-plugin/marketplace.json` — Distribution manifest
 
-After scaffolding, read the skill's SKILL.md and add the registration check to its **On Activation** section. Insert before any existing config loading logic:
+After scaffolding, read the skill's SKILL.md and integrate the registration check into its **On Activation** section. How you integrate depends on whether the skill has an existing first-run init flow:
+
+**If the skill has a first-run init** (e.g., agents with sidecar memory — if sidecar doesn't exist, the skill loads an init template for first-time onboarding): add the module registration to that existing first-run flow. The init reference should load `./assets/module-setup.md` before or as part of first-time setup, so the user gets both module registration and skill initialization in a single first-run experience. The `setup`/`configure` arg should still work independently for reconfiguration.
+
+**If the skill has no first-run init** (e.g., simple workflows): add a standalone registration check before any config loading:
 
 > Check if `{project-root}/_bmad/config.yaml` contains a `{module-code}` section. If not — or if user passed `setup` or `configure` — load `./assets/module-setup.md` and complete registration before proceeding.
 
-This is typically a 2-3 line addition. Show the user the proposed change and confirm before writing it.
+In both cases, the `setup`/`configure` argument should always trigger `./assets/module-setup.md` regardless of whether the module is already registered (for reconfiguration).
+
+Show the user the proposed changes and confirm before writing.
 
 ### 8. Confirm and Next Steps
 

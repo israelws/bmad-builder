@@ -119,7 +119,7 @@ Critical issues block completion. Warnings are noted but don't block.
 
 ## Quality Optimize (QO)
 
-Comprehensive validation and optimization for existing skills. Runs deterministic lint scripts for instant structural checks and LLM scanner subagents for judgment-based analysis, all in parallel.
+Validation and optimization for existing skills. Runs deterministic lint scripts for instant structural checks and LLM scanner subagents for judgment-based analysis, all in parallel.
 
 ### Pre-Scan Checks
 
@@ -182,7 +182,7 @@ Not every suggestion should be applied. The optimizer communicates these decisio
 
 ## Convert (CW)
 
-One-command conversion of any existing skill into a BMad-compliant, outcome-driven equivalent. This is the fastest path for taking a non-conformant skill — whether it's bloated, poorly structured, or just doesn't follow BMad best practices — and producing a clean version that does. Unlike the Build Process's edit/rebuild modes, `--convert` always runs headless and produces a visual comparison report.
+One-command conversion of any existing skill into a BMad-compliant, outcome-driven equivalent. Takes a non-conformant skill — bloated, poorly structured, or just not following BMad practices — and produces a clean version. Unlike the Build Process's edit/rebuild modes, `--convert` always runs headless and produces a visual comparison report.
 
 ### Usage
 
@@ -238,7 +238,7 @@ The Module Builder (`bmad-module-builder`) handles module-level planning, scaffo
 
 ### Ideate Module (IM)
 
-A facilitative brainstorming session that helps you envision your module from scratch. The builder acts as a creative collaborator — drawing out ideas, exploring possibilities, and guiding you toward the right architecture.
+A brainstorming session that helps you plan your module from scratch. The builder acts as a creative collaborator — drawing out ideas, exploring possibilities, and guiding you toward the right architecture.
 
 | Aspect          | Detail                                          |
 | --------------- | ----------------------------------------------- |

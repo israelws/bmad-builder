@@ -3,7 +3,7 @@ title: 'Scripts in Skills'
 description: Why deterministic scripts make skills faster, cheaper, and more reliable — and the technical choices behind portable script design
 ---
 
-Scripts are the reliability backbone of a well-built skill. They handle work that has clear right-and-wrong answers — validation, transformation, extraction, counting — so the LLM can focus on what it does best: judgment, synthesis, and creative reasoning.
+Scripts handle work that has clear right-and-wrong answers — validation, transformation, extraction, counting — so the LLM can focus on judgment, synthesis, and creative reasoning.
 
 ## The Problem: LLMs Do Too Much
 
@@ -17,7 +17,7 @@ The pattern shows up everywhere: skills that try to LLM their way through struct
 
 ## The Determinism Boundary
 
-The core design principle is **intelligence placement** — put each operation where it belongs.
+The design principle is **intelligence placement**: put each operation where it belongs.
 
 | Scripts Handle                     | LLM Handles                                      |
 | ---------------------------------- | ------------------------------------------------ |
@@ -92,7 +92,7 @@ import yaml
 
 When a skill invokes this script with `uv run scripts/analyze.py`, the dependency (`pyyaml` in this example) is automatically resolved. The user never sees an install prompt, never needs to manage a virtual environment, and never pollutes their global Python installation.
 
-**Why this matters for skill authoring:** Without PEP 723, skills that needed libraries like `pyyaml` or `tiktoken` would force users to run `pip install` — a jarring, trust-breaking experience that makes users hesitate to adopt the skill.
+Without PEP 723, skills that need libraries like `pyyaml` or `tiktoken` would force users to run `pip install` — a jarring experience that makes people hesitate to adopt the skill.
 
 ## Graceful Degradation
 
@@ -124,4 +124,4 @@ Look for these signal verbs in a skill's requirements — they indicate script o
 | "compare", "diff", "match against" | Comparison       |
 | "scan for", "find all", "list all" | Pattern scanning |
 
-The builders guide you through script opportunity discovery during the build process. The key insight: if you find yourself writing detailed validation logic in a prompt, it almost certainly belongs in a script instead.
+The builders guide you through script opportunity discovery during the build process. If you find yourself writing detailed validation logic in a prompt, it almost certainly belongs in a script instead.

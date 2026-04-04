@@ -3,7 +3,7 @@ title: 'Progressive Disclosure in Skills'
 description: How to structure skills so they load only the context needed at each moment — from frontmatter through dynamic routing to step files
 ---
 
-Progressive disclosure is the technique that separates basic skills from powerful ones. The core idea: never load more context than the agent needs _right now_. This keeps token usage low, prevents context pollution, and makes skills survive long conversations.
+Progressive disclosure is what separates basic skills from powerful ones. The core idea: never load more context than the agent needs _right now_. This keeps token usage low, prevents context pollution, and lets skills survive long conversations.
 
 ## The Four Layers
 

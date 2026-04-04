@@ -103,7 +103,7 @@ Graceful degradation: if subagents are unavailable, the main agent does a single
 
 ### Graceful Degradation
 
-Every subagent-dependent feature should have a fallback path. Skills run across different platforms, models, and configurations. A skill that hard-fails without subagents is fragile. A skill that gracefully falls back to sequential processing is robust everywhere.
+Every subagent-dependent feature should have a fallback path. Skills run across different platforms, models, and configurations. A skill that hard-fails without subagents is fragile. One that falls back to sequential processing works everywhere.
 
 ### Verifiable Intermediate Outputs
 

@@ -18,7 +18,7 @@ The `.claude-plugin/` convention originates from Claude Code, but the format wor
 
 The Module Builder generates the appropriate `marketplace.json` during the Create Module (CM) step - but you will want to verify it lists the proper relative paths to the skills you want to deliver with your module.
 
-This is very powerful also if you want to include remote URL skills in your own module to combine them.
+This also means you can include remote URL skills in your own module to combine them.
 
 ## What a Module Contains
 
@@ -43,7 +43,7 @@ The first architecture decision when planning a module is whether to use a singl
 | **Hybrid**                         | Some capabilities need persistent persona/memory while others are procedural | Best of both worlds but more skills to build and maintain                                                     |
 
 :::tip[Agent-First Thinking]
-Many users default to building multiple single-purpose agents. Consider whether one agent with rich internal capabilities and routing would serve users better. A single agent accumulates context, maintains memory across interactions, and provides a more seamless experience.
+Many users default to building multiple single-purpose agents. Consider whether one agent with rich internal capabilities and routing would serve users better. A single agent accumulates context, maintains memory across interactions, and provides a smoother experience.
 :::
 
 ## Multi-Agent Modules and Memory
@@ -103,7 +103,7 @@ When a module has external dependencies, the setup skill should check for their 
 
 Modules can include user interfaces — dashboards, progress views, interactive visualizations, or even full web applications. A UI skill might show shared progress across the module's capabilities, provide a visual map of how skills relate, or offer an interactive way to navigate the module's features.
 
-Not every module needs a UI. But for complex modules with many capabilities, a visual layer can make the experience significantly more accessible.
+Not every module needs a UI. But for complex modules with many capabilities, a visual layer makes the experience much more accessible.
 
 ## Building a Module
 

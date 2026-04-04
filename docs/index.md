@@ -9,7 +9,7 @@ description: BMad Builder - Build More, Architect Dreams
 
 ## The Dream
 
-Imagine AI that truly knows you — a fitness coach that remembers every PR, a writing partner that knows your characters better than you do, a research assistant that learns your preferences.
+What if your AI remembered everything? A fitness coach that tracks every PR. A writing partner that knows your characters better than you do. A research assistant that already knows how you work.
 
 BMad Builder lets you create:
 
@@ -70,7 +70,7 @@ See the [Builder Commands Reference](/reference/builder-commands.md) for all cap
 
 ## Design Patterns
 
-Build better skills with these guides distilled from real-world BMad development.
+Build better skills with these guides, distilled from real-world BMad development.
 
 | Guide                                                                                | What You'll Learn                                                    |
 | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |

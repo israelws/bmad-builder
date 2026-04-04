@@ -3,7 +3,7 @@ title: 'What Are BMad Workflows?'
 description: How workflows guide users through structured processes, how they differ from agents and simple skills, and when to build one
 ---
 
-BMad Workflows are skills that guide users through a **structured process** to produce a specific output. They are the workhorses of the BMad ecosystem — focused, composable, and generally stateless.
+BMad Workflows are skills that guide users through a **structured process** to produce a specific output. They do most of the heavy lifting in the BMad ecosystem — focused, composable, and generally stateless.
 
 ## What Makes a Workflow a Workflow
 
@@ -64,6 +64,6 @@ Workflows are also excellent as the **internal capabilities** of an agent. Build
 
 ## Building Workflows
 
-The **BMad Workflow Builder** (`bmad-workflow-builder`) uses the same six-phase conversational discovery as the Agent Builder — intent, classification, requirements, drafting, building, and quality optimization. It produces a ready-to-use skill folder.
+The **BMad Workflow Builder** (`bmad-workflow-builder`) uses the same six-phase conversational discovery as the Agent Builder — intent, classification, requirements, drafting, building, and quality optimization — and produces a ready-to-use skill folder.
 
 See the [Builder Commands Reference](/reference/builder-commands.md) for details on the build process phases and capabilities.

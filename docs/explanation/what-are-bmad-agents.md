@@ -15,7 +15,7 @@ Every skill in the BMad ecosystem is ultimately a skill file, but agents carry t
 | **Capabilities** | Actions the agent can perform, either as internal prompt commands or by calling external skills                        |
 | **Memory**       | A sidecar directory where the agent stores what it learns about you, your preferences, and past interactions           |
 
-Together these create something that feels less like running a command and more like talking to a specialist who already knows you.
+Together, they make the interaction feel less like running a command and more like talking to a specialist who already knows you.
 
 ## How Memory Works
 
@@ -55,6 +55,6 @@ If you are unsure, start with a workflow. You can always wrap it inside an agent
 
 ## Building Agents
 
-The **BMad Agent Builder** (`bmad-agent-builder`) walks you through a six-phase conversational discovery process — from intent through capabilities, requirements, drafting, building, and quality optimization. It produces a ready-to-use skill folder you can drop into your tools' skills directory.
+The **BMad Agent Builder** (`bmad-agent-builder`) walks you through six phases of conversational discovery — intent, capabilities, requirements, drafting, building, and quality optimization — and produces a ready-to-use skill folder you can drop into your tools' skills directory.
 
 See the [Builder Commands Reference](/reference/builder-commands.md) for details on the build process phases and capabilities.

@@ -5,7 +5,7 @@ description: How BMad modules handle user configuration through a setup skill, w
 
 BMad modules register their capabilities with the help system and optionally collect user preferences. Multi-skill modules use a dedicated **setup skill** for this. Single-skill standalone modules handle registration themselves on first run.
 
-When you create your own custom module, you can choose to either add a configuration skill, or you could just add the feature to every skill following the standalone pattern. for modules with more than 1-2 skills, it would be recommended to just have a setup skill.
+When you create your own module, you can either add a configuration skill or embed the feature in every skill following the standalone pattern. For modules with more than 1-2 skills, a setup skill is the better choice.
 
 ## When You Need Configuration
 
@@ -32,7 +32,7 @@ Module registration serves two purposes:
 
 ### Why Register with the Help System?
 
-The `bmad-help` skill reads `module-help.csv` to understand what capabilities are available, detect which ones have been completed (by checking output locations for artifacts), and recommend next steps based on the dependency graph. Without registration, `bmad-help` cannot discover or recommend your module's capabilities beyond what it knows basically from skill headers. the help provides richer potential info such as args, relationship to other skills, inputs and outputs, and any other relevant authored information. also if you have a skill with multiple capabilities, they each have their own help entry.
+The `bmad-help` skill reads `module-help.csv` to understand what capabilities are available, detect which ones have been completed (by checking output locations for artifacts), and recommend next steps based on the dependency graph. Without registration, `bmad-help` cannot discover or recommend your module's capabilities beyond what it knows basically from skill headers. The help system provides richer detail: arguments, relationships to other skills, inputs and outputs, and any other authored metadata. If a skill has multiple capabilities, each one gets its own help entry.
 
 ### Two Registration Paths
 
@@ -82,7 +82,7 @@ Variables with a `prompt` field are presented to the user during setup. The `def
 
 ## Help Registration Without Configuration
 
-You may not need any configurable values but still want to register your module with the help system. This is worth doing when:
+You may not need any configurable values but still want to register your module with the help system. Registration is still worthwhile when:
 
 - The skill description in SKILL.md frontmatter cannot fully convey what the module offers while staying concise
 - You want to express capability sequencing, phase constraints, or other metadata the CSV supports

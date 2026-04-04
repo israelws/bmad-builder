@@ -3,7 +3,7 @@ title: 'Subagent Orchestration Patterns'
 description: Six patterns for using subagents effectively — from simple data delegation through persona-driven parallel reasoning to evolutionary systems
 ---
 
-Subagents are isolated LLM instances that a parent skill spawns to handle specific tasks. They have their own context window, receive instructions, and return results. Used well, they keep the parent context small while enabling massive parallel work.
+Subagents are isolated LLM instances that a parent skill spawns to handle specific tasks. Each gets its own context window, receives instructions, and returns results. Used well, they keep the parent context small while enabling parallel work at scale.
 
 All patterns share one principle: **the filesystem is the single source of truth**. Parent context stays tiny (file pointers + high-level plan). Subagents are stateless black boxes — instructions in, response out, isolated context.
 
@@ -101,7 +101,7 @@ The most powerful pattern for quality. Spawn diverse specialists in parallel —
 
 ## Pattern 6: Evolutionary & Emergent Systems
 
-These turn stateless subagents into something that feels alive. All use the filesystem blackboard as connective tissue.
+These turn stateless subagents into something that feels alive. All build on the filesystem blackboard.
 
 | Variant                        | How It Works                                                                                                                      | Best For                                      |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
@@ -114,9 +114,9 @@ These turn stateless subagents into something that feels alive. All use the file
 
 The single most important thing to get right with subagent patterns is **preventing the parent from reading the data it is delegating**. If the parent reads all the files before spawning subagents, the entire pattern is defeated — you have already spent the tokens, bloated the context, and lost the isolation benefit.
 
-This happens more often than you might expect. You write a skill that should spawn subagents to each read a document and return findings. You run it. The parent agent helpfully reads every document first, then passes them to subagents, then collects distilled summaries. The subagents still provide fresh perspectives (a real benefit), but the context savings — the primary reason for the pattern — are gone.
+This happens often. You write a skill that should spawn subagents to each read a document and return findings. You run it. The parent agent helpfully reads every document first, then passes them to subagents, then collects distilled summaries. The subagents still provide fresh perspectives, but the context savings — the primary reason for the pattern — are gone.
 
-**The fix is defensive language in your skill.** You need to explicitly tell the parent agent what it should and should not do. The key is being specific without being verbose.
+**The fix is defensive language in your skill.** Explicitly tell the parent agent what it should and should not do. Be specific without being verbose.
 
 :::note[Example from the BMad Quality Optimizer]
 The optimizer's instructions say: **"DO NOT read the target skill's files yourself."** It then tells the parent exactly what it _should_ do: run scripts (which return structured JSON), spawn subagents (which do the reading), and synthesize from their outputs. The parent never touches the raw files.
@@ -131,7 +131,7 @@ The optimizer's instructions say: **"DO NOT read the target skill's files yourse
 | **Use pre-pass scripts**                       | Run a lightweight script that extracts metadata (file names, sizes, structure) so the parent can plan without reading |
 | **Be explicit about the boundary**             | "Your role is ORCHESTRATION. Scripts and subagents do all analysis"                                                   |
 
-**Testing is how you catch this.** Run your skill and watch what actually happens. If you see the parent reading files it should be delegating, tighten the language. This is normal iteration — the builders are tuned with these patterns, but different models and tools may need more explicit guidance. Review the existing BMad quality optimizer prompts (`prompts/quality-optimizer.md`) and scanner agents (`agents/quality-scan-*.md`) for working examples of this defensive language in practice.
+**Test and watch what actually happens.** If the parent reads files it should be delegating, tighten the language. This is normal iteration — the builders are tuned with these patterns, but different models and tools may need more explicit guidance. Review the BMad quality optimizer prompts (`prompts/quality-optimizer.md`) and scanner agents (`agents/quality-scan-*.md`) for working examples of this defensive language.
 
 ## Choosing a Pattern
 

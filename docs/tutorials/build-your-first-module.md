@@ -3,7 +3,7 @@ title: 'Build Your First Module'
 description: Create a complete BMad module from idea to installable package using the Module Builder
 ---
 
-Walk through the complete module lifecycle — from brainstorming an idea to scaffolding an installable BMad module with help registration and configuration.
+This tutorial walks through the full module lifecycle — from brainstorming an idea to scaffolding an installable BMad module with help registration and configuration.
 
 ## What You'll Learn
 
@@ -141,11 +141,11 @@ Run Validate Module (VM) to check that everything is wired correctly.
 
 Fix any findings and re-validate until clean.
 
-## What You've Accomplished
+## What You've Built
 
 Your module is now a complete, distributable BMad module. For multi-skill modules, users run the setup skill to install. For standalone modules, the skill self-registers on first run.
 
-Either way, the module's capabilities are now discoverable through `bmad-help`, configuration is collected and persisted, and the module works within the BMad ecosystem.
+Either way, the module's capabilities are discoverable through `bmad-help`, configuration is collected and persisted, and the module works within the BMad ecosystem.
 
 ## Quick Reference
 
@@ -183,5 +183,5 @@ Yes. During ideation or creation, specify that your module is an expansion. Your
 - **[Discord](https://discord.gg/gk8jAdXWmj)** — Community support
 
 :::tip[Key Takeaways]
-Plan first with Ideate Module (IM), build individual skills with the Agent and Workflow Builders, package with Create Module (CM), and verify with Validate Module (VM). For multi-skill modules, a setup skill handles registration. For single skills, registration is built in — no extra infrastructure needed.
+Plan with Ideate Module (IM), build individual skills with the Agent and Workflow Builders, package with Create Module (CM), and verify with Validate Module (VM). For multi-skill modules, a setup skill handles registration. For single skills, registration is built in — no extra infrastructure needed.
 :::

@@ -24,7 +24,7 @@ Read raw files ONLY for:
 - Principles quality (guiding vs generic platitudes?)
 - Logical consistency (does description match actual capabilities?)
 - Activation sequence logical ordering
-- Memory setup completeness for sidecar agents
+- Memory setup completeness for agents with memory
 - Access boundaries adequacy
 - Headless mode setup if declared
 
@@ -107,11 +107,11 @@ Agents should describe outcomes, not prescribe procedures for things the LLM doe
 | Identity matches communication style     | Identity says "formal expert" but style shows casual examples |
 | Activation sequence is logically ordered | Config must load before reading config vars                   |
 
-### Memory Setup (Sidecar Agents)
+### Memory Setup (Agents with Memory)
 
-| Check                                               | Why It Matters                                  |
-| --------------------------------------------------- | ----------------------------------------------- |
-| Memory system file exists if agent declares sidecar | Sidecar without memory spec is incomplete       |
+| Check                                                       | Why It Matters                                      |
+| ----------------------------------------------------------- | --------------------------------------------------- |
+| Memory system file exists if agent has persistent memory    | Agent memory without memory spec is incomplete      |
 | Access boundaries defined                           | Critical for headless agents especially         |
 | Memory paths consistent across all files            | Different paths in different files break memory |
 | Save triggers defined if memory persists            | Without save triggers, memory never updates     |
@@ -131,7 +131,7 @@ Agents should describe outcomes, not prescribe procedures for things the LLM doe
 | Severity     | When to Apply                                                                                                                                |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Critical** | Missing SKILL.md, invalid frontmatter (no name), missing required sections, orphaned capabilities pointing to non-existent files             |
-| **High**     | Description too vague to trigger, identity missing or ineffective, memory setup incomplete for sidecar, activation sequence logically broken |
+| **High**     | Description too vague to trigger, identity missing or ineffective, memory setup incomplete, activation sequence logically broken |
 | **Medium**   | Principles are generic, communication style lacks examples, minor consistency issues, headless mode incomplete                               |
 | **Low**      | Style refinement suggestions, principle strengthening opportunities                                                                          |
 

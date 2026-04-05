@@ -79,7 +79,7 @@ const UNRESOLVABLE_VARS = [
   '{date}',
   '{count}',
   '{epic_number}',
-  '{sidecar-folder}',
+  '{memory-folder}',
   '{targetWorkflowPath}',
   '{workflow_folder_path}',
   '{module_output_folder}',

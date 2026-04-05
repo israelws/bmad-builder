@@ -27,7 +27,7 @@ from datetime import date
 from pathlib import Path
 
 SKILL_NAME = "bmad-agent-creative-muse"
-SANCTUM_DIR = f"{SKILL_NAME}-sanctum"
+SANCTUM_DIR = SKILL_NAME
 
 # Files that stay in the skill bundle (only used during First Breath)
 SKILL_ONLY_FILES = {"first-breath.md"}
@@ -38,7 +38,6 @@ TEMPLATE_FILES = [
     "CREED-template.md",
     "BOND-template.md",
     "MEMORY-template.md",
-    "TOOLS-template.md",
     "PULSE-template.md",
 ]
 
@@ -155,6 +154,15 @@ def generate_capabilities_md(capabilities: list[dict]) -> str:
         'Tell me "I want you to be able to do X" and we\'ll create it together.',
         "I'll write the prompt, save it to `capabilities/`, and register it here.",
         "Next session, I'll know how.",
+        "",
+        "## Tools",
+        "",
+        "Prefer crafting your own tools over depending on external ones. A script you wrote "
+        "and saved is more reliable than an external API. Use the file system creatively.",
+        "",
+        "### User-Provided Tools",
+        "",
+        "_MCP servers, APIs, or services the owner has made available. Document them here._",
     ])
 
     return "\n".join(lines) + "\n"

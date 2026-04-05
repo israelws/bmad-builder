@@ -113,7 +113,7 @@ LLM instructions that verify directory structure, file existence, or organizatio
 
 - Verifying agent folder has required files → Bash/Python script
 - Checking for orphaned files not referenced anywhere → Python script
-- Memory sidecar structure validation → Python script
+- Memory folder structure validation → Python script
 - Directory tree validation against expected layout → Python script
 
 ### 7. Dependency & Graph Analysis

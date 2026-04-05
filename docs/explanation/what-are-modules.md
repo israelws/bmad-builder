@@ -48,19 +48,19 @@ Many users default to building multiple single-purpose agents. Consider whether 
 
 ## Multi-Agent Modules and Memory
 
-Modules with multiple agents introduce a memory architecture decision. Every BMad agent has its own **sidecar memory**: a personal folder where it stores user preferences, learned patterns, session history, and domain-specific data. In a multi-agent module, you also need to decide whether agents should share memory.
+Modules with multiple agents introduce a memory architecture decision. Every BMad agent has its own **agent memory**: a personal folder where it stores user preferences, learned patterns, session history, and domain-specific data. In a multi-agent module, you also need to decide whether agents should share memory.
 
 | Pattern                              | When It Fits                                                                            |
 | ------------------------------------ | --------------------------------------------------------------------------------------- |
-| **Personal sidecars only**           | Agents have distinct domains with minimal overlap                                       |
-| **Personal + shared module sidecar** | Agents have their own context but also learn shared things about the user or project    |
-| **Shared sidecar only**              | All agents serve the same domain; consider whether a single agent is the better design |
+| **Personal memory only**                | Agents have distinct domains with minimal overlap                                       |
+| **Personal + shared module memory**     | Agents have their own context but also learn shared things about the user or project    |
+| **Shared memory only**                  | All agents serve the same domain; consider whether a single agent is the better design |
 
-**Example:** A social creative module with a podcast expert, a viral video expert, and a blog expert. Each agent remembers the specifics of what it has done with the user (episode topics, video formats, blog themes). But they all also learn about the user's communication style, favorite catchphrases, content preferences, and brand voice. This shared knowledge lives in a module-level sidecar that every agent reads from and contributes to.
+**Example:** A social creative module with a podcast expert, a viral video expert, and a blog expert. Each agent remembers the specifics of what it has done with the user (episode topics, video formats, blog themes). But they all also learn about the user's communication style, favorite catchphrases, content preferences, and brand voice. This shared knowledge lives in a module-level memory folder that every agent reads from and contributes to.
 
 Each agent should still be self-contained with its own capabilities, even if this means duplicating some common functionality. A podcast expert that can independently handle a full session without needing the blog expert is better than one that depends on shared state to function.
 
-See **[What Are BMad Agents](/explanation/what-are-bmad-agents.md)** for details on how agent memory and sidecars work.
+See **[What Are BMad Agents](/explanation/what-are-bmad-agents.md)** for details on how agent memory works.
 
 ## Standalone vs. Expansion Modules
 

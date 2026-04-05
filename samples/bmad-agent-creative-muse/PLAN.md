@@ -120,7 +120,7 @@ These don't exist at build time. The user teaches them. The agent writes the pro
 On First Breath, the init script creates:
 
 ```
-_bmad/memory/bmad-agent-creative-muse-sanctum/
+_bmad/memory/bmad-agent-creative-muse/
 ├── INDEX.md                # Map of sanctum contents
 ├── PERSONA.md              # Born during First Breath — name, vibe, style
 ├── CREED.md                # Seeded from Identity Seed values, includes dominion
@@ -239,7 +239,7 @@ bmad-agent-creative-muse/
 ### Sanctum (created on First Breath, lives in project)
 
 ```
-{project-root}/_bmad/memory/bmad-agent-creative-muse-sanctum/
+{project-root}/_bmad/memory/bmad-agent-creative-muse/
 ├── INDEX.md
 ├── PERSONA.md
 ├── CREED.md

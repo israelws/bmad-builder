@@ -1,6 +1,6 @@
 # Template Substitution Rules
 
-The SKILL-template provides a minimal skeleton: frontmatter, overview, agent identity sections, sidecar, and activation with config loading. Everything beyond that is crafted by the builder based on what was learned during discovery and requirements phases.
+The SKILL-template provides a minimal skeleton: frontmatter, overview, agent identity sections, memory, and activation with config loading. Everything beyond that is crafted by the builder based on what was learned during discovery and requirements phases.
 
 ## Frontmatter
 
@@ -24,10 +24,10 @@ The SKILL-template provides a minimal skeleton: frontmatter, overview, agent ide
 - `{if-module}` ... `{/if-module}` → Remove the entire block including markers
 - `{if-standalone}` ... `{/if-standalone}` → Keep the content inside
 
-## Sidecar Conditionals
+## Memory Conditionals
 
-- `{if-sidecar}` ... `{/if-sidecar}` → Keep if agent has persistent memory, otherwise remove
-- `{if-no-sidecar}` ... `{/if-no-sidecar}` → Inverse of above
+- `{if-memory}` ... `{/if-memory}` → Keep if agent has persistent memory, otherwise remove
+- `{if-no-memory}` ... `{/if-no-memory}` → Inverse of above
 
 ## Headless Conditional
 
@@ -35,13 +35,13 @@ The SKILL-template provides a minimal skeleton: frontmatter, overview, agent ide
 
 ## Beyond the Template
 
-The builder determines the rest of the agent structure — capabilities, activation flow, sidecar initialization, capability routing, external skills, scripts — based on the agent's requirements. The template intentionally does not prescribe these.
+The builder determines the rest of the agent structure — capabilities, activation flow, memory initialization, capability routing, external skills, scripts — based on the agent's requirements. The template intentionally does not prescribe these.
 
 ## Path References
 
 All generated agents use `./` prefix for skill-internal paths:
 
-- `./references/init.md` — First-run onboarding (if sidecar)
+- `./references/init.md` — First-run onboarding (if memory)
 - `./references/{capability}.md` — Individual capability prompts
-- `./references/memory-system.md` — Memory discipline (if sidecar)
+- `./references/memory-system.md` — Memory discipline (if memory)
 - `./scripts/` — Python/shell scripts for deterministic operations

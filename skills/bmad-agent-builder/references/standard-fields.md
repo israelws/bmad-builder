@@ -19,7 +19,7 @@ These are used within the SKILL.md body — never in frontmatter:
 | `title`       | Role title                               | `Tech Writer`, `Holodeck Operator`   |
 | `icon`        | Single emoji                             | `🔥`, `🌟`                           |
 | `role`        | Functional role                          | `Technical Documentation Specialist` |
-| `sidecar`     | Memory folder (optional)                 | `{skillName}-sidecar/`               |
+| `memory`      | Memory folder (optional)                 | `{skillName}/`                       |
 
 ## Overview Section Format
 
@@ -69,11 +69,11 @@ All references to files within the skill use `./` relative paths:
 
 This distinguishes skill-internal files from `{project-root}` paths — without the `./` prefix the LLM may confuse them.
 
-### Memory Files (sidecar)
+### Memory Files
 
-Always use `{project-root}` prefix: `{project-root}/_bmad/memory/{skillName}-sidecar/`
+Always use `{project-root}` prefix: `{project-root}/_bmad/memory/{skillName}/`
 
-The sidecar `index.md` is the single entry point to the agent's memory system — it tells the agent what else to load (boundaries, logs, references, etc.). Load it once on activation; don't duplicate load instructions for individual memory files.
+The memory `index.md` is the single entry point to the agent's memory system — it tells the agent what else to load (boundaries, logs, references, etc.). Load it once on activation; don't duplicate load instructions for individual memory files.
 
 ### Project-Scope Paths
 

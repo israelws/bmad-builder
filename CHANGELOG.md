@@ -4,7 +4,7 @@
 
 ### 🎁 Features
 
-* **Standalone self-registering modules** — Single-skill modules no longer need a dedicated `-setup` skill. The Module Builder auto-detects single vs multi-skill input and embeds registration directly in the skill via `assets/module-setup.md`. First-run init hooks into existing agent sidecar detection for a unified setup experience
+* **Standalone self-registering modules** — Single-skill modules no longer need a dedicated `-setup` skill. The Module Builder auto-detects single vs multi-skill input and embeds registration directly in the skill via `assets/module-setup.md`. First-run init hooks into existing agent memory detection for a unified setup experience
 * **Module Builder skill** — New `bmad-module-builder` with three capabilities: Ideate Module (IM) for creative brainstorming, Create Module (CM) for scaffolding both standalone and multi-skill modules, and Validate Module (VM) for structural and quality validation with `--headless` CI support
 * **BMB Setup skill** — Extracted and regenerated as `bmad-bmb-setup` using the Module Builder itself. Manages config.yaml, config.user.yaml, and module-help.csv with anti-zombie merge pattern and legacy migration
 * **Workflow Convert capability (CW)** — One-command skill modernization via `--convert <path-or-url>`. Produces a clean BMad-compliant equivalent with an interactive HTML before/after comparison report including token metrics, categorized changes, and dark/light mode

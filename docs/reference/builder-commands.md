@@ -64,7 +64,7 @@ Both builders accept any of these as a starting point.
 | Requirement              | Description                                                                         |
 | ------------------------ | ----------------------------------------------------------------------------------- |
 | **Identity**             | Who is this agent? Communication style, decision-making philosophy                  |
-| **Memory & persistence** | Sidecar needed? Critical data vs checkpoint data, save triggers                     |
+| **Memory & persistence** | Persistent memory needed? Critical data vs checkpoint data, save triggers           |
 | **Activation modes**     | Interactive only, or interactive + autonomous (schedule/cron)                       |
 | **First-run onboarding** | What to ask on first activation to configure itself                                 |
 | **Folder dominion**      | Read boundaries, write boundaries, explicit deny zones                              |

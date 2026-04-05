@@ -35,7 +35,7 @@ The best agents come from understanding the human's vision directly. Walk throug
 - **What's the core outcome?** What does this agent help the user accomplish? What does success look like?
 - **What capabilities serve that core outcome?** Not "what features sound cool" — what does the user actually need?
 - **What's the one thing this agent must get right?** The non-negotiable.
-- **If memory/sidecar:** What's worth remembering across sessions? What should the agent track over time?
+- **If persistent memory:** What's worth remembering across sessions? What should the agent track over time?
 
 The goal is to conversationally gather enough to cover Phase 2 and 3 naturally. Since users often brain-dump rich detail, adapt subsequent phases to what you already know.
 
@@ -57,7 +57,7 @@ Key structural context:
 
 - **Naming:** Standalone: `bmad-agent-{name}`. Module: `bmad-{modulecode}-agent-{name}`
 - **Activation modes:** Interactive only, or Interactive + Headless (schedule/cron for background tasks)
-- **Memory architecture:** Sidecar at `{project-root}/_bmad/memory/{skillName}-sidecar/`
+- **Memory architecture:** Agent memory at `{project-root}/_bmad/memory/{skillName}/`
 - **Access boundaries:** Read/write/deny zones stored in memory
 
 **If headless mode enabled, also gather:**
@@ -67,7 +67,7 @@ Key structural context:
 
 **Path conventions (CRITICAL):**
 
-- Memory: `{project-root}/_bmad/memory/{skillName}-sidecar/`
+- Memory: `{project-root}/_bmad/memory/{skillName}/`
 - Project-scope paths: `{project-root}/...` (any path relative to project root)
 - Skill-internal: `./references/`, `./scripts/`
 - Config variables used directly — they already contain full paths (no `{project-root}` prefix)
@@ -108,10 +108,10 @@ Build the agent using templates from `./assets/` and rules from `./references/te
 ├── SKILL.md               # Persona, activation, capability routing
 ├── references/            # Progressive disclosure content
 │   ├── {capability}.md    # Each internal capability prompt
-│   ├── memory-system.md   # Memory discipline (if sidecar)
-│   ├── init.md            # First-run onboarding (if sidecar)
+│   ├── memory-system.md   # Memory discipline (if memory)
+│   ├── init.md            # First-run onboarding (if memory)
 │   ├── autonomous-wake.md # Headless activation (if headless)
-│   └── save-memory.md     # Explicit memory save (if sidecar)
+│   └── save-memory.md     # Explicit memory save (if memory)
 ├── assets/                # Templates, starter files
 └── scripts/               # Deterministic code with tests
 ```
@@ -128,7 +128,7 @@ Build the agent using templates from `./assets/` and rules from `./references/te
 Activation is a single flow regardless of mode. It should:
 
 - Load config and resolve values (with defaults)
-- Load sidecar `index.md` if the agent has memory
+- Load memory `index.md` if the agent has persistent memory
 - If headless, route to `./references/autonomous-wake.md`
 - If interactive, greet the user and continue from memory context or offer capabilities
 

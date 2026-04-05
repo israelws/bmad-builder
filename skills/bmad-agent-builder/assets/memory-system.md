@@ -1,6 +1,6 @@
 # Memory System for {displayName}
 
-**Memory location:** `_bmad/memory/{skillName}-sidecar/`
+**Memory location:** `_bmad/memory/{skillName}/`
 
 ## Core Principle
 
@@ -119,4 +119,4 @@ Periodically condense, prune, and consolidate memory files to keep them lean.
 
 ## First Run
 
-If sidecar doesn't exist, load `init.md` to create the structure.
+If memory folder doesn't exist, load `init.md` to create the structure.

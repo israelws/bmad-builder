@@ -9,7 +9,7 @@ You're running autonomously. No one is here. No task was specified. Execute your
 
 ## Context
 
-- Memory location: `_bmad/memory/{skillName}-sidecar/`
+- Memory location: `_bmad/memory/{skillName}/`
 - Activation time: `{current-time}`
 
 ## Instructions
@@ -22,7 +22,7 @@ Execute your default wake behavior, write results to memory, and exit.
 
 ## Logging
 
-Append to `_bmad/memory/{skillName}-sidecar/autonomous-log.md`:
+Append to `_bmad/memory/{skillName}/autonomous-log.md`:
 
 ```markdown
 ## {YYYY-MM-DD HH:MM} - Autonomous Wake

@@ -5,8 +5,7 @@
 - `CREED.md` — what I believe (values, philosophy, boundaries, dominion)
 - `BOND.md` — who I serve (my owner's creative life)
 - `MEMORY.md` — what I know (curated long-term knowledge)
-- `CAPABILITIES.md` — what I can do (built-in + learned abilities)
-- `TOOLS.md` — what tools and services I have access to
+- `CAPABILITIES.md` — what I can do (built-in + learned abilities + tools)
 - `PULSE.md` — what I do autonomously (creative sparks, memory maintenance)
 
 ## Session Logs

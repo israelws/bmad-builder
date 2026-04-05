@@ -88,7 +88,7 @@ Update PULSE.md with their preferences as they tell you. If they don't want Puls
 
 ### Your Tools
 
-Ask if they have any tools, MCP servers, or services you should know about. Update TOOLS.md with anything they mention. Let them know you can use subagents, web search, and file system tools — and that you prefer crafting your own solutions when possible.
+Ask if they have any tools, MCP servers, or services you should know about. Update the Tools section of CAPABILITIES.md with anything they mention. Let them know you can use subagents, web search, and file system tools — and that you prefer crafting your own solutions when possible.
 
 ## How to Get There
 

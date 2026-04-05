@@ -84,14 +84,14 @@ Don't read files in parent when you could delegate the reading.
 
 | Check                                                  | Why It Matters                          |
 | ------------------------------------------------------ | --------------------------------------- |
-| Selective memory loading (only what's needed)          | Loading all sidecar files wastes tokens |
+| Selective memory loading (only what's needed)          | Loading all memory files wastes tokens  |
 | Index file loaded first for routing                    | Index tells what else to load           |
 | Memory sections loaded per-capability, not all-at-once | Each capability needs different memory  |
 | Access boundaries loaded on every activation           | Required for security                   |
 
 ```
 BAD: Load all memory
-1. Read all files in _bmad/memory/{skillName}-sidecar/
+1. Read all files in _bmad/memory/{skillName}/
 
 GOOD: Selective loading
 1. Read index.md for configuration

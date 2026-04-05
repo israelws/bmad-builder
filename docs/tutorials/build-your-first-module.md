@@ -52,7 +52,7 @@ The ideation session covers:
 | ----------------- | ------------------------------------------------------------------------- |
 | **Vision**        | Problem space, target users, core value                                   |
 | **Architecture**  | Single agent, multiple workflows, or hybrid                               |
-| **Memory**        | For multi-agent modules: personal sidecars, shared module memory, or both |
+| **Memory**        | For multi-agent modules: personal memory, shared module memory, or both |
 | **Module type**   | Standalone or expansion of another module                                 |
 | **Skills**        | Each planned skill's purpose, capabilities, and relationships             |
 | **Configuration** | Custom install questions and variables                                    |

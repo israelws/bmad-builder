@@ -40,9 +40,9 @@ Load available config from `{project-root}/_bmad/config.yaml` and `{project-root
 - `{document_output_language}` ({default}) — use for generated document content
   {/if-standalone}
 
-{if-sidecar}
-Load sidecar memory from `{project-root}/_bmad/memory/{skillName}-sidecar/index.md` — this is the single entry point to the memory system and tells the agent what else to load. Load `./references/memory-system.md` for memory discipline. If sidecar doesn't exist, load `./references/init.md` for first-run onboarding.
-{/if-sidecar}
+{if-memory}
+Load agent memory from `{project-root}/_bmad/memory/{skillName}/index.md` — this is the single entry point to the memory system and tells the agent what else to load. Load `./references/memory-system.md` for memory discipline. If memory folder doesn't exist, load `./references/init.md` for first-run onboarding.
+{/if-memory}
 
 {if-headless}
 If `--headless` or `-H` is passed, load `./references/autonomous-wake.md` and complete the task without interaction.

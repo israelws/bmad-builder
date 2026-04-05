@@ -8,7 +8,7 @@ Validates all .md and .json files against BMad path conventions:
 4. Skill-internal paths must use ./ prefix (references/, scripts/, assets/)
 5. No ../ parent directory references
 6. No absolute paths
-7. Memory paths must use {project-root}/_bmad/memory/{skillName}-sidecar/
+7. Memory paths must use {project-root}/_bmad/memory/{skillName}/
 8. Frontmatter allows only name and description
 9. No .md files at skill root except SKILL.md
 """
@@ -44,7 +44,7 @@ BARE_INTERNAL_RE = re.compile(r'(?:^|[\s"`\'(])(?<!\./)((?:references|scripts|as
 
 # Memory path pattern: should use {project-root}/_bmad/memory/
 MEMORY_PATH_RE = re.compile(r'_bmad/memory/\S+')
-VALID_MEMORY_PATH_RE = re.compile(r'\{project-root\}/_bmad/memory/\S+-sidecar/')
+VALID_MEMORY_PATH_RE = re.compile(r'\{project-root\}/_bmad/memory/[\w-]+/')
 
 # Fenced code block detection (to skip examples showing wrong patterns)
 FENCE_RE = re.compile(r'^```', re.MULTILINE)
@@ -193,14 +193,13 @@ def scan_file(filepath: Path, skip_fenced: bool = True) -> list[dict]:
             'action': '',
         })
 
-    # Memory path check — memory paths should use {project-root}/_bmad/memory/{skillName}-sidecar/
+    # Memory path check — memory paths should use {project-root}/_bmad/memory/{skillName}/
     for match in MEMORY_PATH_RE.finditer(content):
         pos = match.start()
         if skip_fenced and is_in_fenced_block(content, pos):
             continue
         start = max(0, pos - 20)
         before = content[start:pos]
-        matched_text = match.group()
         if '{project-root}/' not in before:
             line_num = get_line_number(content, pos)
             line_content = content.split('\n')[line_num - 1].strip()
@@ -210,18 +209,6 @@ def scan_file(filepath: Path, skip_fenced: bool = True) -> list[dict]:
                 'severity': 'high',
                 'category': 'memory-path',
                 'title': 'Memory path missing {project-root} prefix — use {project-root}/_bmad/memory/',
-                'detail': line_content[:120],
-                'action': '',
-            })
-        elif '-sidecar/' not in matched_text:
-            line_num = get_line_number(content, pos)
-            line_content = content.split('\n')[line_num - 1].strip()
-            findings.append({
-                'file': rel_path,
-                'line': line_num,
-                'severity': 'high',
-                'category': 'memory-path',
-                'title': 'Memory path not using {skillName}-sidecar/ convention',
                 'detail': line_content[:120],
                 'action': '',
             })

@@ -44,7 +44,7 @@ TEMPLATE_ARTIFACTS = [
     r'\{if-module\}', r'\{/if-module\}',
     r'\{if-headless\}', r'\{/if-headless\}',
     r'\{if-autonomous\}', r'\{/if-autonomous\}',
-    r'\{if-sidecar\}', r'\{/if-sidecar\}',
+    r'\{if-memory\}', r'\{/if-memory\}',
     r'\{displayName\}', r'\{skillName\}',
 ]
 # Runtime variables that ARE expected (not artifacts)
@@ -218,7 +218,7 @@ def extract_memory_paths(skill_path: Path) -> tuple[list[str], list[dict]]:
     memory_paths = set()
 
     # Memory path patterns
-    mem_pattern = re.compile(r'(?:memory/|sidecar/)[\w\-/]+(?:\.\w+)?')
+    mem_pattern = re.compile(r'memory/[\w\-/]+(?:\.\w+)?')
 
     files_to_scan = []
 
@@ -247,20 +247,12 @@ def extract_memory_paths(skill_path: Path) -> tuple[list[str], list[dict]]:
         prefixes.add(prefix)
 
     memory_prefixes = {p for p in prefixes if 'memory' in p.lower()}
-    sidecar_prefixes = {p for p in prefixes if 'sidecar' in p.lower()}
 
     if len(memory_prefixes) > 1:
         findings.append({
             'file': 'multiple', 'line': 0,
             'severity': 'medium', 'category': 'memory-paths',
             'issue': f'Inconsistent memory path prefixes: {", ".join(sorted(memory_prefixes))}',
-        })
-
-    if len(sidecar_prefixes) > 1:
-        findings.append({
-            'file': 'multiple', 'line': 0,
-            'severity': 'medium', 'category': 'memory-paths',
-            'issue': f'Inconsistent sidecar path prefixes: {", ".join(sorted(sidecar_prefixes))}',
         })
 
     return sorted_paths, findings

@@ -1,7 +1,6 @@
 ---
 name: quality-analysis
 description: Comprehensive quality analysis for BMad agents. Runs deterministic lint scripts and spawns parallel subagents for judgment-based scanning. Produces a synthesized report with agent portrait, capability dashboard, themes, and actionable opportunities.
-menu-code: QA
 ---
 
 **Language:** Use `{communication_language}` for all output.
@@ -32,17 +31,17 @@ Check for uncommitted changes. In headless mode, note warnings and proceed. In i
 
 | #   | Script                           | Focus                                   | Output File                |
 | --- | -------------------------------- | --------------------------------------- | -------------------------- |
-| S1  | `scripts/scan-path-standards.py` | Path conventions                        | `path-standards-temp.json` |
-| S2  | `scripts/scan-scripts.py`        | Script portability, PEP 723, unit tests | `scripts-temp.json`        |
+| S1  | `./scripts/scan-path-standards.py` | Path conventions                        | `path-standards-temp.json` |
+| S2  | `./scripts/scan-scripts.py`        | Script portability, PEP 723, unit tests | `scripts-temp.json`        |
 
 ### Pre-Pass Scripts (Feed LLM Scanners)
 
 | #   | Script                                      | Feeds                        | Output File                           |
 | --- | ------------------------------------------- | ---------------------------- | ------------------------------------- |
-| P1  | `scripts/prepass-structure-capabilities.py` | structure scanner            | `structure-capabilities-prepass.json` |
-| P2  | `scripts/prepass-prompt-metrics.py`         | prompt-craft scanner         | `prompt-metrics-prepass.json`         |
-| P3  | `scripts/prepass-execution-deps.py`         | execution-efficiency scanner | `execution-deps-prepass.json`         |
-| P4  | `scripts/prepass-sanctum-architecture.py`   | sanctum architecture scanner | `sanctum-architecture-prepass.json`   |
+| P1  | `./scripts/prepass-structure-capabilities.py` | structure scanner            | `structure-capabilities-prepass.json` |
+| P2  | `./scripts/prepass-prompt-metrics.py`         | prompt-craft scanner         | `prompt-metrics-prepass.json`         |
+| P3  | `./scripts/prepass-execution-deps.py`         | execution-efficiency scanner | `execution-deps-prepass.json`         |
+| P4  | `./scripts/prepass-sanctum-architecture.py`   | sanctum architecture scanner | `sanctum-architecture-prepass.json`   |
 
 ### LLM Scanners (Judgment-Based — Run After Scripts)
 
@@ -67,12 +66,12 @@ First create output directory: `{bmad_builder_reports}/{skill-name}/quality-anal
 ### Step 1: Run All Scripts (Parallel)
 
 ```bash
-python3 scripts/scan-path-standards.py {skill-path} -o {report-dir}/path-standards-temp.json
-python3 scripts/scan-scripts.py {skill-path} -o {report-dir}/scripts-temp.json
-python3 scripts/prepass-structure-capabilities.py {skill-path} -o {report-dir}/structure-capabilities-prepass.json
-python3 scripts/prepass-prompt-metrics.py {skill-path} -o {report-dir}/prompt-metrics-prepass.json
-uv run scripts/prepass-execution-deps.py {skill-path} -o {report-dir}/execution-deps-prepass.json
-python3 scripts/prepass-sanctum-architecture.py {skill-path} -o {report-dir}/sanctum-architecture-prepass.json
+uv run ./scripts/scan-path-standards.py {skill-path} -o {report-dir}/path-standards-temp.json
+uv run ./scripts/scan-scripts.py {skill-path} -o {report-dir}/scripts-temp.json
+uv run ./scripts/prepass-structure-capabilities.py {skill-path} -o {report-dir}/structure-capabilities-prepass.json
+uv run ./scripts/prepass-prompt-metrics.py {skill-path} -o {report-dir}/prompt-metrics-prepass.json
+uv run ./scripts/prepass-execution-deps.py {skill-path} -o {report-dir}/execution-deps-prepass.json
+uv run ./scripts/prepass-sanctum-architecture.py {skill-path} -o {report-dir}/sanctum-architecture-prepass.json
 ```
 
 ### Step 2: Spawn LLM Scanners (Parallel)
@@ -103,7 +102,7 @@ The report creator reads everything, synthesizes agent portrait + capability das
 ### Step 4: Generate HTML Report
 
 ```bash
-python3 scripts/generate-html-report.py {report-dir} --open
+uv run ./scripts/generate-html-report.py {report-dir} --open
 ```
 
 ## Present to User

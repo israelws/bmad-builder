@@ -116,9 +116,9 @@ Include all pre-pass findings in your output, preserved as-is.
 
 | Check | Why It Matters | Severity |
 |-------|---------------|----------|
-| init-sanctum.py exists in scripts/ | Without it, sanctum scaffolding is manual | CRITICAL |
+| init-sanctum.py exists in ./scripts/ | Without it, sanctum scaffolding is manual | CRITICAL |
 | SKILL_NAME matches the skill's folder name | Wrong name = sanctum in wrong directory | CRITICAL |
-| TEMPLATE_FILES matches actual templates in assets/ | Mismatch = missing sanctum files on init | HIGH |
+| TEMPLATE_FILES matches actual templates in ./assets/ | Mismatch = missing sanctum files on init | HIGH |
 | Script scans capability frontmatter | Without this, CAPABILITIES.md is empty | MEDIUM |
 | EVOLVABLE flag matches evolvable capabilities decision | Wrong flag = missing or extra Learned section | LOW |
 

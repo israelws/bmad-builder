@@ -17,7 +17,7 @@ Usage:
     skill-path:   Path to the skill directory (where SKILL.md, references/, assets/ live)
 
 Example:
-    python3 scripts/init-sanctum.py /Users/me/myproject /path/to/bmad-agent-creative-muse
+    uv run scripts/init-sanctum.py /Users/me/myproject /path/to/bmad-agent-creative-muse
 """
 
 import sys

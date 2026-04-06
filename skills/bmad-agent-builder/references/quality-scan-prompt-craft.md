@@ -22,7 +22,7 @@ Read raw files for judgment calls:
 
 - `SKILL.md` — Overview quality, persona context assessment
 - `*.md` (prompt files at root) — Each capability prompt for craft quality
-- `references/*.md` — Progressive disclosure assessment
+- `./references/*.md` — Progressive disclosure assessment
 
 ---
 
@@ -33,9 +33,9 @@ Check the pre-pass JSON for `is_memory_agent`. If `true`, adjust your SKILL.md c
 - **Bootloaders are intentionally lean (~30-40 lines).** This is correct architecture, not over-optimization. Do NOT flag as "bare procedural skeleton", "missing or empty Overview", "no persona framing", or "over-optimized complex agent."
 - **The identity seed IS the persona framing** -- it's a 2-3 sentence personality DNA paragraph, not a formal `## Identity` section. Evaluate its quality as a seed (is it evocative? does it capture personality?) not its length.
 - **No Overview section by design.** The bootloader is the overview. Don't flag its absence.
-- **No Communication Style or Principles by design.** These live in sanctum templates (PERSONA-template.md, CREED-template.md in `assets/`). Read those files for persona context if needed for voice consistency checks.
-- **Capability prompts are in `references/`**, not at the skill root. The pre-pass now includes these. Evaluate them normally for outcome-focused craft.
-- **Config headers:** Memory agent capability prompts may not have `{communication_language}` headers. The agent gets language from BOND.md in its sanctum. Don't flag missing config headers in `references/` files as high severity for memory agents.
+- **No Communication Style or Principles by design.** These live in sanctum templates (PERSONA-template.md, CREED-template.md in `./assets/`). Read those files for persona context if needed for voice consistency checks.
+- **Capability prompts are in `./references/`**, not at the skill root. The pre-pass now includes these. Evaluate them normally for outcome-focused craft.
+- **Config headers:** Memory agent capability prompts may not have `{communication_language}` headers. The agent gets language from BOND.md in its sanctum. Don't flag missing config headers in `./references/` files as high severity for memory agents.
 
 For stateless agents (`is_memory_agent: false`), apply all standard checks below without modification.
 
@@ -72,7 +72,7 @@ A good agent Overview includes:
 | ----------------------------------------------------- | ------------------------------- | ----------------------------------------------------- |
 | Multi-capability agent with brief capability sections | Up to ~250 lines                | Each capability section brief, detail in prompt files |
 | Single-purpose agent with deep persona                | Up to ~500 lines (~5000 tokens) | Acceptable if content is genuinely needed             |
-| Agent with large reference tables or schemas inline   | Flag for extraction             | These belong in references/, not SKILL.md             |
+| Agent with large reference tables or schemas inline   | Flag for extraction             | These belong in ./references/, not SKILL.md           |
 
 ### Detecting Over-Optimization (Under-Contextualized Agents)
 

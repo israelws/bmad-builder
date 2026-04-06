@@ -29,7 +29,17 @@ If the SKILL.md routing already asked the 3-way question (Analyze/Edit/Rebuild),
 - **Edit** — changing specific behavior while keeping the current approach
 - **Rebuild** — rethinking from core outcomes, full discovery using the old skill as context
 
-For **Edit**: identify what to change, preserve what works, apply outcome-driven principles to the changed portions.
+For **Edit**: use the edit fast-track — full Phase 1-6 is for Rebuild and new builds only.
+
+**Edit fast-track:**
+
+1. Read the relevant files in the existing skill
+2. Understand the specific change requested and its scope
+3. Apply the change following outcome-driven principles — preserve what works, improve what's targeted
+4. Run lint gate (Phase 5 lint steps) and fix any findings
+5. Present the change and lint results
+
+If the edit touches the skill's core architecture, classification, or requires rethinking multiple stages, recommend Rebuild instead.
 
 For **Rebuild**: read the old skill to understand its goals, then proceed through full discovery as if building new — the old skill informs your questions but doesn't constrain the design.
 
@@ -54,7 +64,7 @@ Ask upfront:
   - What other skills will it use from the core or module? (need name, inputs, outputs for integration)
   - What config variables does it need access to?
 
-Load `./references/classification-reference.md` and classify. Present classification with reasoning.
+Load `./classification-reference.md` and classify. Present classification with reasoning.
 
 For Simple Workflows and Complex Workflows, also ask:
 
@@ -67,12 +77,12 @@ Work through conversationally, adapted per skill type. Glean from what the user 
 **All types — Common fields:**
 
 - **Name:** kebab-case. Module: `bmad-{modulecode}-{skillname}`. Standalone: `bmad-{skillname}`
-- **Description:** Two parts: [5-8 word summary]. [Use when user says 'specific phrase'.] — Default to conservative triggering. See `./references/standard-fields.md` for format.
+- **Description:** Two parts: [5-8 word summary]. [Use when user says 'specific phrase'.] — Default to conservative triggering. See `./standard-fields.md` for format.
 - **Overview:** What/How/Why-Outcome. For interactive or complex skills, include domain framing and theory of mind — these give the executing agent context for judgment calls.
 - **Role guidance:** Brief "Act as a [role/expert]" primer
 - **Design rationale:** Non-obvious choices the executing agent should understand
 - **External skills used:** Which skills does this invoke?
-- **Script Opportunity Discovery** — Walk through planned steps with the user. Identify deterministic operations that should be scripts not prompts. Load `./references/script-opportunities-reference.md` for guidance. Confirm the script-vs-prompt plan. If any scripts require external dependencies (anything beyond Python's standard library), explicitly list each dependency and get user approval before proceeding — dependencies add install-time cost and require `uv` to be available.
+- **Script Opportunity Discovery** — Walk through planned steps with the user. Identify deterministic operations that should be scripts not prompts. Load `./script-opportunities-reference.md` for guidance. Confirm the script-vs-prompt plan. If any scripts require external dependencies (anything beyond Python's standard library), explicitly list each dependency and get user approval before proceeding — dependencies add install-time cost and require `uv` to be available.
 - **Creates output documents?** If yes, will use `{document_output_language}`
 
 **Simple Utility additional:**
@@ -92,7 +102,7 @@ Confirm with user: phase-name, after (dependencies), before (downstream), is-req
 
 **Path conventions (CRITICAL):**
 
-- Skill-internal: `./references/`, `./scripts/`
+- Skill-internal: `references/`, `scripts/` (relative to skill root)
 - Project-scope paths: `{project-root}/...` (any path relative to project root)
 - Config variables used directly — they already contain `{project-root}`
 
@@ -115,15 +125,15 @@ Watch especially for:
 
 **Load these before building:**
 
-- `./references/standard-fields.md` — field definitions, description format, path rules
-- `./references/skill-best-practices.md` — outcome-driven authoring, patterns, anti-patterns
-- `./references/quality-dimensions.md` — build quality checklist
+- `./standard-fields.md` — field definitions, description format, path rules
+- `./skill-best-practices.md` — outcome-driven authoring, patterns, anti-patterns
+- `./quality-dimensions.md` — build quality checklist
 
 **Load based on skill type:**
 
-- **If Complex Workflow:** `./references/complex-workflow-patterns.md` — compaction survival, config integration, progressive disclosure
+- **If Complex Workflow:** `./complex-workflow-patterns.md` — compaction survival, config integration, progressive disclosure
 
-Load the template from `./assets/SKILL-template.md` and `./references/template-substitution-rules.md`. Build the skill with progressive disclosure (SKILL.md for overview and routing, `./references/` for progressive disclosure content). Output to `{bmad_builder_output_folder}`.
+Load the template from `assets/SKILL-template.md` and `./template-substitution-rules.md`. Build the skill with progressive disclosure (SKILL.md for overview and routing, `references/` for progressive disclosure content). Output to `{bmad_builder_output_folder}`.
 
 **Skill Source Tree** (only create subfolders that are needed):
 
@@ -139,11 +149,11 @@ Load the template from `./assets/SKILL-template.md` and `./references/template-s
 | Location            | Contains                           | LLM relationship                     |
 | ------------------- | ---------------------------------- | ------------------------------------ |
 | **SKILL.md**        | Overview, activation, routing      | LLM identity and router              |
-| **`./references/`** | Capability prompts, reference data | Loaded on demand                     |
-| **`./assets/`**     | Templates, starter files           | Copied/transformed into output       |
-| **`./scripts/`**    | Python, shell scripts with tests   | Invoked for deterministic operations |
+| **`references/`**   | Capability prompts, reference data | Loaded on demand                     |
+| **`assets/`**       | Templates, starter files           | Copied/transformed into output       |
+| **`scripts/`**      | Python, shell scripts with tests   | Invoked for deterministic operations |
 
-**If the built skill includes scripts**, also load `./references/script-standards.md` — ensures PEP 723 metadata, correct shebangs, and `uv run` invocation from the start.
+**If the built skill includes scripts**, also load `./script-standards.md` — ensures PEP 723 metadata, correct shebangs, and `uv run` invocation from the start.
 
 **Lint gate** — after building, validate and auto-fix:
 
@@ -151,8 +161,8 @@ If subagents available, delegate lint-fix to a subagent. Otherwise run inline.
 
 1. Run both lint scripts in parallel:
    ```bash
-   python3 ./scripts/scan-path-standards.py {skill-path}
-   python3 ./scripts/scan-scripts.py {skill-path}
+   python3 scripts/scan-path-standards.py {skill-path}
+   python3 scripts/scan-scripts.py {skill-path}
    ```
 2. Fix high/critical findings and re-run (up to 3 attempts per script)
 3. Run unit tests if scripts exist in the built skill
@@ -163,4 +173,4 @@ Present what was built: location, structure, capabilities. Include lint results.
 
 Run unit tests if scripts exist. Remind user to commit before quality analysis.
 
-**Offer quality analysis:** Ask if they'd like a Quality Analysis to identify opportunities. If yes, load `quality-analysis.md` with the skill path.
+**Offer quality analysis:** Ask if they'd like a Quality Analysis to identify opportunities. If yes, load `./quality-analysis.md` with the skill path.

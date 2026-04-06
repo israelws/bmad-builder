@@ -86,15 +86,22 @@ This skill {what it does}. Use when {when to use}. Returns {output format} with 
 
 ## Path Rules
 
-### Skill-Internal Files
+### Same-Folder References
 
-All references to files within the skill use `./` relative paths:
+Use `./` only when referencing a file in the same directory as the file containing the reference:
 
-- `./references/memory-system.md`
-- `./references/some-guide.md`
-- `./scripts/calculate-metrics.py`
+- From `references/build-process.md` → `./some-guide.md` (both in references/)
+- From `scripts/scan.py` → `./utils.py` (both in scripts/)
 
-This distinguishes skill-internal files from `{project-root}` paths — without the `./` prefix the LLM may confuse them.
+### Cross-Directory References
+
+Use bare paths relative to the skill root — no `./` prefix:
+
+- `references/memory-system.md`
+- `scripts/calculate-metrics.py`
+- `assets/template.md`
+
+These work from any file in the skill because they're always resolved from the skill root. **Never use `./` for cross-directory paths** — `./scripts/foo.py` from a file in `references/` is misleading because `scripts/` is not next to that file.
 
 ### Memory Files
 

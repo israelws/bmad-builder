@@ -14,7 +14,7 @@ At the distribution level, a BMad module is a **plugin**: a package of skills wi
 | **Single plugin**   | One module (standalone or multi-skill)                       | `.claude-plugin/marketplace.json` with one plugin entry   |
 | **Marketplace**     | A repo that ships multiple modules                           | `.claude-plugin/marketplace.json` with multiple plugin entries |
 
-The `.claude-plugin/` convention originates from Claude Code, but the format works across all 43+ skills platforms supported by the upcoming BMad installer. You can also install directly using the NPX skill installer from Vercel, or through Anthropic's plugin system if targeting only Claude Code.
+The `.claude-plugin/` convention originates from Claude Code, but the format works across multiple skills platforms. The BMad installer will support installing custom modules directly from GitHub in an upcoming release. Until then, copy the created skill folder into your tool's skills directory (`.claude/skills/`, `.agents/skills/`, etc.). You can also use Anthropic's plugin system if targeting only Claude Code.
 
 The Module Builder generates the appropriate `marketplace.json` during the Create Module (CM) step - but you will want to verify it lists the proper relative paths to the skills you want to deliver with your module.
 
@@ -48,19 +48,20 @@ Many users default to building multiple single-purpose agents. Consider whether 
 
 ## Multi-Agent Modules and Memory
 
-Modules with multiple agents introduce a memory architecture decision. Every BMad agent has its own **agent memory**: a personal folder where it stores user preferences, learned patterns, session history, and domain-specific data. In a multi-agent module, you also need to decide whether agents should share memory.
+Modules with multiple agents introduce a memory architecture decision. BMad agents exist on a spectrum from stateless (no memory) through memory agents (personal sanctum) to autonomous agents (sanctum + PULSE). In a multi-agent module, you choose both the agent type for each skill and whether agents should share memory across the module.
 
 | Pattern                              | When It Fits                                                                            |
 | ------------------------------------ | --------------------------------------------------------------------------------------- |
 | **Personal memory only**                | Agents have distinct domains with minimal overlap                                       |
 | **Personal + shared module memory**     | Agents have their own context but also learn shared things about the user or project    |
 | **Shared memory only**                  | All agents serve the same domain; consider whether a single agent is the better design |
+| **Mixed types**                         | Some agents need memory (coaches, companions) while others are stateless (formatters, validators) |
 
-**Example:** A social creative module with a podcast expert, a viral video expert, and a blog expert. Each agent remembers the specifics of what it has done with the user (episode topics, video formats, blog themes). But they all also learn about the user's communication style, favorite catchphrases, content preferences, and brand voice. This shared knowledge lives in a module-level memory folder that every agent reads from and contributes to.
+**Example:** A social creative module with a podcast expert, a viral video expert, and a blog expert. Each memory agent maintains its own sanctum with what it has done with the user (episode topics, video formats, blog themes). But they all also contribute to a module-level memory folder that captures the user's communication style, favorite catchphrases, content preferences, and brand voice.
 
 Each agent should still be self-contained with its own capabilities, even if this means duplicating some common functionality. A podcast expert that can independently handle a full session without needing the blog expert is better than one that depends on shared state to function.
 
-See **[What Are BMad Agents](/explanation/what-are-bmad-agents.md)** for details on how agent memory works.
+See **[What Are BMad Agents](/explanation/what-are-bmad-agents.md)** for the three agent types, and **[Agent Memory and Personalization](/explanation/agent-memory-and-personalization.md)** for details on how the sanctum architecture works.
 
 ## Standalone vs. Expansion Modules
 

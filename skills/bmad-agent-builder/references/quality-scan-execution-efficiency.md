@@ -20,7 +20,7 @@ Read raw files for judgment calls:
 
 - `SKILL.md` — On Activation patterns, operation flow
 - `*.md` (prompt files at root) — Each prompt for execution patterns
-- `references/*.md` — Resource loading patterns
+- `./references/*.md` — Resource loading patterns
 
 ---
 
@@ -100,7 +100,7 @@ Memory agents batch-load 6 identity files on rebirth: INDEX.md, PERSONA.md, CREE
 | Check                                                        | Why It Matters                                    |
 | ------------------------------------------------------------ | ------------------------------------------------- |
 | 6 sanctum files batch-loaded on rebirth (correct)            | Agent needs full identity to function             |
-| Capability reference files loaded on demand (not at startup) | These are in `references/`, loaded when triggered |
+| Capability reference files loaded on demand (not at startup) | These are in `./references/`, loaded when triggered |
 | Session logs NOT loaded on rebirth (correct)                  | Raw material, curated during Pulse                |
 | `memory-guidance.md` loaded at session close and during Pulse | Memory discipline is on-demand, not startup       |
 

@@ -5,7 +5,7 @@ Validates all .md and .json files against BMad path conventions:
 1. {project-root} for any project-scope path (not just _bmad)
 2. Bare _bmad references must have {project-root} prefix
 3. Config variables used directly — no double-prefix with {project-root}
-4. Skill-internal paths must use ./ prefix (references/, scripts/, assets/)
+4. ./ only for same-folder references — never ./subdir/ cross-directory
 5. No ../ parent directory references
 6. No absolute paths
 7. Memory paths must use {project-root}/_bmad/memory/{skillName}/
@@ -38,9 +38,8 @@ ABSOLUTE_PATH_RE = re.compile(r'(?:^|[\s"`\'(])(/(?:Users|home|opt|var|tmp|etc|u
 HOME_PATH_RE = re.compile(r'(?:^|[\s"`\'(])(~/\S+)', re.MULTILINE)
 # Parent directory reference (still invalid)
 RELATIVE_DOT_RE = re.compile(r'(?:^|[\s"`\'(])(\.\./\S+)', re.MULTILINE)
-# Bare skill-internal paths without ./ prefix
-# Match references/, scripts/, assets/ when NOT preceded by ./
-BARE_INTERNAL_RE = re.compile(r'(?:^|[\s"`\'(])(?<!\./)((?:references|scripts|assets)/\S+)', re.MULTILINE)
+# Cross-directory ./ — ./subdir/ is wrong because ./ means same folder only
+CROSS_DIR_DOT_SLASH_RE = re.compile(r'(?:^|[\s"`\'(])\./(?:references|scripts|assets)/\S+', re.MULTILINE)
 
 # Memory path pattern: should use {project-root}/_bmad/memory/
 MEMORY_PATH_RE = re.compile(r'_bmad/memory/\S+')
@@ -150,8 +149,8 @@ def scan_file(filepath: Path, skip_fenced: bool = True) -> list[dict]:
          'Home directory path (~/) found — environment-specific'),
         (RELATIVE_DOT_RE, 'relative-prefix', 'high',
          'Parent directory reference (../) found — fragile, breaks with reorganization'),
-        (BARE_INTERNAL_RE, 'bare-internal-path', 'high',
-         'Bare skill-internal path without ./ prefix — use ./references/, ./scripts/, ./assets/ to distinguish from {project-root} paths'),
+        (CROSS_DIR_DOT_SLASH_RE, 'cross-dir-dot-slash', 'high',
+         'Cross-directory ./ reference — ./ means same folder only; use bare skill-root relative path (e.g., references/foo.md not ./references/foo.md)'),
     ]
 
     for pattern, category, severity, message in checks:
@@ -250,7 +249,7 @@ def scan_skill(skill_path: Path, skip_fenced: bool = True) -> dict:
         'bare_bmad': 0,
         'absolute_path': 0,
         'relative_prefix': 0,
-        'bare_internal_path': 0,
+        'cross_dir_dot_slash': 0,
         'memory_path': 0,
         'frontmatter': 0,
         'structure': 0,
@@ -267,7 +266,7 @@ def scan_skill(skill_path: Path, skip_fenced: bool = True) -> dict:
     return {
         'scanner': 'path-standards',
         'script': 'scan-path-standards.py',
-        'version': '2.1.0',
+        'version': '3.0.0',
         'skill_path': str(skill_path),
         'timestamp': datetime.now(timezone.utc).isoformat(),
         'files_scanned': files_scanned,

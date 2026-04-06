@@ -97,7 +97,7 @@ The subagent loads the scanner file, analyzes the skill, writes its analysis to 
 
 ### Step 3: Synthesize Report
 
-After all scanners complete, spawn a subagent with `report-quality-scan-creator.md`.
+After all scanners complete, spawn a subagent with `./report-quality-scan-creator.md`.
 
 Provide:
 

@@ -226,7 +226,7 @@ Use `./assets/SKILL-template-bootloader.md` for the lean bootloader. Generate th
 **Parameterize init-sanctum.py** from `./assets/init-sanctum-template.py`:
 - Set `SKILL_NAME` to the agent's skill name
 - Set `SKILL_ONLY_FILES` (always includes `first-breath.md`)
-- Set `TEMPLATE_FILES` to match the actual templates in `assets/`
+- Set `TEMPLATE_FILES` to match the actual templates in `./assets/`
 - Set `EVOLVABLE` based on evolvable capabilities decision
 
 | Location            | Contains                           | LLM relationship                     |
@@ -271,6 +271,6 @@ Run unit tests if scripts exist. Remind user to commit before quality analysis.
 - Which files are seeds vs. fully populated — sanctum templates have seeded values that First Breath refines; MEMORY.md starts empty.
 - The capabilities that were registered — list the built-in capabilities by code and name.
 - If autonomous mode: explain PULSE behavior (what it does on `--headless`, task routing, frequency) and how to set up cron/scheduling.
-- The init script: explain that `python3 scripts/init-sanctum.py <project-root> <skill-path>` runs before the first conversation to create the sanctum structure.
+- The init script: explain that `uv run ./scripts/init-sanctum.py <project-root> <skill-path>` runs before the first conversation to create the sanctum structure.
 
 **Offer quality analysis:** Ask if they'd like a Quality Analysis to identify opportunities. If yes, load `quality-analysis.md` with the agent path.

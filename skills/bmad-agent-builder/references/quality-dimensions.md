@@ -61,5 +61,5 @@ Memory agents have additional quality dimensions beyond the general seven:
 - **Template seed quality:** All 6 standard sanctum templates (INDEX, PERSONA, CREED, BOND, MEMORY, CAPABILITIES) must exist. CREED, BOND, and PERSONA should have meaningful seed values, not empty placeholders. MEMORY starts empty (correct).
 - **First Breath completeness:** first-breath.md must exist with all universal mechanics (for calibration: pacing, mirroring, hypotheses, silence-as-signal, save-as-you-go; for configuration: discovery questions, urgency detection). Must have domain-specific territories beyond universal ones. Birthday ceremony must be present.
 - **Standing orders:** CREED template must include surprise-and-delight and self-improvement, domain-adapted with concrete examples.
-- **Init script validity:** init-sanctum.py must exist, SKILL_NAME must match the skill name, TEMPLATE_FILES must match actual templates in assets/.
+- **Init script validity:** init-sanctum.py must exist, SKILL_NAME must match the skill name, TEMPLATE_FILES must match actual templates in ./assets/.
 - **Self-containment:** After init script runs, the sanctum must be fully self-contained. The agent should not depend on the skill bundle for normal operation (only for First Breath and init).

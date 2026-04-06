@@ -49,7 +49,11 @@ Invoke the **Agent Builder** or **Workflow Builder** and describe what you want 
 
 ### 3. Use Your Skill
 
-The builders produce a complete skill folder. Copy it into your AI tool's skills directory (`.claude/skills/`, `.codex/skills/`, `.agent/skills/`, or wherever your tool looks) and it's immediately usable. If you're not sure where skills go, ask your AI agent or use the BMad Method installer: `npx bmad-method install`.
+The builders produce a complete skill folder. Copy it into your AI tool's skills directory (`.claude/skills/`, `.codex/skills/`, `.agents/skills/`, or wherever your tool looks) and it's immediately usable.
+
+:::note[Installer Coming Soon]
+The BMad Method installer (`npx bmad-method install`) will support installing custom modules directly from GitHub repositories in an upcoming release. For now, copy the created skill folder into your tool's skills directory manually.
+:::
 
 :::tip[No Module Required]
 If you're building something for personal use, you don't need to package it as a module. Copy the skill folder and use it directly. Module packaging (with `bmad-help` registration and configuration) is for sharing or richer discoverability.
@@ -84,7 +88,7 @@ Build better skills with these guides, drawn from real-world BMad development.
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | **[Build Your First Module](/tutorials/build-your-first-module.md)**             | Plan, build, scaffold, and validate a complete module                    |
 | **[Distribute Your Module](/how-to/distribute-your-module.md)**                  | Share your module via GitHub for anyone to install                        |
-| **[Concepts](/explanation/)**                                                    | What agents, workflows, and skills are, and how they relate              |
+| **[Concepts](/explanation/)**                                                    | Agent types, memory architecture, workflows, skills, and how they relate |
 | **[Design Patterns](/explanation/#design-patterns)**                             | Progressive disclosure, subagent orchestration, authoring best practices |
 | **[Reference](/reference/)**                                                     | Builder commands, workflow patterns                                      |
 

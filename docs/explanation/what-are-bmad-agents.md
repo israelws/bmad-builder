@@ -1,60 +1,92 @@
 ---
 title: 'What Are BMad Agents?'
-description: How agents differ from workflows, what makes them stateful personas, and when to build one
+description: How agents differ from workflows, what the three agent types are, and when to build each one
 ---
 
-BMad Agents are self-contained AI skills that combine a **persona**, **capabilities**, and **persistent memory** into a conversational partner you can return to across sessions.
+BMad Agents are AI skills that combine a **persona**, **capabilities**, and optionally **persistent memory** into a conversational partner. They range from focused, stateless experts to evolving companions that remember you across sessions.
 
 ## What Makes an Agent an Agent
 
-Every skill in the BMad ecosystem is ultimately a skill file, but agents carry three traits that set them apart.
+Agents are skill files with three additional traits that workflows lack.
 
 | Trait            | What It Means                                                                                                          |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| **Persona**      | A defined role and voice (architect, therapist, game master, finance advisor) that shapes how the agent communicates |
-| **Capabilities** | Actions the agent can perform, either as internal prompt commands or by calling external skills                        |
-| **Memory**       | A sidecar directory where the agent stores what it learns about you, your preferences, and past interactions           |
+| **Persona**      | A defined role and voice (architect, coach, game master, muse) that shapes how the agent communicates |
+| **Capabilities** | Actions the agent can perform, either as internal prompt commands, scripts, or by calling external skills              |
+| **Memory**       | Optional persistent storage where the agent keeps what it learns about you, your preferences, and past interactions   |
 
-Together, they make the interaction feel less like running a command and more like talking to a specialist who already knows you.
+Together, they turn the interaction into a conversation with a specialist who knows your context.
+
+## The Three Agent Types
+
+Agents exist on a spectrum. The builder detects which type fits through natural conversation.
+
+| Type           | Memory | First Breath | Autonomous | Build For                                                    |
+| -------------- | ------ | ------------ | ---------- | ------------------------------------------------------------ |
+| **Stateless**  | No     | No           | No         | Isolated sessions, focused experts (code formatter, diagram generator, meeting summarizer) |
+| **Memory**     | Yes    | Yes          | No         | Ongoing relationships where remembering adds value (code coach, writing partner, domain advisor) |
+| **Autonomous** | Yes    | Yes          | Yes        | Proactive value creation between sessions (idea incubation, project monitoring, content curation) |
+
+### Stateless Agents
+
+Everything lives in a single SKILL.md with supporting references. No memory directory, no initialization ceremony. The agent brings a persona and capabilities but treats every session as independent. Pick this type when prior session context wouldn't change the agent's behavior.
+
+### Memory Agents
+
+A lean bootloader SKILL.md (~30 lines) points to a **sanctum**: a set of persistent files the agent reads on every launch to become itself again. The sanctum holds the agent's identity, values, understanding of its owner, curated knowledge, and capability registry. On first launch, a **First Breath** conversation lets the agent discover who you are and calibrate itself to your needs.
+
+Memory agents treat every session as a rebirth. They don't fake continuity; they read their sanctum files and become themselves again. If they don't remember something, they say so and check the files.
+
+### Autonomous Agents
+
+Everything a memory agent has, plus a PULSE file that defines what the agent does when no one's watching. Autonomous agents can wake on a schedule (cron, background task) and perform maintenance, from curating memory to checking on projects to running domain-specific tasks. With a human present, they're conversational. Headless, they work independently and exit.
+
+## Capabilities: Internal, External, and Scripts
+
+| Type                  | Description                                                 | Example                                                       |
+| --------------------- | ----------------------------------------------------------- | ------------------------------------------------------------- |
+| **Internal commands** | Prompt-driven actions defined inside the agent's skill file | A Dream Agent's "Dream Capture" command                       |
+| **External skills**   | Standalone skills or workflows the agent can invoke         | Calling the `create-prd` workflow via a PM agent              |
+| **Scripts**           | Deterministic operations offloaded from the LLM             | Validation, data processing, file operations                  |
+
+You choose the mix when you design the agent. Internal commands keep everything self-contained. External skills let you compose agents from shared building blocks, and scripts handle operations where determinism matters more than judgment.
+
+### Evolvable Capabilities
+
+Memory agents can optionally support **evolvable capabilities**. When enabled, the agent gets a capability-authoring reference and a "Learned" section in its capability registry. Users can teach the agent new prompt-based, script-based, or multi-file capabilities that it absorbs into its repertoire over time.
 
 ## How Memory Works
 
-When an agent launches for the first time in a project, it can create a sidecar memory directory at `_bmad/memory/<agent-name>/`. On every subsequent launch the agent loads this memory, which is how it remembers your preferences, prior decisions, and anything you told it to retain.
+Memory agents store their persistent state in a **sanctum** at `_bmad/memory/<agent-name>/`. The sanctum contains six core files that load on every session:
 
-Agents can also include a **first-run onboarding** step: a set of questions the agent asks on initial launch so it can configure itself for your needs before you start working together.
+| File                | Purpose                                                     |
+| ------------------- | ----------------------------------------------------------- |
+| **PERSONA.md**      | Identity, communication style, traits, evolution log        |
+| **CREED.md**        | Mission, values, standing orders, philosophy, boundaries    |
+| **BOND.md**         | Owner understanding, preferences, things to remember/avoid  |
+| **MEMORY.md**       | Curated long-term knowledge (kept under 200 lines)          |
+| **CAPABILITIES.md** | Built-in + learned capabilities registry                    |
+| **INDEX.md**        | Map of the sanctum structure (loaded first on every rebirth)|
 
 :::tip[Memory Lives Outside the Skill]
-Agent memory is stored in your project, not inside the skill folder. This prevents agents from accidentally modifying their own instructions and keeps your data portable. Also the same agent can be used with different projects or shared with others and generate their own memory space!
+Agent memory is stored in your project, not inside the skill folder. This keeps agents from modifying their own instructions and makes your data portable. The same agent can be used across different projects, each generating its own memory space.
 :::
 
-## Capabilities: Internal and External
-
-Agent capabilities come in two flavors.
-
-| Type                  | Description                                                 | Example                                                                                                     |
-| --------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| **Internal commands** | Prompt-driven actions defined inside the agent's skill file | A Dream Agent's "Dream Capture" command                                                                     |
-| **External skills**   | Standalone skills or workflows the agent can invoke         | Calling the `create-prd` workflow via a PM agent, allowing the workflow to retain customization and memory |
-
-You choose the mix when you design the agent. Internal commands keep everything self-contained; external skills let you compose agents from reusable building blocks.
-
-## Headless Mode
-
-Agents support a headless (autonomous) wake mode. When activated (for example through a cron job or an orchestrator like Open Claw) the agent skips waiting for user input and attempts to complete its tasks independently. This makes agents suitable for background automation while still being conversational when a human is present.
+Sanctum architecture, First Breath, PULSE, and the two-tier memory system are covered in **[Agent Memory and Personalization](/explanation/agent-memory-and-personalization.md)**.
 
 ## When to Build an Agent vs. a Workflow
 
 | Choose an Agent When                              | Choose a Workflow When                           |
 | ------------------------------------------------- | ------------------------------------------------ |
-| The user will return to it repeatedly             | The process runs once and produces an output     |
-| Remembering context across sessions adds value    | Stateless execution is fine                      |
-| A strong persona improves the interaction         | Personality is secondary to getting the job done |
-| The skill spans many loosely related capabilities | All steps serve a single, focused goal           |
+| The user will return to it repeatedly              | The process runs once and produces an output      |
+| Remembering context across sessions adds value     | Stateless execution is fine                       |
+| A strong persona improves the interaction          | Personality is secondary to getting the job done  |
+| The skill spans many loosely related capabilities  | All steps serve a single, focused goal            |
 
-If you are unsure, start with a workflow. You can always wrap it inside an agent later.
+If you're unsure, start with a workflow. You can always wrap it inside an agent later.
 
 ## Building Agents
 
-The **BMad Agent Builder** (`bmad-agent-builder`) walks you through six phases of conversational discovery (intent, capabilities, requirements, drafting, building, and quality optimization) and produces a ready-to-use skill folder you can drop into your tools' skills directory.
+The **BMad Agent Builder** (`bmad-agent-builder`) runs six phases of conversational discovery. The first phase detects which agent type fits your vision through natural questions, and the remaining phases adapt based on whether you're creating a stateless expert, a memory-backed companion, or an autonomous agent.
 
 See the [Builder Commands Reference](/reference/builder-commands.md) for details on the build process phases and capabilities.

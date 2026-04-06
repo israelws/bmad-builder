@@ -29,7 +29,7 @@ A BMad module bundles skills so they're discoverable and configurable. The Modul
 
 | Approach              | When to Use                                  | What Gets Generated                                             |
 | --------------------- | -------------------------------------------- | --------------------------------------------------------------- |
-| **Setup skill**       | Folder of 2+ skills                          | Dedicated `bmad-{code}-setup` skill with config and help assets |
+| **Setup skill**       | Folder of 2+ skills                          | Dedicated `{code}-setup` skill with config and help assets      |
 | **Self-registration** | Single standalone skill                      | Registration embedded in the skill's own `assets/` folder       |
 
 Both produce the same registration artifacts: `module.yaml` (identity and config variables) and `module-help.csv` (capability entries), which register with `bmad-help`.
@@ -52,7 +52,8 @@ The ideation session covers:
 | ----------------- | ------------------------------------------------------------------------- |
 | **Vision**        | Problem space, target users, core value                                   |
 | **Architecture**  | Single agent, multiple workflows, or hybrid                               |
-| **Memory**        | For multi-agent modules: personal sidecars, shared module memory, or both |
+| **Agent types**   | For each agent: stateless, memory, or autonomous (see [What Are Agents](/explanation/what-are-bmad-agents.md)) |
+| **Memory**        | For multi-agent modules: personal memory, shared module memory, or both |
 | **Module type**   | Standalone or expansion of another module                                 |
 | **Skills**        | Each planned skill's purpose, capabilities, and relationships             |
 | **Configuration** | Custom install questions and variables                                    |
@@ -69,7 +70,7 @@ Now build each skill individually.
 | Agent               | Agent Builder    | BA        |
 | Workflow or utility | Workflow Builder | BW        |
 
-Share the plan document as context when building each skill so the builder knows how it fits into the module.
+Share the plan document as context when building each skill so the builder knows how it fits into the module. For agents, the builder will detect the right type (stateless, memory, or autonomous) through conversational discovery and adapt the build process accordingly.
 
 :::caution[Build Before Packaging]
 Build and test each skill before scaffolding the module. The Create Module step reads your finished skills to generate accurate help entries.
@@ -91,7 +92,7 @@ The builder generates a dedicated setup skill:
 
 ```
 your-skills-folder/
-├── bmad-{code}-setup/           # Generated setup skill
+├── {code}-setup/                # Generated setup skill
 │   ├── SKILL.md                 # Setup instructions
 │   ├── scripts/                 # Config merge and cleanup scripts
 │   │   ├── merge-config.py

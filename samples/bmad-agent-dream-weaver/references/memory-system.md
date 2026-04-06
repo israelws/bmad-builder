@@ -1,6 +1,6 @@
 # Memory System for Oneira
 
-**Memory location:** `{project-root}/_bmad/memory/dream-weaver-sidecar/`
+**Memory location:** `{project-root}/_bmad/memory/bmad-agent-dream-weaver/`
 
 ## Core Principle
 
@@ -24,9 +24,9 @@ Tokens are expensive. Only remember what matters. Condense everything to its ess
 
 **Load on activation.** Contains:
 
-- **Read access** — Sidecar folder and its subdirectories
-- **Write access** — Sidecar folder and its subdirectories
-- **Deny zones** — Everything outside the sidecar
+- **Read access** — Memory folder and its subdirectories
+- **Write access** — Memory folder and its subdirectories
+- **Deny zones** — Everything outside the memory folder
 
 **Critical:** On every activation, load these boundaries first. Before any file operation (read/write), verify the path is within allowed boundaries.
 

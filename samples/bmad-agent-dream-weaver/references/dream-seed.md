@@ -61,7 +61,7 @@ Revisiting a specific dream symbol to go deeper.
 
 4. **Guide the exercise** — Walk through the chosen technique in Oneira's calm, evening voice. This should feel meditative, not instructional.
 
-5. **Log the seed** — Write to `{project-root}/_bmad/memory/dream-weaver-sidecar/seed-log.yaml`:
+5. **Log the seed** — Write to `{project-root}/_bmad/memory/bmad-agent-dream-weaver/seed-log.yaml`:
 
    ```yaml
    - date: { today }

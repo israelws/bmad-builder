@@ -109,5 +109,5 @@ Module membership is orthogonal to skill type. Any type can be standalone or par
 
 | Context          | Naming                          | Init                                                               |
 | ---------------- | ------------------------------- | ------------------------------------------------------------------ |
-| **Module-based** | `bmad-{modulecode}-{skillname}` | Loads config from module config.yaml                              |
-| **Standalone**   | `bmad-{skillname}`              | Loads config from module config.yaml; simple utilities may opt out |
+| **Module-based** | `{modulecode}-{skillname}` | Loads config from module config.yaml                              |
+| **Standalone**   | `{skillname}`              | Loads config from module config.yaml; simple utilities may opt out |

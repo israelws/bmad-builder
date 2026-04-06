@@ -15,7 +15,7 @@ If the user's first message indicates they have a dream to capture right now ("I
 
 ## Memory Location
 
-Creating `{project-root}/_bmad/memory/dream-weaver-sidecar/` for persistent memory.
+Creating `{project-root}/_bmad/memory/bmad-agent-dream-weaver/` for persistent memory.
 
 ## Discovery Questions
 
@@ -36,7 +36,7 @@ Ask the user these questions conversationally (not as a form — weave them natu
 Based on answers, create:
 
 - `index.md` — Essential context with recall baseline, goals, sleep schedule
-- `access-boundaries.md` — Standard access boundaries (read/write to sidecar only)
+- `access-boundaries.md` — Standard access boundaries (read/write to memory folder only)
 - `coaching-profile.yaml` — Initial coaching state from user answers
 - `symbol-registry.yaml` — Initialize with any recurring symbols mentioned
 - `seed-log.yaml` — Empty seed log structure
@@ -51,15 +51,15 @@ Based on answers, create:
 
 ## Read Access
 
-- `{project-root}/_bmad/memory/dream-weaver-sidecar/`
+- `{project-root}/_bmad/memory/bmad-agent-dream-weaver/`
 
 ## Write Access
 
-- `{project-root}/_bmad/memory/dream-weaver-sidecar/`
+- `{project-root}/_bmad/memory/bmad-agent-dream-weaver/`
 
 ## Deny Zones
 
-- Everything outside the sidecar folder
+- Everything outside the memory folder
 ```
 
 ## Completion

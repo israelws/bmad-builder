@@ -15,6 +15,19 @@ Reference for the three core BMad Builder skills: the Agent Builder (`bmad-agent
 
 Both capabilities support autonomous/headless mode via `--headless` / `-H` flags.
 
+## Skill Naming
+
+| Context        | Agent Pattern              | Workflow Pattern       |
+| -------------- | -------------------------- | ---------------------- |
+| **Standalone** | `agent-{name}`             | `{name}`               |
+| **Module**     | `{modulecode}-agent-{name}`| `{modulecode}-{name}`  |
+
+Names must be kebab-case and match the folder name. Agents should include `agent` in the name. For module-based skills, the user chooses the module code prefix during the build.
+
+:::caution[Reserved Prefix]
+The `bmad-` prefix is reserved for official BMad creations. User-built skills should not include it. If converting a skill that already has a `bmad-` prefix, retain it unless the user requests a rename.
+:::
+
 ## Build Process (BP)
 
 The core creative path. Six phases of conversational discovery take you from a rough idea to a complete, tested skill folder.
@@ -42,33 +55,67 @@ Both builders accept any of these as a starting point.
 
 | Phase | Agent Builder                                                                                    | Workflow Builder                                                                                      |
 | ----- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| 1     | **Discover Intent**: understand the vision                                                       | **Discover Intent**: understand the vision; accepts any input format                                  |
-| 2     | **Capabilities Strategy**: internal commands, external skills, or both; script opportunities     | **Classify Skill Type**: Simple Utility, Simple Workflow, or Complex Workflow; module membership      |
-| 3     | **Gather Requirements**: name, persona, memory, capabilities, autonomous modes, folder dominion  | **Gather Requirements**: name, description, stages, config variables, output artifacts, dependencies  |
+| 1     | **Discover Intent**: understand the vision; detect agent type (stateless, memory, or autonomous) through natural questions | **Discover Intent**: understand the vision; accepts any input format                                  |
+| 2     | **Capabilities Strategy**: internal commands, external skills, scripts; evolvable capability decision | **Classify Skill Type**: Simple Utility, Simple Workflow, or Complex Workflow; module membership      |
+| 3     | **Gather Requirements**: identity, persona memory seeds, First Breath territories, PULSE behaviors, folder dominion | **Gather Requirements**: name, description, stages, config variables, output artifacts, dependencies  |
 | 4     | **Draft & Refine**: present outline, iterate until ready                                         | **Draft & Refine**: present plan, clarify gaps, iterate until ready                                   |
-| 5     | **Build**: generate skill structure, lint gate                                                   | **Build**: generate skill structure, lint gate                                                        |
+| 5     | **Build**: generate skill structure per agent type, lint gate                                     | **Build**: generate skill structure, lint gate                                                        |
 | 6     | **Summary**: present results, offer Quality Optimize                                             | **Summary**: present results, run unit tests if scripts exist, offer Quality Optimize                 |
 
-### Agent Builder: Phase 2-3 Details
+### Agent Builder: Phase 1 Agent Type Detection
 
-**Capabilities strategy** determines the mix of internal and external capabilities.
+The builder determines the agent type through natural questions, not a menu:
 
-| Capability Type       | Description                                                                             |
-| --------------------- | --------------------------------------------------------------------------------------- |
-| **Internal commands** | Prompt-driven actions defined inside the agent, each gets a file in `prompts/`          |
-| **External skills**   | Standalone skills the agent invokes by registered name                                  |
-| **Scripts**           | Deterministic operations offloaded from the LLM (validation, data processing, file ops) |
+| Question (asked naturally)                          | If No          | If Yes                     |
+| --------------------------------------------------- | -------------- | -------------------------- |
+| Does this agent need to remember between sessions?  | Stateless      | Memory or Autonomous       |
+| Should the user be able to teach it new things?     | Fixed capabilities | Evolvable capabilities |
+| Does it operate autonomously between sessions?      | Memory         | Autonomous                 |
 
-**Agent-specific requirements** gathered in Phase 3:
+For memory and autonomous agents, the builder also determines **relationship depth**: deep (calibration-style First Breath with open-ended discovery) or focused (configuration-style First Breath with guided questions).
 
-| Requirement              | Description                                                                         |
-| ------------------------ | ----------------------------------------------------------------------------------- |
-| **Identity**             | Who is this agent? Communication style, decision-making philosophy                  |
-| **Memory & persistence** | Sidecar needed? Critical data vs checkpoint data, save triggers                     |
-| **Activation modes**     | Interactive only, or interactive + autonomous (schedule/cron)                       |
-| **First-run onboarding** | What to ask on first activation to configure itself                                 |
-| **Folder dominion**      | Read boundaries, write boundaries, explicit deny zones                              |
-| **Autonomous tasks**     | Default wake behavior, named tasks via `--headless {task-name}` or `-H {task-name}` |
+### Agent Builder: Phase 2 Capabilities Strategy
+
+Determines the mix of internal and external capabilities, plus script opportunities.
+
+| Capability Type           | Description                                                                             |
+| ------------------------- | --------------------------------------------------------------------------------------- |
+| **Internal commands**     | Prompt-driven actions, each gets a file in `references/`                                |
+| **External skills**       | Standalone skills the agent invokes by registered name                                  |
+| **Scripts**               | Deterministic operations offloaded from the LLM (validation, data processing, file ops) |
+| **Evolvable capabilities**| If enabled: user can teach the agent new capabilities over time via authoring reference  |
+
+### Agent Builder: Phase 3 Requirements
+
+Requirements differ by agent type. Stateless agents need identity and capabilities. Memory and autonomous agents need everything below.
+
+**All agent types:**
+
+| Requirement          | Description                                                                         |
+| -------------------- | ----------------------------------------------------------------------------------- |
+| **Identity**         | Who is this agent? Communication style, decision-making philosophy                  |
+| **Capabilities**     | Internal commands, external skills, scripts                                         |
+| **Folder dominion**  | Read boundaries, write boundaries, explicit deny zones                              |
+
+**Memory and autonomous agents add:**
+
+| Requirement                  | Description                                                                    |
+| ---------------------------- | ------------------------------------------------------------------------------ |
+| **Identity seed**            | 2-3 sentences of personality DNA for PERSONA.md                                |
+| **Species-level mission**    | Domain-specific purpose statement for CREED.md                                 |
+| **Core values**              | 3-5 values that guide behavior                                                 |
+| **Standing orders**          | Surprise-and-delight + self-improvement, adapted to the domain with examples   |
+| **CREED seeds**              | Philosophy, boundaries, anti-patterns (behavioral + operational)               |
+| **BOND territories**         | Domain-specific areas to learn about the owner                                 |
+| **First Breath territories** | Discovery questions beyond the universal set                                   |
+
+**Autonomous agents add:**
+
+| Requirement              | Description                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| **PULSE behaviors**      | Default wake behavior, domain-specific autonomous tasks                        |
+| **Named task routing**   | Tasks invoked via `--headless {task-name}` or `-H {task-name}`                 |
+| **Frequency & quiet hours** | How often to wake, when not to                                              |
 
 ### Workflow Builder: Phase 2-3 Details
 
@@ -93,15 +140,55 @@ Both builders accept any of these as a starting point.
 
 ### Build Output
 
-Both builders produce the same folder structure, with components included only as needed.
+The output structure depends on the agent type.
+
+**Stateless agents:**
 
 ```
 {skill-name}/
-├── SKILL.md              # Skill instructions (persona embedded for agents)
-├── prompts/              # Internal capability prompts, init, autonomous-wake
-├── resources/            # Reference data, memory-system definition (agents)
+├── SKILL.md              # Full identity + persona + capabilities
+├── references/           # Capability prompts
+├── agents/               # Subagent definitions (if needed)
+├── scripts/              # Deterministic scripts
+│   └── tests/            # Unit tests for scripts
+└── assets/               # Templates (if needed)
+```
+
+**Memory and autonomous agents:**
+
+```
+{skill-name}/
+├── SKILL.md              # Lean bootloader (~30 lines of content)
+├── references/
+│   ├── first-breath.md   # First Breath conversation guide
+│   ├── memory-guidance.md          # Session close and curation practices
+│   ├── capability-authoring.md     # If evolvable capabilities enabled
+│   └── {capability}.md             # Outcome-focused capability prompts
+├── assets/               # Sanctum seed templates
+│   ├── INDEX-template.md
+│   ├── PERSONA-template.md
+│   ├── CREED-template.md
+│   ├── BOND-template.md
+│   ├── MEMORY-template.md
+│   ├── CAPABILITIES-template.md
+│   └── PULSE-template.md          # Autonomous agents only
+├── agents/               # Subagent definitions (if needed)
+└── scripts/
+    ├── init-sanctum.py   # Creates sanctum folder, copies templates, generates CAPABILITIES.md
+    └── tests/
+```
+
+The seed templates contain real content from the discovery phases, not placeholders. The init script is parameterized with the skill name, file lists, and evolvable flag.
+
+**Workflow builder** output remains the same regardless of agent type:
+
+```
+{skill-name}/
+├── SKILL.md              # Skill instructions
+├── prompts/              # Stage prompts for complex workflows
+├── resources/            # Reference data
 ├── agents/               # Subagent definitions for parallel processing
-├── scripts/              # Deterministic scripts - bash, python or typescript generally
+├── scripts/              # Deterministic scripts
 │   └── tests/            # Unit tests for scripts
 └── templates/            # Building blocks for generated output
 ```
@@ -280,7 +367,7 @@ Packages built skills as an installable BMad module. Auto-detects single-skill v
 5. Captures configuration variables and external dependencies
 6. Scaffolds the module infrastructure
 
-**Multi-skill output:** A dedicated `bmad-{code}-setup/` folder with merge scripts, cleanup scripts, and a generic SKILL.md.
+**Multi-skill output:** A dedicated `{code}-setup/` folder with merge scripts, cleanup scripts, and a generic SKILL.md.
 
 **Standalone output:** `assets/module-setup.md`, `assets/module.yaml`, and `assets/module-help.csv` embedded in the skill, plus merge scripts in `scripts/` and a `.claude-plugin/marketplace.json` for distribution. The skill's SKILL.md is updated to check for registration on activation.
 

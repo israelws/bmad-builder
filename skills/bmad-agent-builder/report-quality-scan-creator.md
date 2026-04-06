@@ -19,15 +19,21 @@ Read all files in `{quality-report-dir}`:
 - `*-prepass.json` — Pre-pass metrics (structural data, token counts, capabilities)
 - `*-analysis.md` — LLM scanner analyses (free-form markdown)
 
-Also read the agent's `SKILL.md` to extract: name, icon, title, identity, communication style, principles, and the capability routing table.
+Also read the agent's `SKILL.md` to extract agent information. Check the structure prepass for `metadata.is_memory_agent` to determine the agent type.
+
+**Stateless agents:** Extract name, icon, title, identity, communication style, principles, and capability routing table from SKILL.md.
+
+**Memory agents (bootloaders):** SKILL.md contains only the identity seed, Three Laws, Sacred Truth, mission, and activation routing. Extract the identity seed and mission from SKILL.md, then read `assets/PERSONA-template.md` for title and communication style seed, `assets/CREED-template.md` for core values and philosophy, and `assets/CAPABILITIES-template.md` for the capability routing table. The portrait should be synthesized from the identity seed and CREED philosophy, not from sections that don't exist in the bootloader.
 
 ### Step 2: Build the Agent Portrait
 
-From the agent's SKILL.md, synthesize a 2-3 sentence portrait that captures who this agent is — their personality, expertise, and voice. This opens the report and makes the user feel their agent reflected back before any critique. Include the agent's icon, display name, and title.
+Synthesize a 2-3 sentence portrait that captures who this agent is -- their personality, expertise, and voice. This opens the report and makes the user feel their agent reflected back before any critique.
+
+For stateless agents, draw from SKILL.md identity and communication style. For memory agents, draw from the identity seed in SKILL.md, the PERSONA-template.md communication style seed, and the CREED-template.md philosophy. Include the display name and title.
 
 ### Step 3: Build the Capability Dashboard
 
-From the routing table in SKILL.md, list every capability. Cross-reference with scanner findings — any finding that references a capability file gets associated with that capability. Rate each:
+List every capability. For stateless agents, read the routing table in SKILL.md. For memory agents, read `assets/CAPABILITIES-template.md` for the built-in capability table. Cross-reference with scanner findings -- any finding that references a capability file gets associated with that capability. Rate each:
 
 - **Good** — no findings or only low/note severity
 - **Needs attention** — medium+ findings referencing this capability
@@ -219,7 +225,7 @@ Every `"..."` below is a placeholder for your content. Replace with actual value
     },
     "persona": {
       "assessment": "1-3 sentence summary",
-      "overview_quality": "appropriate|excessive|missing",
+      "overview_quality": "appropriate|excessive|missing|bootloader",
       "findings": []
     },
     "cohesion": {
@@ -292,6 +298,17 @@ Write both files to `{quality-report-dir}/`.
 ## Return
 
 Return only the path to `report-data.json` when complete.
+
+## Memory Agent Report Guidance
+
+When `is_memory_agent` is true in the prepass data, adjust your synthesis:
+
+- **Do not recommend adding Overview, Identity, Communication Style, or Principles sections to the bootloader.** These are intentionally absent. The bootloader is lean by design (~30 lines). Persona context lives in sanctum templates.
+- **Use `overview_quality: "bootloader"`** in the persona section of report-data.json. This signals that the agent uses a lean bootloader architecture, not that the overview is missing.
+- **Include the Sanctum Architecture section** in Detailed Analysis. Draw from `sanctum-architecture-analysis.md`.
+- **Evaluate identity seed quality** (is it evocative and personality-rich?) rather than checking for formal section headers.
+- **Capability dashboard** comes from `assets/CAPABILITIES-template.md`, not SKILL.md.
+- **Agent portrait** should reflect the identity seed + CREED philosophy, capturing the agent's personality DNA.
 
 ## Key Principle
 

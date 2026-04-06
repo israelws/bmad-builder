@@ -70,6 +70,7 @@ For each analysis dimension, summarize the scanner's assessment and list finding
 - **Execution Efficiency** — from execution-efficiency scanner
 - **Conversation Experience** — from enhancement-opportunities scanner (journeys, headless, edge cases)
 - **Script Opportunities** — from script-opportunities scanner
+- **Sanctum Architecture** — from sanctum architecture scanner (memory agents only, skip if file not present)
 
 ### Step 8: Rank Recommendations
 
@@ -127,6 +128,9 @@ Order by impact — "how many findings does fixing this resolve?" The fix that c
 ### Conversation Experience
 
 ### Script Opportunities
+
+### Sanctum Architecture
+{Only include this section if sanctum-architecture-analysis.md exists in the report directory}
 
 ## Recommendations
 
@@ -249,6 +253,14 @@ Every `"..."` below is a placeholder for your content. Replace with actual value
       "assessment": "1-3 sentence summary",
       "token_savings": "estimated total",
       "findings": []
+    },
+    "sanctum": {
+      "present": true,
+      "assessment": "1-3 sentence summary (omit entire sanctum key if not a memory agent)",
+      "bootloader_lines": 30,
+      "template_count": 6,
+      "first_breath_style": "calibration|configuration",
+      "findings": []
     }
   },
   "recommendations": [
@@ -271,7 +283,7 @@ Every `"..."` below is a placeholder for your content. Replace with actual value
 5. Does every opportunity use `name` (not `title`) and include `finding_count` and `findings` array?
 6. Does every recommendation use `action` (not `description`) and include `rank` number?
 7. Does every capability include `name`, `file`, `status`, `finding_count`, `findings`?
-8. Are detailed_analysis keys exactly: `structure`, `persona`, `cohesion`, `efficiency`, `experience`, `scripts`?
+8. Are detailed_analysis keys exactly: `structure`, `persona`, `cohesion`, `efficiency`, `experience`, `scripts` (plus `sanctum` for memory agents)?
 9. Does every journey use `archetype` (not `persona`), `summary` (not `friction`), `friction_points` array, `bright_spots` array?
 10. Does `autonomous` use `potential` and `notes`?
 

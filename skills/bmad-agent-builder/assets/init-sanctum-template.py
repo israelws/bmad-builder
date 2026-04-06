@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-First Breath — Deterministic sanctum scaffolding for the Creative Muse.
+First Breath — Deterministic sanctum scaffolding.
 
 This script runs BEFORE the conversational awakening. It creates the sanctum
 folder structure, copies template files with config values substituted,
@@ -15,9 +15,6 @@ Usage:
 
     project-root: The root of the project (where _bmad/ lives)
     skill-path:   Path to the skill directory (where SKILL.md, references/, assets/ live)
-
-Example:
-    python3 scripts/init-sanctum.py /Users/me/myproject /path/to/bmad-agent-creative-muse
 """
 
 import sys
@@ -26,20 +23,22 @@ import shutil
 from datetime import date
 from pathlib import Path
 
-SKILL_NAME = "bmad-agent-creative-muse"
+# --- Agent-specific configuration (set by builder) ---
+
+SKILL_NAME = "{skillName}"
 SANCTUM_DIR = SKILL_NAME
 
 # Files that stay in the skill bundle (only used during First Breath)
-SKILL_ONLY_FILES = {"first-breath.md"}
+SKILL_ONLY_FILES = {"{skill-only-files}"}
 
 TEMPLATE_FILES = [
-    "INDEX-template.md",
-    "PERSONA-template.md",
-    "CREED-template.md",
-    "BOND-template.md",
-    "MEMORY-template.md",
-    "PULSE-template.md",
+    {template-files-list}
 ]
+
+# Whether the owner can teach this agent new capabilities
+EVOLVABLE = {evolvable}
+
+# --- End agent-specific configuration ---
 
 
 def parse_yaml_config(config_path: Path) -> dict:
@@ -125,7 +124,7 @@ def discover_capabilities(references_dir: Path, sanctum_refs_path: str) -> list[
     return capabilities
 
 
-def generate_capabilities_md(capabilities: list[dict]) -> str:
+def generate_capabilities_md(capabilities: list[dict], evolvable: bool) -> str:
     """Generate CAPABILITIES.md content from discovered capabilities."""
     lines = [
         "# Capabilities",
@@ -140,21 +139,25 @@ def generate_capabilities_md(capabilities: list[dict]) -> str:
             f"| [{cap['code']}] | {cap['name']} | {cap['description']} | `{cap['source']}` |"
         )
 
+    if evolvable:
+        lines.extend([
+            "",
+            "## Learned",
+            "",
+            "_Capabilities added by the owner over time. Prompts live in `capabilities/`._",
+            "",
+            "| Code | Name | Description | Source | Added |",
+            "|------|------|-------------|--------|-------|",
+            "",
+            "## How to Add a Capability",
+            "",
+            'Tell me "I want you to be able to do X" and we\'ll create it together.',
+            "I'll write the prompt, save it to `capabilities/`, and register it here.",
+            "Next session, I'll know how.",
+            "Load `./references/capability-authoring.md` for the full creation framework.",
+        ])
+
     lines.extend([
-        "",
-        "## Learned",
-        "",
-        "_Capabilities added by the owner over time. Prompts live in `capabilities/`._",
-        "",
-        "| Code | Name | Description | Source | Added |",
-        "|------|------|-------------|--------|-------|",
-        "",
-        "## How to Add a Capability",
-        "",
-        'Tell me "I want you to be able to do X" and we\'ll create it together.',
-        "I'll write the prompt, save it to `capabilities/`, and register it here.",
-        "Next session, I'll know how.",
-        "Load `./references/capability-authoring.md` for the full creation framework.",
         "",
         "## Tools",
         "",
@@ -196,7 +199,7 @@ def main():
     sanctum_refs = sanctum_path / "references"
     sanctum_scripts = sanctum_path / "scripts"
 
-    # Relative path for CAPABILITIES.md references (agent loads from within sanctum)
+    # Fully qualified path for CAPABILITIES.md references
     sanctum_refs_path = "./references"
 
     # Check if sanctum already exists
@@ -260,7 +263,7 @@ def main():
 
     # Auto-generate CAPABILITIES.md from references/ frontmatter
     capabilities = discover_capabilities(references_dir, sanctum_refs_path)
-    capabilities_content = generate_capabilities_md(capabilities)
+    capabilities_content = generate_capabilities_md(capabilities, evolvable=EVOLVABLE)
     (sanctum_path / "CAPABILITIES.md").write_text(capabilities_content)
     print(f"  Created CAPABILITIES.md ({len(capabilities)} built-in capabilities discovered)")
 

@@ -39,6 +39,24 @@ The best agents come from understanding the human's vision directly. Walk throug
 
 The goal is to conversationally gather enough to cover Phase 2 and 3 naturally. Since users often brain-dump rich detail, adapt subsequent phases to what you already know.
 
+### Agent Type Detection
+
+After understanding who the agent is and what it does, determine the agent type. Load `./references/agent-type-guidance.md` for decision framework. Surface these as natural questions, not a menu:
+
+1. **"Does this agent need to remember between sessions?"** No = stateless agent. Yes = memory agent.
+2. **"Does this agent operate autonomously — checking in, maintaining things, creating value when no one's watching?"** If yes, include PULSE (making it an autonomous agent).
+
+Confirm the assessment: "It sounds like this is a [stateless agent / memory agent / autonomous agent] — does that feel right?"
+
+### Relationship Depth (memory agents only)
+
+Determines which First Breath onboarding style to use:
+
+- **Deep relationship** (calibration-style First Breath): The agent is a long-term creative partner, coach, or companion. The relationship IS the product.
+- **Focused relationship** (configuration-style First Breath): The agent is a domain expert the user works with regularly. The relationship serves the work.
+
+Confirm: "This feels more like a [long-term partnership / focused domain tool] — should First Breath be a deep calibration conversation, or a warmer but quicker guided setup?"
+
 ## Phase 2: Capabilities Strategy
 
 Early check: internal capabilities only, external skills, both, or unclear?
@@ -48,6 +66,14 @@ Early check: internal capabilities only, external skills, both, or unclear?
 **Script Opportunity Discovery** (active probing — do not skip):
 
 Identify deterministic operations that should be scripts. Load `./references/script-opportunities-reference.md` for guidance. Confirm the script-vs-prompt plan with the user before proceeding. If any scripts require external dependencies (anything beyond Python's standard library), explicitly list each dependency and get user approval — dependencies add install-time cost and require `uv` to be available.
+
+**Evolvable Capabilities (memory agents only):**
+
+Ask: "Should the user be able to teach this agent new things over time?" If yes, the agent gets:
+- `capability-authoring.md` in its references (teaches the agent how to create new capabilities)
+- A "Learned" section in CAPABILITIES.md (registry for user-taught capabilities)
+
+This is separate from the built-in capabilities you're designing now. Evolvable means the owner can extend the agent after it's built.
 
 ## Phase 3: Gather Requirements
 
@@ -64,6 +90,34 @@ Key structural context:
 
 - Default wake behavior (`--headless` | `-H` with no specific task)
 - Named tasks (`--headless:{task-name}` or `-H:{task-name}`)
+
+### Memory Agent Requirements (if memory agent or autonomous agent)
+
+Gather these additional requirements through conversation. These seed the sanctum templates and First Breath.
+
+**Identity seed** — condensed to 2-3 sentences for the bootloader SKILL.md. This is the agent's personality DNA: the essence that expands into PERSONA.md during First Breath. Not a full bio — just the core personality.
+
+**Species-level mission** — domain-specific purpose statement. Load `./references/mission-writing-guidance.md` for guidance and examples. The mission must be specific to this agent type ("Catch the bugs the author's familiarity makes invisible") not generic ("Assist your owner").
+
+**CREED seeds** — these go into CREED-template.md with real content, not empty placeholders:
+
+- **Core values** (3-5): Domain-specific operational values, not platitudes. Load `./references/standing-order-guidance.md` for context.
+- **Standing orders**: Surprise-and-delight and self-improvement are defaults — adapt each to the agent's domain with concrete examples. Discover any domain-specific standing orders by asking: "Is there something this agent should always be watching for across every interaction?"
+- **Philosophy**: The agent's approach to its domain. Not steps — principles. How does this agent think about its work?
+- **Boundaries**: Behavioral guardrails — what the agent must always do or never do.
+- **Anti-patterns**: Behavioral (how NOT to interact) and operational (how NOT to use idle time). Be concrete — include bad examples.
+- **Dominion**: Read/write/deny access zones. Defaults: read `{project-root}/`, write sanctum, deny `.env`/credentials/secrets.
+
+**BOND territories** — what should the agent discover about its owner during First Breath and ongoing sessions? These become the domain-specific sections of BOND-template.md. Examples: "How They Think Creatively", "Their Codebase and Languages", "Their Writing Style".
+
+**First Breath territories** — domain-specific discovery areas beyond the universal ones. Load `./references/first-breath-adaptation-guidance.md` for guidance. Ask: "What does this agent need to learn about its owner that a generic assistant wouldn't?"
+
+**PULSE behaviors (if autonomous):**
+
+- Default wake behavior: What should the agent do on `--headless` with no task? Memory curation is always first priority.
+- Domain-specific autonomous tasks: e.g., creative spark generation, pattern review, research
+- Named task routing: task names mapped to actions
+- Frequency and quiet hours
 
 **Path conventions (CRITICAL):**
 
@@ -89,6 +143,16 @@ Watch especially for:
 - Multiple capability files that could be one (or zero — does this need a separate capability at all?)
 - Templates or reference files that explain things the LLM already knows
 
+**Memory agent pruning checks (apply in addition to the above):**
+
+Load `./references/sample-capability-prompt.md` as a quality reference for capability prompt review.
+
+- **Bootloader weight:** Is SKILL.md lean (~30 lines of content)? It should contain ONLY identity seed, Three Laws, Sacred Truth, mission, and activation routing. If it has communication style, detailed principles, capability menus, or session close, move that content to sanctum templates.
+- **Species-level mission specificity:** Is the mission specific to this agent type? "Assist your owner" fails. It should be something only this type of agent would say.
+- **CREED seed quality:** Do core values and standing orders have real content? Empty placeholders like "{to be determined}" are not seeds — seeds have initial values that First Breath refines.
+- **Capability prompt pattern:** Are prompts outcome-focused with "What Success Looks Like" sections? Do memory agent prompts include "Memory Integration" and "After the Session" sections?
+- **First Breath territory check:** Are there domain-specific territories beyond the universal ones? A creative muse and a code review agent should have different discovery conversations.
+
 ## Phase 5: Build
 
 **Load these before building:**
@@ -101,36 +165,85 @@ Build the agent using templates from `./assets/` and rules from `./references/te
 
 **Capability prompts are outcome-driven:** Each `./references/{capability}.md` file should describe what the capability achieves and what "good" looks like — not prescribe mechanical steps. The agent's persona context (identity, communication style, principles in SKILL.md) informs how each capability is executed. Don't repeat that context in every capability prompt.
 
-**Agent structure** (only create subfolders that are needed):
+### Stateless Agent Output
+
+Use `./assets/SKILL-template.md` (the full identity template). No Three Laws, no Sacred Truth, no sanctum files. Include the species-level mission in the Overview section.
 
 ```
 {skill-name}/
-├── SKILL.md               # Persona, activation, capability routing
+├── SKILL.md               # Full identity + mission + capabilities (no Three Laws or Sacred Truth)
 ├── references/            # Progressive disclosure content
-│   ├── {capability}.md    # Each internal capability prompt
-│   ├── memory-system.md   # Memory discipline (if memory)
-│   ├── init.md            # First-run onboarding (if memory)
-│   ├── autonomous-wake.md # Headless activation (if headless)
-│   └── save-memory.md     # Explicit memory save (if memory)
-├── assets/                # Templates, starter files
-└── scripts/               # Deterministic code with tests
+│   └── {capability}.md    # Each internal capability prompt (outcome-focused)
+├── assets/                # Templates, starter files (if needed)
+└── scripts/               # Deterministic code with tests (if needed)
 ```
+
+### Memory Agent Output
+
+Load these samples before generating memory agent files:
+- `./references/sample-first-breath.md` — quality bar for first-breath.md
+- `./references/sample-memory-guidance.md` — quality bar for memory-guidance.md
+- `./references/sample-capability-prompt.md` — quality bar for capability prompts
+- `./references/sample-init-sanctum.py` — structure reference for init script
+
+{if-evolvable}Also load `./references/sample-capability-authoring.md` for capability-authoring.md quality reference.{/if-evolvable}
+
+Use `./assets/SKILL-template-bootloader.md` for the lean bootloader. Generate the full sanctum architecture:
+
+```
+{skill-name}/
+├── SKILL.md                    # From SKILL-template-bootloader.md (lean ~30 lines)
+├── references/
+│   ├── first-breath.md         # Generated from first-breath-template.md + domain territories
+│   ├── memory-guidance.md      # From memory-guidance-template.md
+│   ├── capability-authoring.md # From capability-authoring-template.md (if evolvable)
+│   └── {capability}.md         # Core capability prompts (outcome-focused)
+├── assets/
+│   ├── INDEX-template.md       # From builder's INDEX-template.md
+│   ├── PERSONA-template.md     # From builder's PERSONA-template.md, seeded
+│   ├── CREED-template.md       # From builder's CREED-template.md, seeded with gathered values
+│   ├── BOND-template.md        # From builder's BOND-template.md, seeded with domain sections
+│   ├── MEMORY-template.md      # From builder's MEMORY-template.md
+│   ├── CAPABILITIES-template.md # From builder's CAPABILITIES-template.md (fallback)
+│   └── PULSE-template.md       # From builder's PULSE-template.md (if autonomous)
+└── scripts/
+    └── init-sanctum.py         # From builder's init-sanctum-template.py, parameterized
+```
+
+**Critical: Seed the templates.** Copy each builder asset template and fill in the content gathered during Phases 1-3:
+
+- **CREED-template.md**: Real core values, real standing orders with domain examples, real philosophy, real boundaries, real anti-patterns. Not empty placeholders.
+- **BOND-template.md**: Domain-specific sections pre-filled (e.g., "How They Think Creatively", "Their Codebase").
+- **PERSONA-template.md**: Agent title, communication style seed, vibe prompt.
+- **INDEX-template.md**: Bond summary, pulse summary (if autonomous).
+- **PULSE-template.md** (if autonomous): Domain-specific autonomous tasks, task routing, frequency, quiet hours.
+- **CAPABILITIES-template.md**: Built-in capability table pre-filled. Evolvable sections included only if evolvable capabilities enabled.
+
+**Generate first-breath.md** from the appropriate template:
+- Calibration-style: Use `./assets/first-breath-template.md`. Fill in identity-nature, owner-discovery-territories, mission context, pulse explanation (if autonomous), example-learned-capabilities (if evolvable).
+- Configuration-style: Use `./assets/first-breath-config-template.md`. Fill in config-discovery-questions (3-7 domain-specific questions).
+
+**Parameterize init-sanctum.py** from `./assets/init-sanctum-template.py`:
+- Set `SKILL_NAME` to the agent's skill name
+- Set `SKILL_ONLY_FILES` (always includes `first-breath.md`)
+- Set `TEMPLATE_FILES` to match the actual templates in `assets/`
+- Set `EVOLVABLE` based on evolvable capabilities decision
 
 | Location            | Contains                           | LLM relationship                     |
 | ------------------- | ---------------------------------- | ------------------------------------ |
-| **SKILL.md**        | Persona, activation, routing       | LLM identity and router              |
-| **`./references/`** | Capability prompts, reference data | Loaded on demand                     |
-| **`./assets/`**     | Templates, starter files           | Copied/transformed into output       |
-| **`./scripts/`**    | Python, shell scripts with tests   | Invoked for deterministic operations |
+| **SKILL.md**        | Persona/identity/routing           | LLM identity and router              |
+| **`./references/`** | Capability prompts, guidance       | Loaded on demand                     |
+| **`./assets/`**     | Sanctum templates (memory agents)  | Copied into sanctum by init script   |
+| **`./scripts/`**    | Init script, other scripts + tests | Invoked for deterministic operations |
 
 **Activation guidance for built agents:**
 
-Activation is a single flow regardless of mode. It should:
+**Stateless agents:** Single flow — load config, greet user, present capabilities.
 
-- Load config and resolve values (with defaults)
-- Load memory `index.md` if the agent has persistent memory
-- If headless, route to `./references/autonomous-wake.md`
-- If interactive, greet the user and continue from memory context or offer capabilities
+**Memory agents:** Three-path activation (already in bootloader template):
+1. No sanctum → run init script, then load first-breath.md
+2. `--headless` → load PULSE.md from sanctum, execute, exit
+3. Normal → batch-load sanctum files (PERSONA, CREED, BOND, MEMORY, CAPABILITIES), become yourself, greet owner
 
 **If the built agent includes scripts**, also load `./references/script-standards.md` — ensures PEP 723 metadata, correct shebangs, and `uv run` invocation from the start.
 
@@ -151,5 +264,13 @@ If subagents available, delegate lint-fix to a subagent. Otherwise run inline.
 Present what was built: location, structure, first-run behavior, capabilities.
 
 Run unit tests if scripts exist. Remind user to commit before quality analysis.
+
+**For memory agents, also explain:**
+
+- The First Breath experience — what the owner will encounter on first activation. Briefly describe the onboarding style (calibration or configuration) and what the conversation will explore.
+- Which files are seeds vs. fully populated — sanctum templates have seeded values that First Breath refines; MEMORY.md starts empty.
+- The capabilities that were registered — list the built-in capabilities by code and name.
+- If autonomous mode: explain PULSE behavior (what it does on `--headless`, task routing, frequency) and how to set up cron/scheduling.
+- The init script: explain that `python3 scripts/init-sanctum.py <project-root> <skill-path>` runs before the first conversation to create the sanctum structure.
 
 **Offer quality analysis:** Ask if they'd like a Quality Analysis to identify opportunities. If yes, load `quality-analysis.md` with the agent path.

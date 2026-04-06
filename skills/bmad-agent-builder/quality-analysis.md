@@ -42,6 +42,7 @@ Check for uncommitted changes. In headless mode, note warnings and proceed. In i
 | P1  | `scripts/prepass-structure-capabilities.py` | structure scanner            | `structure-capabilities-prepass.json` |
 | P2  | `scripts/prepass-prompt-metrics.py`         | prompt-craft scanner         | `prompt-metrics-prepass.json`         |
 | P3  | `scripts/prepass-execution-deps.py`         | execution-efficiency scanner | `execution-deps-prepass.json`         |
+| P4  | `scripts/prepass-sanctum-architecture.py`   | sanctum architecture scanner | `sanctum-architecture-prepass.json`   |
 
 ### LLM Scanners (Judgment-Based — Run After Scripts)
 
@@ -55,6 +56,9 @@ Each scanner writes a free-form analysis document:
 | L4  | `quality-scan-agent-cohesion.md`            | Persona-capability alignment, identity coherence, per-capability cohesion | No        | `agent-cohesion-analysis.md`            |
 | L5  | `quality-scan-enhancement-opportunities.md` | Edge cases, experience gaps, user journeys, headless potential            | No        | `enhancement-opportunities-analysis.md` |
 | L6  | `quality-scan-script-opportunities.md`      | Deterministic operations that should be scripts                           | No        | `script-opportunities-analysis.md`      |
+| L7  | `quality-scan-sanctum-architecture.md`      | Sanctum architecture (memory agents only)                                 | Yes       | `sanctum-architecture-analysis.md`      |
+
+**L7 only runs for memory agents.** The prepass (P4) detects whether the agent is a memory agent. If the prepass reports `is_memory_agent: false`, skip L7 entirely.
 
 ## Execution
 
@@ -68,14 +72,17 @@ python3 scripts/scan-scripts.py {skill-path} -o {report-dir}/scripts-temp.json
 python3 scripts/prepass-structure-capabilities.py {skill-path} -o {report-dir}/structure-capabilities-prepass.json
 python3 scripts/prepass-prompt-metrics.py {skill-path} -o {report-dir}/prompt-metrics-prepass.json
 uv run scripts/prepass-execution-deps.py {skill-path} -o {report-dir}/execution-deps-prepass.json
+python3 scripts/prepass-sanctum-architecture.py {skill-path} -o {report-dir}/sanctum-architecture-prepass.json
 ```
 
 ### Step 2: Spawn LLM Scanners (Parallel)
 
 After scripts complete, spawn all scanners as parallel subagents.
 
-**With pre-pass (L1, L2, L3):** provide pre-pass JSON path.
+**With pre-pass (L1, L2, L3, L7):** provide pre-pass JSON path.
 **Without pre-pass (L4, L5, L6):** provide skill path and output directory.
+
+**Memory agent check:** Read `sanctum-architecture-prepass.json`. If `is_memory_agent` is `true`, include L7 in the parallel spawn. If `false`, skip L7.
 
 Each subagent loads the scanner file, analyzes the agent, writes analysis to the output directory, returns the filename.
 

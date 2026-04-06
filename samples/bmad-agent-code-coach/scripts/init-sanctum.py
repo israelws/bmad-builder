@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-First Breath — Deterministic sanctum scaffolding for the Creative Muse.
+First Breath — Deterministic sanctum scaffolding for the Code Coach.
 
 This script runs BEFORE the conversational awakening. It creates the sanctum
 folder structure, copies template files with config values substituted,
@@ -17,7 +17,7 @@ Usage:
     skill-path:   Path to the skill directory (where SKILL.md, references/, assets/ live)
 
 Example:
-    python3 scripts/init-sanctum.py /Users/me/myproject /path/to/bmad-agent-creative-muse
+    python3 scripts/init-sanctum.py /Users/me/myproject /path/to/bmad-agent-code-coach
 """
 
 import sys
@@ -26,7 +26,7 @@ import shutil
 from datetime import date
 from pathlib import Path
 
-SKILL_NAME = "bmad-agent-creative-muse"
+SKILL_NAME = "bmad-agent-code-coach"
 SANCTUM_DIR = SKILL_NAME
 
 # Files that stay in the skill bundle (only used during First Breath)
@@ -38,8 +38,11 @@ TEMPLATE_FILES = [
     "CREED-template.md",
     "BOND-template.md",
     "MEMORY-template.md",
+    "CAPABILITIES-template.md",
     "PULSE-template.md",
 ]
+
+EVOLVABLE = True
 
 
 def parse_yaml_config(config_path: Path) -> dict:
@@ -125,7 +128,7 @@ def discover_capabilities(references_dir: Path, sanctum_refs_path: str) -> list[
     return capabilities
 
 
-def generate_capabilities_md(capabilities: list[dict]) -> str:
+def generate_capabilities_md(capabilities: list[dict], evolvable: bool = False) -> str:
     """Generate CAPABILITIES.md content from discovered capabilities."""
     lines = [
         "# Capabilities",
@@ -155,6 +158,17 @@ def generate_capabilities_md(capabilities: list[dict]) -> str:
         "I'll write the prompt, save it to `capabilities/`, and register it here.",
         "Next session, I'll know how.",
         "Load `./references/capability-authoring.md` for the full creation framework.",
+    ])
+
+    if evolvable:
+        lines.extend([
+            "",
+            "This agent is **evolvable** — you can teach it new skills, modify existing "
+            "ones, and retire capabilities that aren't useful. The built-in capabilities "
+            "above are starting points, not limits.",
+        ])
+
+    lines.extend([
         "",
         "## Tools",
         "",
@@ -196,7 +210,7 @@ def main():
     sanctum_refs = sanctum_path / "references"
     sanctum_scripts = sanctum_path / "scripts"
 
-    # Relative path for CAPABILITIES.md references (agent loads from within sanctum)
+    # Fully qualified path for CAPABILITIES.md references
     sanctum_refs_path = "./references"
 
     # Check if sanctum already exists
@@ -226,7 +240,7 @@ def main():
     (sanctum_path / "sessions").mkdir(exist_ok=True)
     print(f"Created sanctum at {sanctum_path}")
 
-    # Copy reference files (capabilities + techniques + guidance) into sanctum
+    # Copy reference files (capabilities + guidance) into sanctum
     copied_refs = copy_references(references_dir, sanctum_refs)
     print(f"  Copied {len(copied_refs)} reference files to sanctum/references/")
     for name in copied_refs:
@@ -260,7 +274,7 @@ def main():
 
     # Auto-generate CAPABILITIES.md from references/ frontmatter
     capabilities = discover_capabilities(references_dir, sanctum_refs_path)
-    capabilities_content = generate_capabilities_md(capabilities)
+    capabilities_content = generate_capabilities_md(capabilities, evolvable=EVOLVABLE)
     (sanctum_path / "CAPABILITIES.md").write_text(capabilities_content)
     print(f"  Created CAPABILITIES.md ({len(capabilities)} built-in capabilities discovered)")
 

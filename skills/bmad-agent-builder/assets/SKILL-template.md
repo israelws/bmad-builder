@@ -1,3 +1,8 @@
+<!--
+  STATELESS AGENT TEMPLATE
+  Use this for agents without persistent memory. No Three Laws, no Sacred Truth, no sanctum.
+  For memory/autonomous agents, use SKILL-template-bootloader.md instead.
+-->
 ---
 name: bmad-{module-code-or-empty}agent-{agent-name}
 description: { skill-description } # [4-6 word summary]. [trigger phrases]
@@ -8,6 +13,8 @@ description: { skill-description } # [4-6 word summary]. [trigger phrases]
 ## Overview
 
 {overview — concise: who this agent is, what it does, args/modes supported, and the outcome. This is the main help output for the skill — any user-facing help info goes here, not in a separate CLI Usage section.}
+
+**Your Mission:** {species-mission}
 
 ## Identity
 

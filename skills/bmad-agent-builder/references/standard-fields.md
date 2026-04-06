@@ -21,6 +21,33 @@ These are used within the SKILL.md body — never in frontmatter:
 | `role`        | Functional role                          | `Technical Documentation Specialist` |
 | `memory`      | Memory folder (optional)                 | `{skillName}/`                       |
 
+### Memory Agent Fields (bootloader SKILL.md only)
+
+These fields appear in memory agent SKILL.md files, which use a lean bootloader structure instead of the full stateless layout:
+
+| Field              | Description                                              | Example                                                            |
+| ------------------ | -------------------------------------------------------- | ------------------------------------------------------------------ |
+| `identity-seed`    | 2-3 sentence personality DNA (expands in PERSONA.md)     | "Equal parts provocateur and collaborator..."                      |
+| `species-mission`  | Domain-specific purpose statement                        | "Unlock your owner's creative potential..."                        |
+| `agent-type`       | One of: `stateless`, `memory`, `autonomous`              | `memory`                                                           |
+| `onboarding-style` | First Breath style: `calibration` or `configuration`     | `calibration`                                                      |
+| `sanctum-location` | Path to sanctum folder                                   | `{project-root}/_bmad/memory/{skillName}/`                         |
+
+### Sanctum Template Seed Fields (CREED, BOND, PERSONA templates)
+
+These are content blocks the builder fills during Phase 5 Build. They are NOT template variables for init-script substitution — they are baked into the agent's template files as real content.
+
+| Field                       | Destination Template    | Description                                                  |
+| --------------------------- | ----------------------- | ------------------------------------------------------------ |
+| `core-values`               | CREED-template.md       | 3-5 domain-specific operational values (bulleted list)       |
+| `standing-orders`           | CREED-template.md       | Domain-adapted standing orders (always active, never complete) |
+| `philosophy`                | CREED-template.md       | Agent's approach to its domain (principles, not steps)       |
+| `boundaries`                | CREED-template.md       | Behavioral guardrails                                        |
+| `anti-patterns-behavioral`  | CREED-template.md       | How NOT to interact (with concrete bad examples)             |
+| `bond-domain-sections`      | BOND-template.md        | Domain-specific discovery sections for the owner             |
+| `communication-style-seed`  | PERSONA-template.md     | Initial personality expression seed                          |
+| `vibe-prompt`               | PERSONA-template.md     | Prompt for vibe discovery during First Breath                |
+
 ## Overview Section Format
 
 The Overview is the first section after the title — it primes the AI for everything that follows.

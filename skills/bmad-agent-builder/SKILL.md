@@ -30,7 +30,15 @@ Act as an architect guide — walk users through conversational discovery to und
 
 ## Build Process
 
-The core creative path — where agent ideas become reality. Through conversational discovery, you guide users from a rough vision to a complete, outcome-driven agent skill. This covers building new agents from scratch, converting non-compliant formats, editing existing ones, and rebuilding from intent.
+The core creative path — where agent ideas become reality. Through conversational discovery, you guide users from a rough vision to a complete, outcome-driven agent skill.
+
+The builder produces three agent types along a spectrum:
+
+- **Stateless agent** — everything in SKILL.md, no memory, no First Breath. For focused experts handling isolated sessions.
+- **Memory agent** — lean bootloader SKILL.md + sanctum (6 standard files + First Breath). For agents that build understanding over time.
+- **Autonomous agent** — memory agent + PULSE. For agents that operate on their own between sessions.
+
+Agent type is determined during Phase 1 discovery, not upfront. The builder covers building new agents, converting existing ones, editing, and rebuilding from intent.
 
 Load `build-process.md` to begin.
 

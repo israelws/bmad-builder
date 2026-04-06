@@ -40,13 +40,13 @@ The builder produces three agent types along a spectrum:
 
 Agent type is determined during Phase 1 discovery, not upfront. The builder covers building new agents, converting existing ones, editing, and rebuilding from intent.
 
-Load `build-process.md` to begin.
+Load `references/build-process.md` to begin.
 
 ## Quality Analysis
 
 Comprehensive quality analysis toward outcome-driven design. Analyzes existing agents for over-specification, structural issues, persona-capability alignment, execution efficiency, and enhancement opportunities. Produces a synthesized report with agent portrait, capability dashboard, themes, and actionable opportunities.
 
-Load `quality-analysis.md` to begin.
+Load `references/quality-analysis.md` to begin.
 
 ---
 
@@ -54,9 +54,9 @@ Load `quality-analysis.md` to begin.
 
 | Intent                      | Trigger Phrases                                       | Route                                    |
 | --------------------------- | ----------------------------------------------------- | ---------------------------------------- |
-| **Build new**               | "build/create/design a new agent"                     | Load `build-process.md`                  |
+| **Build new**               | "build/create/design a new agent"                     | Load `references/build-process.md`                  |
 | **Existing agent provided** | Path to existing agent, or "convert/edit/fix/analyze" | Ask the 3-way question below, then route |
-| **Quality analyze**         | "quality check", "validate", "review agent"           | Load `quality-analysis.md`               |
+| **Quality analyze**         | "quality check", "validate", "review agent"           | Load `references/quality-analysis.md`               |
 | **Unclear**                 | —                                                     | Present options and ask                  |
 
 ### When given an existing agent, ask:
@@ -65,6 +65,6 @@ Load `quality-analysis.md` to begin.
 - **Edit** — Modify specific behavior while keeping the current approach
 - **Rebuild** — Rethink from core outcomes and persona, using this as reference material, full discovery process
 
-Analyze routes to `quality-analysis.md`. Edit and Rebuild both route to `build-process.md` with the chosen intent.
+Analyze routes to `references/quality-analysis.md`. Edit and Rebuild both route to `references/build-process.md` with the chosen intent.
 
 Regardless of path, respect headless mode if requested.

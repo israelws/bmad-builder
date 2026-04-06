@@ -4,7 +4,7 @@
   For memory/autonomous agents, use SKILL-template-bootloader.md instead.
 -->
 ---
-name: bmad-{module-code-or-empty}agent-{agent-name}
+name: {module-code-or-empty}agent-{agent-name}
 description: { skill-description } # [4-6 word summary]. [trigger phrases]
 ---
 

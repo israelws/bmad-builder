@@ -81,7 +81,7 @@ Gather through conversation: identity, capabilities, activation modes, memory ne
 
 Key structural context:
 
-- **Naming:** Standalone: `bmad-agent-{name}`. Module: `bmad-{modulecode}-agent-{name}`
+- **Naming:** Standalone: `agent-{name}`. Module: `{modulecode}-agent-{name}`. The `bmad-` prefix is reserved for official BMad creations only.
 - **Activation modes:** Interactive only, or Interactive + Headless (schedule/cron for background tasks)
 - **Memory architecture:** Agent memory at `{project-root}/_bmad/memory/{skillName}/`
 - **Access boundaries:** Read/write/deny zones stored in memory

@@ -1,5 +1,5 @@
 ---
-name: bmad-{module-code-or-empty}agent-{agent-name}
+name: {module-code-or-empty}agent-{agent-name}
 description: {skill-description}
 ---
 

@@ -6,7 +6,7 @@ Only these fields go in the YAML frontmatter block:
 
 | Field         | Description                                          | Example                                       |
 | ------------- | ---------------------------------------------------- | --------------------------------------------- |
-| `name`        | Full skill name (kebab-case, same as folder name)    | `bmad-workflow-builder`, `bmad-validate-json` |
+| `name`        | Full skill name (kebab-case, same as folder name)    | `validate-json`, `cis-brainstorm` |
 | `description` | [5-8 word summary]. [Use when user says 'X' or 'Y'.] | See Description Format below                  |
 
 ## Content Fields (All Types)

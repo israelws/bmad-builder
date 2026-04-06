@@ -15,6 +15,19 @@ Reference for the three core BMad Builder skills: the Agent Builder (`bmad-agent
 
 Both capabilities support autonomous/headless mode via `--headless` / `-H` flags.
 
+## Skill Naming
+
+| Context        | Agent Pattern              | Workflow Pattern       |
+| -------------- | -------------------------- | ---------------------- |
+| **Standalone** | `agent-{name}`             | `{name}`               |
+| **Module**     | `{modulecode}-agent-{name}`| `{modulecode}-{name}`  |
+
+Names must be kebab-case and match the folder name. Agents should include `agent` in the name. For module-based skills, the user chooses the module code prefix during the build.
+
+:::caution[Reserved Prefix]
+The `bmad-` prefix is reserved for official BMad creations. User-built skills should not include it. If converting a skill that already has a `bmad-` prefix, retain it unless the user requests a rename.
+:::
+
 ## Build Process (BP)
 
 The core creative path. Six phases of conversational discovery take you from a rough idea to a complete, tested skill folder.
@@ -354,7 +367,7 @@ Packages built skills as an installable BMad module. Auto-detects single-skill v
 5. Captures configuration variables and external dependencies
 6. Scaffolds the module infrastructure
 
-**Multi-skill output:** A dedicated `bmad-{code}-setup/` folder with merge scripts, cleanup scripts, and a generic SKILL.md.
+**Multi-skill output:** A dedicated `{code}-setup/` folder with merge scripts, cleanup scripts, and a generic SKILL.md.
 
 **Standalone output:** `assets/module-setup.md`, `assets/module.yaml`, and `assets/module-help.csv` embedded in the skill, plus merge scripts in `scripts/` and a `.claude-plugin/marketplace.json` for distribution. The skill's SKILL.md is updated to check for registration on activation.
 

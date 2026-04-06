@@ -17,7 +17,7 @@ Usage:
     skill-path:   Path to the skill directory (where SKILL.md, references/, assets/ live)
 
 Example:
-    uv run scripts/init-sanctum.py /Users/me/myproject /path/to/bmad-agent-creative-muse
+    uv run scripts/init-sanctum.py /Users/me/myproject /path/to/agent-creative-muse
 """
 
 import sys
@@ -26,7 +26,7 @@ import shutil
 from datetime import date
 from pathlib import Path
 
-SKILL_NAME = "bmad-agent-creative-muse"
+SKILL_NAME = "agent-creative-muse"
 SANCTUM_DIR = SKILL_NAME
 
 # Files that stay in the skill bundle (only used during First Breath)

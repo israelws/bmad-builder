@@ -74,7 +74,7 @@ All scripts use PEP 723 and `--help`. When a skill's prompt needs to invoke a sc
 
 ### 1. Frontmatter Validator
 
-> **Status: IMPLEMENTED** in `./scripts/prepass-structure-capabilities.py`. Handles frontmatter parsing, name validation (kebab-case, bmad-agent naming convention), description presence, and field validation as part of the structure prepass.
+> **Status: IMPLEMENTED** in `./scripts/prepass-structure-capabilities.py`. Handles frontmatter parsing, name validation (kebab-case, agent naming convention), description presence, and field validation as part of the structure prepass.
 
 **What:** Validate SKILL.md frontmatter structure and content
 

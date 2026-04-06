@@ -56,7 +56,7 @@ Don't rush to structure. Just listen, ask follow-ups, and capture.
 - **Module code** — 2-4 letter abbreviation (e.g., "cs3"). All skill names and memory paths derive from this. Changing it later means a find-and-replace across the entire plan.
 - **Description** — One-line summary of what the module does
 
-Write these to the plan document frontmatter immediately. All subsequent skill names use `bmad-{modulecode}-{skillname}`.
+Write these to the plan document frontmatter immediately. All subsequent skill names use `{modulecode}-{skillname}` (or `{modulecode}-agent-{name}` for agents). The `bmad-` prefix is reserved for official BMad creations.
 
 - **Standalone or expansion?** If expansion: which module does it extend? How do the new capabilities relate? Even expansion modules should provide value independently — the parent module being absent shouldn't break this one.
 
@@ -154,7 +154,7 @@ For each planned skill (whether agent or workflow), build a **self-contained bri
 
 **For agents:**
 
-- **Name** — following `bmad-{modulecode}-{skillname}` convention
+- **Name** — following `{modulecode}-agent-{name}` convention (agents) or `{modulecode}-{skillname}` (workflows)
 - **Persona** — who is this agent? Communication style, expertise, personality
 - **Core outcome** — what does success look like?
 - **The non-negotiable** — the one thing this agent must get right

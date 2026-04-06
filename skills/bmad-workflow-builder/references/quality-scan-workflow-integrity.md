@@ -27,7 +27,7 @@ Find and read:
 
 | Check                                                                                                 | Why It Matters                                                                                     |
 | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `name` MUST match the folder name AND follows pattern `bmad-{code}-{skillname}` or `bmad-{skillname}` | Naming convention identifies module affiliation                                                    |
+| `name` MUST match the folder name, kebab-case. Module: `{code}-{skillname}`. Standalone: `{skillname}` | Naming convention identifies module affiliation. `bmad-` prefix reserved for official BMad skills  |
 | `description` follows two-part format: [5-8 word summary]. [trigger clause]                           | Description is PRIMARY trigger mechanism — wrong format causes over-triggering or under-triggering |
 | Trigger clause uses quoted specific phrases: `Use when user says 'create a PRD' or 'edit a PRD'`      | Quoted phrases prevent accidental triggering on casual keyword mentions                            |
 | Trigger clause is conservative (explicit invocation) unless organic activation is clearly intentional | Most skills should NOT fire on passing mentions — only on direct requests                          |

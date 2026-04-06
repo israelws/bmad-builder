@@ -4,7 +4,7 @@ The SKILL-template provides a minimal skeleton: frontmatter, overview, agent ide
 
 ## Frontmatter
 
-- `{module-code-or-empty}` → Module code prefix with hyphen (e.g., `cis-`) or empty for standalone
+- `{module-code-or-empty}` → Module code prefix with hyphen (e.g., `cis-`) or empty for standalone. The `bmad-` prefix is reserved for official BMad creations; user agents should not include it.
 - `{agent-name}` → Agent functional name (kebab-case)
 - `{skill-description}` → Two parts: [4-6 word summary]. [trigger phrases]
 - `{displayName}` → Friendly display name
@@ -17,7 +17,7 @@ The SKILL-template provides a minimal skeleton: frontmatter, overview, agent ide
 - `{if-module}` ... `{/if-module}` → Keep the content inside
 - `{if-standalone}` ... `{/if-standalone}` → Remove the entire block including markers
 - `{module-code}` → Module code without trailing hyphen (e.g., `cis`)
-- `{module-setup-skill}` → Name of the module's setup skill (e.g., `bmad-cis-setup`)
+- `{module-setup-skill}` → Name of the module's setup skill (e.g., `cis-setup`)
 
 ### For Standalone Agents
 

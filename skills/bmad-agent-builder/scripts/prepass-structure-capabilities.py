@@ -6,7 +6,7 @@ can use instead of reading all files itself. Covers:
 - Frontmatter parsing and validation
 - Section inventory (H2/H3 headers)
 - Template artifact detection
-- Agent name validation (bmad-{code}-agent-{name} or bmad-agent-{name})
+- Agent name validation (kebab-case, must contain 'agent')
 - Required agent sections (stateless vs memory agent bootloader detection)
 - Memory path consistency checking
 - Language/directness pattern grep
@@ -118,12 +118,11 @@ def parse_frontmatter(content: str) -> tuple[dict | None, list[dict]]:
             'severity': 'high', 'category': 'frontmatter',
             'issue': f'Name "{name}" is not kebab-case',
         })
-    elif not (re.match(r'^bmad-[a-z0-9]+-agent-[a-z0-9]+(-[a-z0-9]+)*$', name)
-              or re.match(r'^bmad-agent-[a-z0-9]+(-[a-z0-9]+)*$', name)):
+    elif 'agent' not in name.split('-'):
         findings.append({
             'file': 'SKILL.md', 'line': 1,
             'severity': 'medium', 'category': 'frontmatter',
-            'issue': f'Name "{name}" does not follow bmad-{{code}}-agent-{{name}} or bmad-agent-{{name}} pattern',
+            'issue': f'Name "{name}" should contain "agent" (e.g., agent-{{name}} or {{code}}-agent-{{name}})',
         })
 
     # description check

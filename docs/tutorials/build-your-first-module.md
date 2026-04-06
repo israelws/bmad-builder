@@ -29,7 +29,7 @@ A BMad module bundles skills so they're discoverable and configurable. The Modul
 
 | Approach              | When to Use                                  | What Gets Generated                                             |
 | --------------------- | -------------------------------------------- | --------------------------------------------------------------- |
-| **Setup skill**       | Folder of 2+ skills                          | Dedicated `bmad-{code}-setup` skill with config and help assets |
+| **Setup skill**       | Folder of 2+ skills                          | Dedicated `{code}-setup` skill with config and help assets      |
 | **Self-registration** | Single standalone skill                      | Registration embedded in the skill's own `assets/` folder       |
 
 Both produce the same registration artifacts: `module.yaml` (identity and config variables) and `module-help.csv` (capability entries), which register with `bmad-help`.
@@ -92,7 +92,7 @@ The builder generates a dedicated setup skill:
 
 ```
 your-skills-folder/
-├── bmad-{code}-setup/           # Generated setup skill
+├── {code}-setup/                # Generated setup skill
 │   ├── SKILL.md                 # Setup instructions
 │   ├── scripts/                 # Config merge and cleanup scripts
 │   │   ├── merge-config.py

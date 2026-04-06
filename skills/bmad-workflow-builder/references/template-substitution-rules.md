@@ -4,7 +4,7 @@ The SKILL-template provides a minimal skeleton: frontmatter, overview, and activ
 
 ## Frontmatter
 
-- `{module-code-or-empty}` → Module code prefix with hyphen (e.g., `bmb-`) or empty for standalone
+- `{module-code-or-empty}` → Module code prefix with hyphen (e.g., `bmb-`) or empty for standalone. The `bmad-` prefix is reserved for official BMad creations; user skills should not include it.
 - `{skill-name}` → Skill functional name (kebab-case)
 - `{skill-description}` → Two parts: [5-8 word summary]. [trigger phrases]
 
@@ -15,7 +15,7 @@ The SKILL-template provides a minimal skeleton: frontmatter, overview, and activ
 - `{if-module}` ... `{/if-module}` → Keep the content inside
 - `{if-standalone}` ... `{/if-standalone}` → Remove the entire block including markers
 - `{module-code}` → Module code without trailing hyphen (e.g., `bmb`)
-- `{module-setup-skill}` → Name of the module's setup skill (e.g., `bmad-builder-setup`)
+- `{module-setup-skill}` → Name of the module's setup skill (e.g., `mymod-setup`)
 
 ### For Standalone Skills
 

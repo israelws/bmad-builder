@@ -38,7 +38,7 @@ The `bmad-help` skill reads `module-help.csv` to understand what capabilities ar
 
 | Path                  | When to Use                                               | How It Works                                                                    |
 | --------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| **Setup skill**       | Multi-skill modules (2+ skills)                           | A dedicated `bmad-{code}-setup` skill handles registration for all skills       |
+| **Setup skill**       | Multi-skill modules (2+ skills)                           | A dedicated `{code}-setup` skill handles registration for all skills            |
 | **Self-registration** | Single-skill standalone modules                           | The skill itself registers on first run or when user passes `setup`/`configure` |
 
 The Module Builder detects which path to use based on what you give it: a folder of skills triggers the setup skill approach, a single skill triggers the standalone approach.

@@ -76,7 +76,7 @@ Work through conversationally, adapted per skill type. Glean from what the user 
 
 **All types — Common fields:**
 
-- **Name:** kebab-case. Module: `bmad-{modulecode}-{skillname}`. Standalone: `bmad-{skillname}`
+- **Name:** kebab-case. Module: `{modulecode}-{skillname}`. Standalone: `{skillname}`. The `bmad-` prefix is reserved for official BMad creations only.
 - **Description:** Two parts: [5-8 word summary]. [Use when user says 'specific phrase'.] — Default to conservative triggering. See `./standard-fields.md` for format.
 - **Overview:** What/How/Why-Outcome. For interactive or complex skills, include domain framing and theory of mind — these give the executing agent context for judgment calls.
 - **Role guidance:** Brief "Act as a [role/expert]" primer

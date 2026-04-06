@@ -147,7 +147,7 @@ python3 ./scripts/scaffold-setup-skill.py \
   --module-csv "{bmad_builder_reports}/{module-code}-temp-help.csv"
 ```
 
-This creates `bmad-{code}-setup/` in the user's skills folder containing:
+This creates `{code}-setup/` in the user's skills folder containing:
 
 - `./SKILL.md` — Generic setup skill with module-specific frontmatter
 - `./scripts/` — merge-config.py, merge-help-csv.py, cleanup-legacy.py
@@ -232,7 +232,7 @@ In headless mode: skip interactive questions, scaffold immediately, and return s
   "status": "success|error",
   "approach": "standalone|setup-skill",
   "module_code": "...",
-  "setup_skill": "bmad-{code}-setup",
+  "setup_skill": "{code}-setup",
   "skill_dir": "/path/to/skill/",
   "location": "/path/to/...",
   "files_created": ["..."],

@@ -25,7 +25,7 @@ This also means you can include remote URL skills in your own module to combine 
 | Component           | Multi-Skill Module                                      | Standalone Module                                          |
 | ------------------- | ------------------------------------------------------- | ---------------------------------------------------------- |
 | **Skills**          | Two or more agents/workflows                            | A single agent or workflow                                 |
-| **Registration**    | Dedicated `bmad-{code}-setup` skill                     | Built into the skill itself (`assets/module-setup.md`)     |
+| **Registration**    | Dedicated `{code}-setup` skill                          | Built into the skill itself (`assets/module-setup.md`)     |
 | **module.yaml**     | In the setup skill's `assets/`                          | In the skill's own `assets/`                               |
 | **module-help.csv** | In the setup skill's `assets/`                          | In the skill's own `assets/`                               |
 | **Distribution**    | Plugin with multiple skill folders                      | Plugin with single skill folder + `marketplace.json`       |

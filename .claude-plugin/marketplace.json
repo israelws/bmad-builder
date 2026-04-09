@@ -25,7 +25,7 @@
     },
     {
       "name": "sample-plugins",
-      "source": "./samples",
+      "source": "./",
       "description": "Sample plugins demonstrating how to build BMad agents and skills. Includes a code coach, creative muse, diagram reviewer, dream weaver, sentinel, and excalidraw generator.",
       "version": "1.0.0",
       "author": {
@@ -37,12 +37,13 @@
         "./samples/bmad-agent-diagram-reviewer",
         "./samples/bmad-agent-dream-weaver",
         "./samples/bmad-agent-sentinel",
-        "./samples/bmad-excalidraw"
+        "./samples/bmad-excalidraw",
+        "./samples/sample-module-setup"
       ]
     },
     {
       "name": "bmad-dream-weaver-agent",
-      "source": "./samples/bmad-agent-dream-weaver",
+      "source": "./",
       "description": "Dream journaling and interpretation agent with lucid dreaming coaching, pattern discovery, symbol analysis, and recall training.",
       "version": "1.0.0",
       "author": {

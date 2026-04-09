@@ -32,6 +32,7 @@
         "name": "Brian (BMad) Madison"
       },
       "skills": [
+        "./samples/sample-module-setup",
         "./samples/bmad-agent-code-coach",
         "./samples/bmad-agent-creative-muse",
         "./samples/bmad-agent-diagram-reviewer",

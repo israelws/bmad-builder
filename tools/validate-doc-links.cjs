@@ -22,7 +22,12 @@ const DOCS_ROOT = path.resolve(__dirname, '../docs');
 const DRY_RUN = !process.argv.includes('--write');
 
 // Regex to match markdown links with site-relative paths or bare .md references
-const LINK_REGEX = /\[([^\]]*)\]\(((?:\.{1,2}\/|\/)[^)]+|[\w][^)\s]*\.md(?:[?#][^)]*)?)\)/g;
+// Matches markdown links whose target is either a relative/site-relative path
+// (starts with ./ ../ or /) or a bare .md reference. The negative lookahead
+// (?!\w+:\/\/) keeps external URLs (https://..., mailto:..., ftp:...) out of
+// the bare-.md alternative so a cross-repo link to a README.md isn't treated
+// as a local docs path.
+const LINK_REGEX = /\[([^\]]*)\]\(((?:\.{1,2}\/|\/)[^)]+|(?!\w+:\/\/)[\w][^)\s]*\.md(?:[?#][^)]*)?)\)/g;
 
 // File extensions that are static assets, not markdown docs
 const STATIC_ASSET_EXTENSIONS = ['.zip', '.txt', '.pdf', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico'];

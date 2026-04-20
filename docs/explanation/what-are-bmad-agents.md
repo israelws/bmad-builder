@@ -85,6 +85,14 @@ Sanctum architecture, First Breath, PULSE, and the two-tier memory system are co
 
 If you're unsure, start with a workflow. You can always wrap it inside an agent later.
 
+## Customization Surface
+
+Every agent ships a `customize.toml` next to its `SKILL.md`. The metadata block (code, name, title, icon, description, agent_type) is always present; it's the install-time roster contract consumed by `module.yaml:agents[]` and the central agent config. Beyond metadata, an override surface (activation hooks, persistent facts, swappable scalars) is opt-in per skill.
+
+For memory and autonomous agents, the sanctum is the primary customization surface. Persona, creed, bond, and capabilities all live there and evolve with the owner. A `customize.toml` override surface would compete with that, so it is disabled by default for those archetypes.
+
+See [Customization for Authors](/explanation/customization-for-authors.md) for the decision guide, or [How to Customize BMad](https://docs.bmad-method.org/how-to/customize-bmad/) for the end-user view.
+
 ## Building Agents
 
 The **BMad Agent Builder** (`bmad-agent-builder`) runs six phases of conversational discovery. The first phase detects which agent type fits your vision through natural questions, and the remaining phases adapt based on whether you're creating a stateless expert, a memory-backed companion, or an autonomous agent.

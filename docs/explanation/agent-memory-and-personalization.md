@@ -41,6 +41,12 @@ ALLCAPS files form the skeleton: consistent structure across all memory agents. 
 └── sessions/                 # Raw session logs by date (not loaded on rebirth)
 ```
 
+### Sanctum Is the Customization Surface
+
+For memory and autonomous agents, the sanctum is where customization belongs. PERSONA, CREED, and BOND are calibrated at First Breath, edited by the owner as the relationship develops, and shared across teams as sanctum files when a whole table wants the same voice.
+
+The parallel `customize.toml` override surface that stateless agents and workflows use (activation hooks, persistent facts, scalar swaps) is disabled by default for memory archetypes. Enable it only for narrow org-level needs the sanctum cannot express, such as a pre-sanctum compliance acknowledgment before rebirth. See [Customization for Authors](/explanation/customization-for-authors.md) for the reasoning.
+
 ### Token Discipline
 
 Every sanctum file loads every session. That means every token pays rent on every conversation. Memory agents keep MEMORY.md ruthlessly under 200 lines through active curation. If something doesn't earn its place, it gets pruned.

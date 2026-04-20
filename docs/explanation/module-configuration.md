@@ -21,6 +21,12 @@ Most modules should not need configuration at all. Before adding configurable va
 If you are building a single standalone agent or workflow, you do not need a separate setup skill. The Module Builder can package it as a **standalone self-registering module** where the registration logic is embedded directly in the skill via an `assets/module-setup.md` reference file, and runs on first activation or when the user passes `setup`/`configure`.
 :::
 
+## Configuration vs Customization
+
+Module configuration (this doc) and per-skill customization (`customize.toml`) are different surfaces with different jobs. Configuration is about install-time answers: paths, language, team preferences, per-module install answers, and the agent roster. You still author `module.yaml` as the source of truth; at install the installer flows module-level answers and the `agents:` roster into `_bmad/config.toml` (and `config.user.toml` for user-scoped answers) at the project root, where many skills consume them. Customization is about per-skill behavior overrides: activation hooks, persistent facts, swappable templates. It lives in `_bmad/custom/{skill-name}.toml` and is scoped to one skill.
+
+Use configuration when the value is cross-cutting (every skill needs to know the output folder). Use customization when the value shapes one skill's behavior (this workflow's brief template). Some values legitimately fit both surfaces; the [End-User Customization Guide](https://docs.bmad-method.org/how-to/customize-bmad/) includes a decision table for that case. For the author-side decision about whether to expose customization at all, see [Customization for Authors](/explanation/customization-for-authors.md).
+
 ## What Module Registration Does
 
 Module registration serves two purposes:

@@ -33,8 +33,12 @@ Six dimensions to keep in mind during the build phase. The quality scanners chec
 | **Intelligence Placement** | Scripts handle plumbing (fetch, transform, validate). Prompts handle judgment (interpret, classify, decide). If a script contains an `if` that decides what content _means_, intelligence has leaked |
 | **Progressive Disclosure** | SKILL.md stays focused; stage instructions go in `prompts/`, reference data in `resources/`                                                                                                          |
 | **Description Format**     | Two parts: `[5-8 word summary]. [Use when user says 'X' or 'Y'.]`. Default to conservative triggering                                                                                               |
-| **Path Construction**      | Never use `{skill-root}`. Use `{project-root}` for any project-scope path, `./` for skill-internal. Config variables used directly; they already contain `{project-root}`                            |
+| **Path Construction**      | Use `{project-root}` for any project-scope path and `./` for same-folder references inside a skill. Cross-directory skill-internal paths are bare (e.g. `references/foo.md`). Config variables already contain `{project-root}`, so never double-prefix them                              |
 | **Token Efficiency**       | Remove genuine waste (repetition, defensive padding). Preserve context that enables judgment (domain framing, rationale)                                                                             |
+
+## Shipping a Customization Surface
+
+When your skill's users come from varied contexts (different orgs, different domains, different taste in output formats), a `customize.toml` surface lets them override specific fields without forking. It's opt-in per skill, and the decision is deliberate: every knob you ship is a promise the resolver will carry across releases. Before you opt in during the build, read [Customization for Authors](/explanation/customization-for-authors.md) for the decision framework and [How to Make a Skill Customizable](/how-to/make-a-skill-customizable.md) for the mechanics.
 
 ## Common Patterns
 

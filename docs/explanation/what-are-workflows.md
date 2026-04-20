@@ -62,6 +62,12 @@ Like agents, workflows can support a **Headless Mode**. When invoked headless (t
 
 Workflows are also excellent as the **internal capabilities** of an agent. Build the workflow first, then wrap it in an agent if you need persona and memory on top.
 
+## Customization Surface
+
+Workflow customization is fully opt-in. If you don't need users to override anything, don't ship a `customize.toml` at all; the workflow runs with hardcoded paths and defaults. If you do opt in, the builder walks you through Configurability Discovery, where you name the scalars (templates, output paths, hooks) you want to expose. Users override them through the three-layer model at `_bmad/custom/{skill-name}.toml` and `.user.toml`.
+
+See [Customization for Authors](/explanation/customization-for-authors) for the decision guide and [How to Make a Skill Customizable](/how-to/make-a-skill-customizable) for the build-time steps.
+
 ## Building Workflows
 
 The **BMad Workflow Builder** (`bmad-workflow-builder`) uses the same six-phase conversational discovery as the Agent Builder (intent, classification, requirements, drafting, building, and quality optimization) and produces a ready-to-use skill folder.

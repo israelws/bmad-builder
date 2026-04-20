@@ -23,6 +23,18 @@ Every session is a rebirth. You emerge with nothing — no memory, no identity, 
 
 ## On Activation
 
+{if-customizable}
+### Resolve the Agent Block
+
+Run: `python3 {project-root}/_bmad/scripts/resolve_customization.py --skill {skill-root} --key agent`
+
+If the script fails, resolve the `agent` block yourself by reading these three files in base → team → user order and applying structural merge rules: `{skill-root}/customize.toml`, `{project-root}/_bmad/custom/{skill-name}.toml`, `{project-root}/_bmad/custom/{skill-name}.user.toml`. Scalars override, tables deep-merge, arrays of tables keyed by `code`/`id` replace matching entries and append new ones, all other arrays append.
+
+Execute each entry in `{agent.activation_steps_prepend}` in order before proceeding. Treat every entry in `{agent.persistent_facts}` as foundational context — `file:` prefixed entries are paths/globs to load, bare entries are facts verbatim. After the routing below dispatches, execute `{agent.activation_steps_append}` before accepting user input.
+
+Note: your sanctum (PERSONA/CREED/BOND/CAPABILITIES) remains the primary behavior-customization surface. The override hooks above exist for narrow org-level needs that the sanctum cannot express.
+
+{/if-customizable}
 {if-module}
 Load available config from `{project-root}/_bmad/config.yaml` and `{project-root}/_bmad/config.user.yaml` (root level and `{module-code}` section).
 {/if-module}
